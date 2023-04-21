@@ -1,10 +1,10 @@
-package com.ssafy.moneykeeper;
+package com.ssafy.moneykeeperbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MoneykeeperApplicationTests {
+class MoneykeeperbackendApplicationTests {
 
 	@Test
 	void contextLoads() {
