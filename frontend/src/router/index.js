@@ -10,24 +10,24 @@ const routes = [
     path: '/book',
     children: [
       {
-        path: '/calendar',
+        path: 'calendar',
         name: 'calendar',
         component: () => import('../views/book/calendarView.vue')
       },
       {
-        path: '/add',
+        path: 'add',
         name: 'add',
         component: () => import('../views/book/addView.vue')
       },
       {
-        path: '/:id',
+        path: ':id',
         name: 'detail',
         component: () => import('../views/book/detailView.vue')
       },
     ]
   },
   {
-    path: '/research',
+    path: 'research',
     children: [
       {
         path: '/',
@@ -35,7 +35,7 @@ const routes = [
         component: () => import('../views/research/researchView.vue')
       },
       {
-        path: '/recom',
+        path: 'recom',
         name: 'recom',
         component: () => import('../views/research/researchView.vue')
       },
@@ -50,12 +50,12 @@ const routes = [
         component: () => import('../views/budget/budgetView.vue')
       },
       {
-        path: '/set',
+        path: 'set',
         name: 'set',
         component: () => import('../views/budget/setView.vue')
       },
       {
-        path: '/update',
+        path: 'update',
         name: 'update',
         component: () => import('../views/budget/updateView.vue')
       },
@@ -70,22 +70,22 @@ const routes = [
         component: () => import('../views/comparison/comparisonView.vue')
       },
       {
-        path: '/group',
+        path: 'group',
         name: 'group',
         component: () => import('../views/comparison/groupView.vue')
       },
       {
-        path: '/challenge',
+        path: 'challenge',
         name: 'challenge',
         component: () => import('../views/comparison/challengeView.vue')
       },
       {
-        path: '/challenge/add',
+        path: 'challenge/add',
         name: 'challengeAdd',
         component: () => import('../views/comparison/challengeAddView.vue')
       },
       {
-        path: '/challenge/:id',
+        path: 'challenge/:id',
         name: 'challengeDetail',
         component: () => import('../views/comparison/detailView.vue')
       },
