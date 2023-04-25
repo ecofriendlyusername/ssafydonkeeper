@@ -1,18 +1,16 @@
 <template>
-  <headerComponent/>
-  <router-view />
-  <footerComponent/>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js App"/>
 </template>
 
 <script>
-import headerComponent from "@/components/headerComponent.vue";
-import footerComponent from "@/components/footerComponent.vue";
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
+  name: 'App',
   components: {
-    headerComponent,
-    footerComponent
-  },
+    HelloWorld
+  }
 }
 </script>
 
@@ -23,18 +21,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  margin-top: 60px;
 }
 </style>
