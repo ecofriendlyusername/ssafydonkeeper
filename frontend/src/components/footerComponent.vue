@@ -14,10 +14,10 @@ export default {
     data() {
         return {
             menuBar: [
-                {name:'가계부', route:'calendar'}, 
-                {name:'예산', route:'calendar'}, 
-                {name:'소비패턴', route:'calendar'}, 
-                {name:'자산비교', route:'calendar'}
+                {name:'가계부', route:'/book/calendar'}, 
+                {name:'예산', route:'/budget'}, 
+                {name:'소비패턴', route:'/research'}, 
+                {name:'자산비교', route:'/comparison'}
             ]
         }
     }
