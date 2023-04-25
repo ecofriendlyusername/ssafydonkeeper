@@ -27,10 +27,10 @@ const routes = [
     ]
   },
   {
-    path: 'research',
+    path: '/research',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'research',
         component: () => import('../views/research/researchView.vue')
       },
@@ -45,7 +45,7 @@ const routes = [
     path: '/budget',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'budget',
         component: () => import('../views/budget/budgetView.vue')
       },
@@ -65,7 +65,7 @@ const routes = [
     path: '/comparison',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'comparison',
         component: () => import('../views/comparison/comparisonView.vue')
       },
