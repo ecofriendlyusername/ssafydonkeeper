@@ -1,44 +1,26 @@
-# frontend
+import { createRouter, createWebHistory } from 'vue-router'
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-{
+const routes = [
+  // {
+  //   path: '/',
+  //   name: 'main',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/mainPageView.vue')
+  // },
+  {
     path: '/book',
     children: [
       {
-        path: '/calendar',
+        path: 'calendar',
         name: 'calendar',
         component: () => import('../views/book/calendarView.vue')
       },
       {
-        path: '/add',
+        path: 'add',
         name: 'add',
         component: () => import('../views/book/addView.vue')
       },
       {
-        path: '/:id',
+        path: ':id',
         name: 'detail',
         component: () => import('../views/book/detailView.vue')
       },
@@ -48,12 +30,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     path: '/research',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'research',
         component: () => import('../views/research/researchView.vue')
       },
       {
-        path: '/recom',
+        path: 'recom',
         name: 'recom',
         component: () => import('../views/research/researchView.vue')
       },
@@ -63,17 +45,17 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     path: '/budget',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'budget',
         component: () => import('../views/budget/budgetView.vue')
       },
       {
-        path: '/set',
+        path: 'set',
         name: 'set',
         component: () => import('../views/budget/setView.vue')
       },
       {
-        path: '/update',
+        path: 'update',
         name: 'update',
         component: () => import('../views/budget/updateView.vue')
       },
@@ -83,27 +65,38 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     path: '/comparison',
     children: [
       {
-        path: '/',
+        path: '',
         name: 'comparison',
         component: () => import('../views/comparison/comparisonView.vue')
       },
       {
-        path: '/group',
+        path: 'group',
         name: 'group',
         component: () => import('../views/comparison/groupView.vue')
       },
       {
-        path: '/challenge',
+        path: 'challenge',
         name: 'challenge',
         component: () => import('../views/comparison/challengeView.vue')
       },
       {
-        path: '/challenge/add',
+        path: 'challenge/add',
         name: 'challengeAdd',
         component: () => import('../views/comparison/challengeAddView.vue')
       },
       {
-        path: '/challenge/:id',
+        path: 'challenge/:id',
         name: 'challengeDetail',
         component: () => import('../views/comparison/detailView.vue')
       },
+      
+    ]
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
