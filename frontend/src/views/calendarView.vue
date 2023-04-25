@@ -4,8 +4,15 @@
 
 <script>
 export default {
-    name:'calendarView'
-
+    name:'calendarView',
+    computed: {
+      title() {
+        return this.$store.getters.getTitle;
+      }
+    },
+    mounted() {
+      this.$store.dispatch('setTitle', '가계부');
+    }
 }
 </script>
 
