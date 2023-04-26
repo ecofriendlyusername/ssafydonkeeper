@@ -5,6 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
+import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 
@@ -18,8 +20,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO : orElseThrow 로 변경
-		Member member = memberRepository.findByEmail(username).orElse(null);
+		Member member = memberRepository.findByEmail(username)
+			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.REQUIRED_RE_LOGIN));
 
 		return new CustomUserDetails(member);
 	}

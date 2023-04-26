@@ -12,7 +12,8 @@ import lombok.Getter;
 @Getter
 public enum AuthExceptionEnum {
 	AUTH_AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0000", "인증되지 않았습니다."),
-	KAKAO_SHOULD_HAVE_EMAIL(HttpStatus.UNAUTHORIZED, "A0001", "카카오 이메일 제공에 동의해주셔야 서비스 이용이 가능합니다.");
+	KAKAO_SHOULD_HAVE_EMAIL(HttpStatus.UNAUTHORIZED, "A0001", "카카오 이메일 제공에 동의해주셔야 서비스 이용이 가능합니다."),
+	REQUIRED_RE_LOGIN(HttpStatus.UNAUTHORIZED, "A0002", "재로그인이 필요합니다.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;
