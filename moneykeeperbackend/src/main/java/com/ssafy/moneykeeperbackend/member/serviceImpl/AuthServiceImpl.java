@@ -172,7 +172,7 @@ public class AuthServiceImpl implements AuthService {
 				.id(member.getId())
 				.email(member.getEmail())
 				.nickname(member.getNickname())
-				.password(member.getPassword())
+				.password("kakao" + String.valueOf(id))
 				.build();
 
 		} catch (IOException e) {

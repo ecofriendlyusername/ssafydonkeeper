@@ -22,7 +22,6 @@ public class CustomUserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Member member = memberRepository.findByEmail(username)
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.REQUIRED_RE_LOGIN));
-
 		return new CustomUserDetails(member);
 	}
 }

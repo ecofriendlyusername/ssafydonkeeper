@@ -24,6 +24,8 @@ public class SecurityConfig {
 	private final TokenProvider tokenProvider;
 	private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+	private final CustomUserDetailService customUserDetailService;
+
 	@Bean
 	public AuthenticationManager authenticationManager(
 		AuthenticationConfiguration authenticationConfiguration
@@ -49,7 +51,10 @@ public class SecurityConfig {
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 
 			.and()
-			.apply(new JwtSecurityConfig(tokenProvider));
+			.apply(new JwtSecurityConfig(tokenProvider))
+
+			.and()
+			.userDetailsService(customUserDetailService);
 
 		return http.build();
 	}

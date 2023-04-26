@@ -21,6 +21,7 @@ public class CustomUserDetails implements UserDetails {
 		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
 		authorities.add(grantedAuthority);
 		return authorities;
+
 	}
 
 	@Override
