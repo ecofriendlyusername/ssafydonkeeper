@@ -5,26 +5,24 @@
       차트이미지
     </div>
 
-    <h2>소비 맞춤 카드 추천</h2>
-    
-    <ul>
-      <li>카드1</li>
-      <li>카드2</li>
-      <li>카드3</li>
-      <li>카드4</li>
-    </ul>
-
+    <RecomView/>
     
 
   </div>
 </template>
 
 <script>
+import RecomView from './recomView.vue'
+
 export default {
+  components:{
+    RecomView
+  }
 
 }
 </script>
 
 <style>
+
 
 </style>
