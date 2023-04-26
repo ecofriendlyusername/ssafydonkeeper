@@ -21,6 +21,12 @@ const routes = [
         component: () => import('../views/book/addView.vue')
       },
       {
+        path: 'list',
+        name: 'list',
+        component: () => import('../views/book/listView.vue')
+      },
+      
+      {
         path: ':id',
         name: 'detail',
         component: () => import('../views/book/detailView.vue')
