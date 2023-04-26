@@ -2,7 +2,9 @@
   <div class="header">
     돈키퍼
     <!-- 현재 페이지 {{ title }} -->
+    <button v-on:click="this.$router.go(-1)">back</button>  
   </div>
+  
 </template>
 
 <script>
