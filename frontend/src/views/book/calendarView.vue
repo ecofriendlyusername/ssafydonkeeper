@@ -24,7 +24,8 @@
           <div v-for="day in days" :class="day.class" :key="day.index">{{ day.date }}</div>
         </div>
       </div>
-      <router-link to="/book/add">추가하기</router-link>
+      <button v-on:click="this.$router.push('/book/list')">목록보기</button>
+      <button v-on:click="this.$router.push('/book/add')">추가하기</button>
       <button v-on:click="addData()">dataSet(임시버튼)</button>
       <button v-on:click="addData()">copy</button>
     </div>
@@ -91,7 +92,14 @@ export default {
           this.spend += data.money
         }
       })
-      console.log(dayday)
+      /*
+      대충 axios.get(url)
+      .then(res => {
+        res.data.'리스트이름'.forEach(data=>{
+          데이터집어넣기
+        })
+      })
+      */
     },
     renderCalendar() {
       let currentYear = this.thisMonth.getFullYear();
