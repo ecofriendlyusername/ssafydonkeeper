@@ -7,7 +7,7 @@
         <div class="year-month">{{ yearMonth }}</div>
         <a href="javascript:;" class="nav-btn go-next" @click="goNext">next</a>
       </div>
-      <div>수입 {{ '1,000,000' }} | 지출 {{ '350,000' }} | 잔액 {{ '650,000' }}</div>
+      <div>수입 {{ incom }} | 지출 {{ spend }} | 잔액 {{ incom - spend }}</div>
       <div class="cal_wrap">
         <!-- 요일 -->
         <div class="days">
@@ -24,7 +24,8 @@
           <div v-for="day in days" :class="day.class" :key="day.index">{{ day.date }}</div>
         </div>
       </div>
-      <router-link to="/book/add">aa</router-link>
+      <router-link to="/book/add">추가하기</router-link>
+      <button v-on:click="addData()">dataSet(임시버튼)</button>
       <button v-on:click="addData()">copy</button>
     </div>
   </div>
@@ -38,6 +39,8 @@ export default {
       thisMonth: new Date(),
       days: [],
       // 임시데이터
+      incom: 0,
+      spend: 0,
       datas:[
       {
           'category':'incom',
@@ -81,6 +84,12 @@ export default {
         p.setAttribute('class', data.category)
         p.innerText = data.money;
         dayday[data.day-1].appendChild(p);
+
+        if (data.category == 'incom') {
+          this.incom += data.money
+        } else {
+          this.spend += data.money
+        }
       })
       console.log(dayday)
     },
