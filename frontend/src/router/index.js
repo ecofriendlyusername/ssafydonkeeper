@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+
 const routes = [
   // {
   //   path: '/',
@@ -89,9 +90,18 @@ const routes = [
         name: 'challengeDetail',
         component: () => import('../views/comparison/detailView.vue')
       },
-      
+
     ]
   },
+    path: '/calendar',
+    name: 'calendar',
+    component: () => import('../views/calendarView.vue')
+  },
+  {
+    path: '/kakaoCallback',
+    name: 'kakaoCallback',
+    component: () => import('../views/kakaoCallback.vue')
+  }
 ]
 
 const router = createRouter({
