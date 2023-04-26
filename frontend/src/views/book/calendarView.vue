@@ -25,7 +25,7 @@
         </div>
       </div>
       <router-link to="/book/add">aa</router-link>
-      <button>copy</button>
+      <button v-on:click="addData()">copy</button>
     </div>
   </div>
 </template>
@@ -36,7 +36,35 @@ export default {
     return {
       today: new Date(),
       thisMonth: new Date(),
-      days: []
+      days: [],
+      // 임시데이터
+      datas:[
+      {
+          'category':'incom',
+          'day':1,
+          'money':100000,
+        },
+        {
+          'category':'spend',
+          'day':1,
+          'money':10000,
+        },
+        {
+          'category':'incom',
+          'day':2,
+          'money':2000,
+        },
+        {
+          'category':'spend',
+          'day':3,
+          'money':10000,
+        },
+        {
+          'category':'spend',
+          'day':5,
+          'money':10000,
+        },
+      ]
     };
   },
   computed: {
@@ -45,6 +73,17 @@ export default {
     }
   },
   methods: {
+    // 데이터 추가하는 함수, mount 걸어야 함, async로 renderCalendar다음에 시작되도록 해야 함
+    addData() {
+      const dayday = document.querySelectorAll('.current');
+      this.datas.forEach(data=>{
+        let p = document.createElement("p");
+        p.setAttribute('class', data.category)
+        p.innerText = data.money;
+        dayday[data.day-1].appendChild(p);
+      })
+      console.log(dayday)
+    },
     renderCalendar() {
       let currentYear = this.thisMonth.getFullYear();
       let currentMonth = this.thisMonth.getMonth();
@@ -89,8 +128,9 @@ export default {
       this.renderCalendar();
     }
   },
-  mounted() {
+  async mounted() {
     this.renderCalendar();
+    // this.addData();
   }
 };
 </script>
@@ -176,7 +216,7 @@ export default {
 }
 
 .sec_cal .cal_wrap .day {
-    display:flex;
+    /* display:flex; */
     align-items: center;
     justify-content: center;
     width: calc(100% / 7);
@@ -184,7 +224,7 @@ export default {
     color: #999;
     font-size: 12px;
     text-align: center;
-    border-radius:5px
+    border-radius:5px;
 }
 
 .current.today {background: rgb(242 242 242);}
@@ -193,6 +233,7 @@ export default {
     display: flex;
     flex-flow: wrap;
     height: 290px;
+
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n -1) {
@@ -205,5 +246,13 @@ export default {
 
 .sec_cal .cal_wrap .day.disable {
     color: #ddd;
+}
+
+.incom{
+  color: blue;
+}
+
+.spend{
+  color: red;
 }
 </style>
