@@ -7,16 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +18,10 @@ import com.google.gson.JsonElement;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
 import com.ssafy.moneykeeperbackend.member.dto.common.MemberDto;
-import com.ssafy.moneykeeperbackend.member.dto.common.TokenDto;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.entity.Role;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.member.service.AuthService;
-import com.ssafy.moneykeeperbackend.security.filter.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,20 +34,13 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
 	private final MemberRepository memberRepository;
-
-	private final TokenProvider tokenProvider;
 
 	@Value("${kakao.rest-api-key}")
 	private String API_KEY;
 
 	@Value("${kakao.redirect-uri}")
 	private String REDIRECT_URI;
-
-	// @Autowired
-	// private PasswordEncoder passwordEncoder;
 
 	private String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
 
@@ -85,10 +69,10 @@ public class AuthServiceImpl implements AuthService {
 
 			//결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
+			log.info("토큰 가져올 때 responseCode : " + responseCode);
 			if (responseCode != 200) {
 				throw new AuthRuntimeException(AuthExceptionEnum.AUTH_AUTHORIZATION_EXCEPTION);
 			}
-			log.info("토큰 가져올 때 responseCode : " + responseCode);
 
 			//요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -125,10 +109,11 @@ public class AuthServiceImpl implements AuthService {
 
 			//결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
+			log.info("유저 정보 가져올 때 responseCode : " + responseCode);
+
 			if (responseCode != 200) {
 				throw new AuthRuntimeException(AuthExceptionEnum.AUTH_AUTHORIZATION_EXCEPTION);
 			}
-			log.info("유저 정보 가져올 때 responseCode : " + responseCode);
 
 			//요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -156,6 +141,7 @@ public class AuthServiceImpl implements AuthService {
 				.get("has_email")
 				.getAsBoolean();
 			String email = "";
+
 			if (hasEmail) {
 				email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 			} else {
@@ -180,16 +166,13 @@ public class AuthServiceImpl implements AuthService {
 			} else {
 				member.setNickname(nickname);
 				member.setOauthAceessToken(accessToken);
-
-				authorize(email, member.getPassword());
-
-				// TODO : token을 세션에 저장한다.
 			}
 
 			return MemberDto.builder()
 				.id(member.getId())
 				.email(member.getEmail())
 				.nickname(member.getNickname())
+				.password("kakao" + String.valueOf(id))
 				.build();
 
 		} catch (IOException e) {
@@ -197,23 +180,5 @@ public class AuthServiceImpl implements AuthService {
 		}
 	}
 
-	public TokenDto authorize(String email, String password) {
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
-			password);
-
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String authorities = getAuthorities(authentication);
-		return tokenProvider.createToken(email, authorities);
-	}
-
-	// 권한 가져오기
-	public String getAuthorities(Authentication authentication) {
-		return authentication.getAuthorities()
-			.stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
-	}
 
 }

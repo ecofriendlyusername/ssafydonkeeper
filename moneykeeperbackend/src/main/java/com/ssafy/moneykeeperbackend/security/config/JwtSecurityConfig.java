@@ -6,7 +6,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ssafy.moneykeeperbackend.security.filter.JwtFilter;
-import com.ssafy.moneykeeperbackend.security.filter.TokenProvider;
+import com.ssafy.moneykeeperbackend.security.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
