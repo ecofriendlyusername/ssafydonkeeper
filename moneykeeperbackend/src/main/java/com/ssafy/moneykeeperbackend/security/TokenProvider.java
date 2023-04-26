@@ -95,6 +95,8 @@ public class TokenProvider {
 		refreshTokenCookie.setMaxAge((int)refreshTokenValidityTime);
 		refreshTokenCookie.setPath("/");
 
+		response.addCookie(refreshTokenCookie);
+
 		return new TokenDto(accessToken, refreshToken);
 	}
 
