@@ -93,10 +93,10 @@ const routes = [
 
     ]
   },
-    path: '/calendar',
-    name: 'calendar',
-    component: () => import('../views/calendarView.vue')
-  },
+  //   path: '/calendar',
+  //   name: 'calendar',
+  //   component: () => import('../views/calendarView.vue')
+  // },
   {
     path: '/kakaoCallback',
     name: 'kakaoCallback',

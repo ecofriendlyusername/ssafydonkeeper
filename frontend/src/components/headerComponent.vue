@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    현재 페이지 {{ title }}
+    돈키퍼
+    <!-- 현재 페이지 {{ title }} -->
   </div>
 </template>
 
@@ -21,8 +22,11 @@ export default {
   align-items: center;
   justify-content: center;
   height: 40px;
-  padding: 0 30px;
-  background-color: #ff9bc2;
+  padding: 5px 30px;
+  background-color: #4D82E6;
+  color: white;
   border-bottom: rgb(220, 220, 220) solid 0.1px;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
