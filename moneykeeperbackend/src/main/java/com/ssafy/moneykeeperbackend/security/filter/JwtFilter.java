@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,27 +29,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
+	@Value("${jwt.token-validity-in-milliseconds}")
+	private long accessTokenValidityTime;
+
 	private final TokenProvider tokenProvider;
 
+	/*
+	 * 인증이 필요한 페이지에서만 인증 로직을 탄다.
+	 * 쿠키와 세션에서 access token, refresh token을 찾고
+	 * valid check 한다.
+	 *
+	 * @date 2023.04.26
+	 * @author 정민지
+	 * */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-
-		// 세션에서 access token을 찾는다.
-
-		// validateToken이 true면 인증하고 dofilter
-		// false라면 refresh token을 찾는다.
-		// refresh token이 validateToken이 true면 access token 재발급하고
-		// 인증해서 넘겨주고
-		// refresh token이 validateToken이 false면 인증하지 않고 dofilter 한다.
-
-		// 인증
-		// Authentication auth = tokenProvider.getAuthentication(token);
-		// SecurityContextHolder.getContext().setAuthentication(auth);
-		// filterChain.doFilter(request, response);
-
-		// no 인증
-		// filterChain.doFilter(request, response);
 
 		// 인증이 필요한 경우에만 토큰 검증을 수행합니다.
 		if (requiresAuthentication(request)) {
@@ -61,6 +60,21 @@ public class JwtFilter extends OncePerRequestFilter {
 				Map<String, String> resultMap = tokenProvider.getEmailAndAuthFromToken(refreshToken);
 				accessToken = tokenProvider.createAccessToken(resultMap.get("email"), resultMap.get("auth"), request,
 					response);
+
+				String accessTokenId = UUID.randomUUID().toString();
+				HttpSession session = request.getSession(true);    // true를 주면 session이 없을 때 session을 만들고 시작함
+
+				session.setAttribute(accessTokenId, accessToken);    // session에 access_token 값을 저장
+
+				// access token 쿠키 생성
+				Cookie accessTokenCookie = new Cookie("access_token_id", accessTokenId);
+				accessTokenCookie.setPath("/");
+				accessTokenCookie.setHttpOnly(true);    // http를 통해서만 쿠키가 보내짐
+				accessTokenCookie.setMaxAge((int)accessTokenValidityTime);
+				// accessTokenCookie.setSecure(true);    // https에서만 쿠키가 보내지도록
+
+				response.addCookie(accessTokenCookie);
+
 				Authentication auth = tokenProvider.getAuthentication(accessToken);
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			} else {
@@ -72,15 +86,20 @@ public class JwtFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
+	/*
+	 * 인증이 필요한 엔드포인트를 확인한다.
+	 * @return 인증이 필요하다면 true, 아니면 false
+	 *
+	 * @date 2023.04.26
+	 * @author 정민지
+	 * */
 	private boolean requiresAuthentication(HttpServletRequest request) {
-		// 인증이 필요한 엔드포인트를 확인하는 로직을 구현합니다.
-		// 예를 들어, "/login" 및 "/register" 엔드포인트에 대해 인증이 필요하지 않다고 가정합니다.
-		String requestURI = request.getRequestURI();
-		if (requestURI.equals("/api/auth/kakao/callback")) {
-			return false;
-		}
-		return requestURI.startsWith("/api");
-//		return false;
+		// String requestURI = request.getRequestURI();
+		// if (requestURI.equals("/api/auth/session")) {
+		// 	return true;
+		// }
+		// return requestURI.startsWith("/api");
+		return false;
 	}
 
 }

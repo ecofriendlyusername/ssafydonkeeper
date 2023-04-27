@@ -7,6 +7,8 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.withCredentials = true; // 백엔드에서 cookie 세팅 할 수 있으려면 axios에 기본으로 되어있어야 한다. axios 한곳으로 몰아서 쓸거면 거기에 이거 작성해주세요.
+
 export default {
     name:'kakaoCallback',
     methods : {
@@ -16,9 +18,9 @@ export default {
         axios({
             method: 'post',
             url: `http://localhost:8080/api/auth/kakao/callback`,
-            // headers: {
-            //     'Authorization': `Bearer ${token}`,
-            // },
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
             data: { // 인자로 보낼 데이터
                 "code": this.$route.query.code
             }

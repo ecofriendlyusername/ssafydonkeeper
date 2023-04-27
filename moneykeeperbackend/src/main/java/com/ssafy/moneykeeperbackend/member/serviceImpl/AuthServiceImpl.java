@@ -46,6 +46,12 @@ public class AuthServiceImpl implements AuthService {
 
 	private String USER_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
 
+	/*
+	 * 카카오 로그인
+	 *
+	 * @date 2023.04.26
+	 * @author 정민지
+	 * */
 	@Override
 	public MemberDto getKakao(String code) {
 
