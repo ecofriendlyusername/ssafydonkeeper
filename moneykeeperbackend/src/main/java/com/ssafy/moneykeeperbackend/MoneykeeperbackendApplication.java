@@ -13,7 +13,4 @@ public class MoneykeeperbackendApplication {
 
 	public static void main(String[] args) { SpringApplication.run(MoneykeeperbackendApplication.class, args); }
 
-
-
-
 }
