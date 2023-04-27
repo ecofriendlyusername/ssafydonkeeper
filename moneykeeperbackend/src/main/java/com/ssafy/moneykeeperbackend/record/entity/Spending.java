@@ -1,11 +1,9 @@
 package com.ssafy.moneykeeperbackend.record.entity;
 
+import com.ssafy.moneykeeperbackend.member.entity.Member;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -16,8 +14,6 @@ public class Spending {
     @Id
     @GeneratedValue
     private Long id;
-
-    private Long testId;
     @ManyToOne
     @NonNull
     private SpendingClassification spendingClassification;
@@ -28,12 +24,14 @@ public class Spending {
     private String detail;
     private String memo;
     @Builder
-    public Spending(SpendingClassification spendingClassification, int amount, LocalDate date, String detail, String memo, Long testId) {
+    public Spending(SpendingClassification spendingClassification, int amount, LocalDate date, String detail, String memo, Member member) {
         this.spendingClassification = spendingClassification;
         this.amount = amount;
         this.detail = detail;
         this.memo = memo;
         this.date = date;
-        this.testId = testId;
+        this.member = member;
     }
+    @ManyToOne
+    private Member member;
 }

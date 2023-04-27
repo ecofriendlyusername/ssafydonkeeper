@@ -4,10 +4,7 @@ import com.ssafy.moneykeeperbackend.statistics.service.StatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -17,9 +14,9 @@ import java.util.Map;
 public class StatController {
     private final StatService statService;
     @GetMapping("/comparemonths/{months}")
-    public ResponseEntity<?> compareWithRecentXMonths(@PathVariable int months) {
-        Map<String,int[]> map = statService.compareWithRecentXMonths(months);
+    public ResponseEntity<?> compareWithRecentXMonths(@PathVariable int months, @RequestPart String id) {
+        Map<String,double[]> map = statService.compareWithRecentXMonths(months, Long.parseLong(id));
 
-        return new ResponseEntity<Map<String,int[]>>(map, HttpStatus.OK);
+        return new ResponseEntity<Map<String,double[]>>(map, HttpStatus.OK);
     }
 }

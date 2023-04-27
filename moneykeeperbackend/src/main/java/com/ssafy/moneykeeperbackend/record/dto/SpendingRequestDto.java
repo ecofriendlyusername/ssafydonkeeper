@@ -11,8 +11,6 @@ public class SpendingRequestDto {
     private String classification;
     private int year;
     private int month;
-
-    private Long testId;
     private int day;
     private int amount;
     private String detail;

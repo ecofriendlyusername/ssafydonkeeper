@@ -1,5 +1,7 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
+import com.ssafy.moneykeeperbackend.member.entity.Member;
+import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.record.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.record.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthRecordRepository;
@@ -19,29 +21,29 @@ public class StatService {
     SpendingClassificationRepository spendingClassificationRepository;
 
     private final MonthRecordRepository monthRecordRepository;
-    public Map<String, int[]> compareWithRecentXMonths(int months) {
+
+    private final MemberRepository memberRepository;
+    public Map<String, double[]> compareWithRecentXMonths(int months, Long memberId) {
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
         LocalDate firstMonth = curMonth.minusMonths(months);
         LocalDate lastMonth = curMonth.minusMonths(1);
 
-        Long testId = 1L;
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
 
-        List<MonthRecord> curMonthRecordList = monthRecordRepository.findByTestIdAndYmonth(testId,curMonth);
- // ---------------------------for test---------------------------
-        // List<SpendingClassification> forTest = spendingClassificationRepository.findAll();
+        if (!optionalMember.isPresent()) {
+            // .. ?
+        }
+        Member member = optionalMember.get();
 
- // ---------------------------for test---------------------------
-        Map<String,int[]> map = new HashMap<>();
 
-//        for (SpendingClassification spendingClassification : forTest) {
-//            map.put(spendingClassification.getName(),new int[3]);
-//        }
+        List<MonthRecord> curMonthRecordList = monthRecordRepository.findByMemberAndYmonth(member,curMonth);
 
-        int curTotalAmount = 0;
+        Map<String,double[]> map = new HashMap<>();
 
-        System.out.println("curMonthRecordList : " + curMonthRecordList.size());
+
+        double curTotalAmount = 0;
 
         for (MonthRecord mr : curMonthRecordList) {
             SpendingClassification spendingClassification = mr.getSpendingClassification();
@@ -50,16 +52,16 @@ public class StatService {
                 // ... ?
             }
             String className = spendingClassification.getName();
-            System.out.println("className : " + className);
             if (!map.containsKey(className)) {
-                map.put(className,new int[3]);
+                map.put(className,new double[3]);
             }
             map.get(spendingClassification.getName())[0] += mr.getAmount();
+            curTotalAmount += mr.getAmount();
         }
 
-        List<MonthRecord> recentMonthsRecordList = monthRecordRepository.findByTestIdAndYmonthBetween(testId,firstMonth,lastMonth);
+        List<MonthRecord> recentMonthsRecordList = monthRecordRepository.findByMemberAndYmonthBetween(member,firstMonth,lastMonth);
 
-        int totalSum = 0;
+        double totalSum = 0;
 
         for (MonthRecord monthRecord : recentMonthsRecordList) {
             SpendingClassification spendingClassification = monthRecord.getSpendingClassification();
@@ -69,24 +71,29 @@ public class StatService {
             }
             String classificationName = spendingClassification.getName();
             if (!map.containsKey(classificationName)) continue;
-            int amount = monthRecord.getAmount();
+            double amount = monthRecord.getAmount();
             map.get(classificationName)[1] += amount;
             totalSum += amount;
         }
 
-        int[] data = new int[3];
+        double[] data = new double[3];
         data[0] = curTotalAmount;
         data[1] = totalSum / months;
 
         map.put("total",data);
 
-        for (int[] dt : map.values()) {
+        for (double[] dt : map.values()) {
             dt[1] = dt[1] / months;
-            if (dt[1] < dt[0]) { // 감소
-                dt[2] = (int) (100 - ((double)(dt[1]) / (double)(dt[0])) * 100);
-                dt[2] = -dt[2];
+            if (dt[0] == 0) {
+                dt[2] = -100;
+                continue;
+            }
+            if (dt[1] > dt[0]) { // 감소
+                double diff = dt[1] - dt[0]; // 감소량
+                dt[2] = -(diff / dt[1] * 100);
             } else {
-                dt[2] = (int) (((double)(dt[1]) / (double)(dt[0])) * 100 - 100);
+                double diff = dt[0] - dt[1];
+                dt[2] = diff / dt[1] * 100;
             }
         }
 

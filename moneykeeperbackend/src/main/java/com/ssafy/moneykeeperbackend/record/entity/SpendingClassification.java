@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.record.entity;
 
+import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import lombok.*;
 
@@ -15,6 +16,7 @@ public class SpendingClassification {
     @GeneratedValue
     private Long id;
     @NonNull
+    @Column(unique=true)
     private String name;
     @OneToMany(mappedBy = "spendingClassification", fetch = FetchType.LAZY)
     private List<Spending> spendingList;
