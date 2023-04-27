@@ -23,14 +23,17 @@ public class Spending {
     private LocalDate date;
     private String detail;
     private String memo;
+    @OneToOne
+    private Asset asset;
     @Builder
-    public Spending(SpendingClassification spendingClassification, int amount, LocalDate date, String detail, String memo, Member member) {
+    public Spending(Asset asset, SpendingClassification spendingClassification, int amount, LocalDate date, String detail, String memo, Member member) {
         this.spendingClassification = spendingClassification;
         this.amount = amount;
         this.detail = detail;
         this.memo = memo;
         this.date = date;
         this.member = member;
+        this.asset = asset;
     }
     @ManyToOne
     private Member member;

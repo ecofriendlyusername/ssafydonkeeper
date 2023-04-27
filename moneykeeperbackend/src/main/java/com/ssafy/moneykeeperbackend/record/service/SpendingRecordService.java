@@ -1,13 +1,14 @@
 package com.ssafy.moneykeeperbackend.record.service;
 
+import com.ssafy.moneykeeperbackend.budget.repository.AccountRepository;
+import com.ssafy.moneykeeperbackend.budget.repository.BudgetRepository;
+import com.ssafy.moneykeeperbackend.budget.service.BudgetService;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.record.dto.SpendingRequestDto;
 import com.ssafy.moneykeeperbackend.record.dto.SpendingResponseDto;
-import com.ssafy.moneykeeperbackend.record.entity.Spending;
-import com.ssafy.moneykeeperbackend.record.entity.SpendingClassification;
-import com.ssafy.moneykeeperbackend.record.repository.SpendingClassificationRepository;
-import com.ssafy.moneykeeperbackend.record.repository.SpendingRepository;
+import com.ssafy.moneykeeperbackend.record.entity.*;
+import com.ssafy.moneykeeperbackend.record.repository.*;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthRecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,29 @@ public class SpendingRecordService {
     private final SpendingRepository spendingRepository;
     private final SpendingClassificationRepository spendingClassificationRepository;
     private final MonthRecordRepository monthRecordRepository;
+
+    private final AccountRepository accountRepository;
+    private final BudgetRepository budgetRepository;
+
+    private final BudgetService budgetService;
+
+    private final AssetRepository assetRepository;
+
     @Transactional
     public void recordSpending(SpendingRequestDto spendingRequestDto, Long memberId) {
         LocalDate date = LocalDate.of(spendingRequestDto.getYear(),spendingRequestDto.getMonth(),spendingRequestDto.getDay());
         // for test
-        SpendingClassification spendingClassification = spendingClassificationRepository.findByName(spendingRequestDto.getClassification());
+        System.out.println((spendingRequestDto == null ) + " " + spendingRequestDto.getClassificationId());
+        Optional<SpendingClassification> optionalSpendingClassification = spendingClassificationRepository.findById(spendingRequestDto.getClassificationId());
 
-        if (spendingClassification == null) {
+        if (!optionalSpendingClassification.isPresent()) {
             System.out.println(" spending classification null ");
-            // ..
+            // do something
+            return;
         }
+
+        SpendingClassification spendingClassification = optionalSpendingClassification.get();
+
 
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
@@ -46,20 +60,27 @@ public class SpendingRecordService {
         }
         Member member = optionalMember.get();
         int amount = spendingRequestDto.getAmount();
+
+        Optional<Asset> asset = assetRepository.findById(spendingRequestDto.getAssetId());
         // for test
+        if (!asset.isPresent()) {
+            // do something
+            System.out.println("Asset with asset Id " + spendingRequestDto.getAssetId() + " doesn't exist");
+            return;
+        }
         Spending spending = Spending.builder()
                 .amount(spendingRequestDto.getAmount())
                 .date(date)
                 .detail(spendingRequestDto.getDetail())
                 .memo(spendingRequestDto.getMemo())
                 .member(member)
+                .asset(asset.get())
                 .spendingClassification(spendingClassification)
                 .build();
         LocalDate curMonth = LocalDate.of(spendingRequestDto.getYear(),spendingRequestDto.getMonth(),1);
         MonthRecord monthRecord = monthRecordRepository.findByMemberAndSpendingClassificationAndYmonth(member,spendingClassification,curMonth);
         if (monthRecord == null) {
             // do something
-
             MonthRecord newMonthRecord = MonthRecord.builder()
                     .month(curMonth)
                     .member(member)
@@ -71,6 +92,17 @@ public class SpendingRecordService {
         } else {
             monthRecord.setAmount(monthRecord.getAmount()+amount);
         }
+
+        budgetService.updateBudgetAndAccountAfterSpending(member,curMonth,amount);
+
+//        Account account = accountRepository.findByMember(member);
+//        Budget budget = budgetRepository.findByMember(member);
+//
+//        int curBalance = account.getBalance();
+//        account.setBalance(curBalance - amount);
+//        int curSpending = budget.getSpending();
+//        budget.setSpending(curSpending + amount);
+
         spendingRepository.save(spending);
     }
 
@@ -96,6 +128,7 @@ public class SpendingRecordService {
             SpendingResponseDto spendingResponseDto = SpendingResponseDto.builder()
                     .day(localDate.getDayOfMonth())
                     .year(year)
+                    .id(spending.getId())
                     .month(month)
                     .memberId(spending.getMember().getId())
                     .amount(spending.getAmount())

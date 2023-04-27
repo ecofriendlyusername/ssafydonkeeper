@@ -8,11 +8,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SpendingRequestDto {
-    private String classification;
+    private Long classificationId;
     private int year;
     private int month;
     private int day;
     private int amount;
+    private Long assetId;
     private String detail;
     private String memo;
 }

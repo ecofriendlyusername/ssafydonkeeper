@@ -65,7 +65,6 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.antMatchers("/api/auth/kakao/callback").permitAll()
 			.anyRequest().permitAll()
-
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 
