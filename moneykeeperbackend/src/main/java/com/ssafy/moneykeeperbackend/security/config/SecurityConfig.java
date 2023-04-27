@@ -24,7 +24,6 @@ import com.ssafy.moneykeeperbackend.security.userDetail.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableSpringHttpSession
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -40,7 +39,7 @@ public class SecurityConfig {
 	) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-	
+
 	/*
 	 * spring session을 인메모리 형식으로 사용하기 위한 설정
 	 *
@@ -59,6 +58,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf().disable();
 		http
 			.csrf().disable()
 			.formLogin().disable()

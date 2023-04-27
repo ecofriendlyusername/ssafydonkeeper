@@ -107,7 +107,7 @@ const routes = [
     path: '/kakaoCallback',
     name: 'kakaoCallback',
     component: () => import('../views/kakaoCallback.vue')
-  }
+  },
 ]
 
 const router = createRouter({
