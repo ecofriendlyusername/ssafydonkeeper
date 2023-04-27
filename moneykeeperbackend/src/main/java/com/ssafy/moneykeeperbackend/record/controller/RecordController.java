@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/record")
+@RequestMapping("/api/record")
 public class RecordController {
     private final SpendingClassificationRepository spendingClassificationRepository;
     private final MemberRepository memberRepository;
