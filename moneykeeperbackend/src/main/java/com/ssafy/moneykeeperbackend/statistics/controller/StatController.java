@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/statistics")
+@RequestMapping("/api/statistics")
 public class StatController {
     private final StatService statService;
     @GetMapping("/comparemonths/{months}")
