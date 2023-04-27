@@ -1,18 +1,17 @@
 package com.ssafy.moneykeeperbackend.member.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import com.ssafy.moneykeeperbackend.record.entity.Spending;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,6 +43,10 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	List<Spending> spendings;
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	List<MonthRecord> monthRecords;
 	public void setNickname(String name) {
 		this.nickname = name;
 	}
