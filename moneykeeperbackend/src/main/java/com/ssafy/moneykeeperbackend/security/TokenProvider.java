@@ -38,6 +38,10 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
+/*
+* 인증 토큰을 생성, 검증, 토큰에서 사용자 정보를 추출하는 클래스
+* */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -77,25 +81,12 @@ public class TokenProvider {
 
 		String accessToken = createAccessToken(email, authorities, request, response); // access tokne 발급
 
-		String refreshTokenId = UUID.randomUUID().toString();    // 랜덤한 refresh token id 생성
-		HttpSession session = request.getSession(true);    // true를 주면 session이 없을 때 session을 만들고 시작함
-
 		String refreshToken = Jwts.builder()
 			.claim("auth", authorities)
 			.claim("email", email)
 			.setExpiration(new Date(now + refreshTokenValidityTime))
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
-
-		session.setAttribute(refreshTokenId, refreshToken);   // session에 refresh_token 값을 저장
-
-		// refresh token 쿠키 생성
-		Cookie refreshTokenCookie = new Cookie("refresh_token_id", refreshTokenId);
-		refreshTokenCookie.setHttpOnly(true);
-		refreshTokenCookie.setMaxAge((int)refreshTokenValidityTime);
-		refreshTokenCookie.setPath("/");
-
-		response.addCookie(refreshTokenCookie);
 
 		return new TokenDto(accessToken, refreshToken);
 	}
@@ -111,9 +102,6 @@ public class TokenProvider {
 	public String createAccessToken(String email, String authorities, HttpServletRequest request,
 		HttpServletResponse response) {
 
-		String accessTokenId = UUID.randomUUID().toString();
-		HttpSession session = request.getSession(true);    // true를 주면 session이 없을 때 session을 만들고 시작함
-
 		long now = (new Date()).getTime();
 
 		String accessToken = Jwts.builder()
@@ -122,16 +110,6 @@ public class TokenProvider {
 			.setExpiration(new Date(now + accessTokenValidityTime))
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
-
-		session.setAttribute(accessTokenId, accessToken);    // session에 access_token 값을 저장
-
-		// access token 쿠키 생성
-		Cookie accessTokenCookie = new Cookie("access_token_id", accessTokenId);
-		accessTokenCookie.setMaxAge((int)accessTokenValidityTime);
-		accessTokenCookie.setPath("/");
-		// accessTokenCookie.setHttpOnly(true);    // http를 통해서만 쿠키가 보내짐
-		// accessTokenCookie.setSecure(true);    // https에서만 쿠키가 보내지도록
-		response.addCookie(accessTokenCookie);
 
 		return accessToken;
 	}
