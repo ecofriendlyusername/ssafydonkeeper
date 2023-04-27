@@ -2,6 +2,8 @@ package com.ssafy.moneykeeperbackend.member.entity;
 
 import javax.persistence.*;
 
+import com.ssafy.moneykeeperbackend.budget.entity.Account;
+import com.ssafy.moneykeeperbackend.budget.entity.Budget;
 import com.ssafy.moneykeeperbackend.record.entity.Spending;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import com.sun.istack.NotNull;
@@ -47,6 +49,12 @@ public class Member {
 	List<Spending> spendings;
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	List<MonthRecord> monthRecords;
+	@OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+	Account account;
+	@OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+	Budget budget;
+
+
 	public void setNickname(String name) {
 		this.nickname = name;
 	}

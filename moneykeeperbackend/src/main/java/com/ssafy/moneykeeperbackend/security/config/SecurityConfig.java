@@ -44,8 +44,8 @@ public class SecurityConfig {
 		http
 			.formLogin().disable()
 			.authorizeRequests()
-			.antMatchers("/api/auth/kakao/callback").permitAll()
-			.anyRequest().authenticated()
+			.antMatchers("/**").permitAll()
+					.anyRequest().permitAll()
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 

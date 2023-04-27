@@ -76,11 +76,11 @@ public class JwtFilter extends OncePerRequestFilter {
 		// 인증이 필요한 엔드포인트를 확인하는 로직을 구현합니다.
 		// 예를 들어, "/login" 및 "/register" 엔드포인트에 대해 인증이 필요하지 않다고 가정합니다.
 		String requestURI = request.getRequestURI();
-		if (requestURI.equals("/api/auth/kakao/callback")) {
-			return false;
-		}
-		return requestURI.startsWith("/api");
-//		return false;
+//		if (requestURI.equals("/api/auth/kakao/callback")) {
+//			return false;
+//		}
+//		return requestURI.startsWith("/api");
+		return false;
 	}
 
 }
