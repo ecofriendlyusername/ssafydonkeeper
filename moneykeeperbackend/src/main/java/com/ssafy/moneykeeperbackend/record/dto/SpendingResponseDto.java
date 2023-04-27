@@ -5,6 +5,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SpendingResponseDto {
+
+    private Long id;
     private String classification;
     private int year;
     private int month;
@@ -15,7 +17,8 @@ public class SpendingResponseDto {
     private Long memberId;
 
     @Builder
-    public SpendingResponseDto(String classification, int amount, int year, int month, int day, String detail, String memo, Long memberId) {
+    public SpendingResponseDto(Long id, String classification, int amount, int year, int month, int day, String detail, String memo, Long memberId) {
+        this.id = id;
         this.classification = classification;
         this.amount = amount;
         this.detail = detail;
