@@ -13,19 +13,4 @@ public class MoneykeeperbackendApplication {
 
 	public static void main(String[] args) { SpringApplication.run(MoneykeeperbackendApplication.class, args); }
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedOrigins("http://127.0.0.1:8081", "http://localhost:8081", "http://localhost:8080")
-					.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS")
-					.allowedHeaders("*")
-					.allowCredentials(true);
-			}
-		};
-	}
-
-
 }
