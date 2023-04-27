@@ -15,7 +15,7 @@
         <td>장소</td>
       </tr>
       <!-- <div>분류</div> | <div>일자</div> | <div>금액</div> | <div>장소</div> -->
-      <tr v-for="(dumy, idx) in dumies" :key="idx">
+      <tr v-for="(dumy, idx) in dumies" :key="idx" v-on:click="this.$router.push('/book/'+dumy.memberId)">
         <!-- {{ dumy.classification }} | {{ dumy.day }} | {{ dumy.amount }} | {{ dumy.detail }} -->
         <td>{{ dumy.classification }}</td>
         <td>{{ dumy.day }}</td>
