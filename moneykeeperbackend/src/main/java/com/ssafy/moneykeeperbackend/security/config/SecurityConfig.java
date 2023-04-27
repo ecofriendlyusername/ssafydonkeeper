@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.ssafy.moneykeeperbackend.security.filter.TokenProvider;
+import com.ssafy.moneykeeperbackend.security.TokenProvider;
+import com.ssafy.moneykeeperbackend.security.exception.CustomAccessDeniedHandler;
+import com.ssafy.moneykeeperbackend.security.userDetail.CustomUserDetailService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +22,9 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final TokenProvider tokenProvider;
+	private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+	private final CustomUserDetailService customUserDetailService;
 
 	@Bean
 	public AuthenticationManager authenticationManager(
@@ -39,11 +44,21 @@ public class SecurityConfig {
 		http
 			.formLogin().disable()
 			.authorizeRequests()
-			.antMatchers("/**").permitAll()
-			.anyRequest().permitAll();
 
-		http.apply(new JwtSecurityConfig(tokenProvider));
+			.antMatchers("/api/auth/kakao/callback").permitAll()
+			.anyRequest().authenticated()
+
+			.and()
+			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+
+			.and()
+			.apply(new JwtSecurityConfig(tokenProvider))
+
+			.and()
+			.userDetailsService(customUserDetailService);
+
 		http.headers().frameOptions().disable();
+
 		return http.build();
 	}
 

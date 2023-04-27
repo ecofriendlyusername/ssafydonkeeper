@@ -2,8 +2,6 @@ package com.ssafy.moneykeeperbackend.security.userDetail;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +20,7 @@ public class CustomUserDetails implements UserDetails {
 		SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
 		authorities.add(grantedAuthority);
 		return authorities;
+
 	}
 
 	@Override
