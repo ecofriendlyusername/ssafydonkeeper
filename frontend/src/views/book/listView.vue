@@ -1,28 +1,90 @@
 <template>
   <div class="DivH">
-    <h1>
-      <button>저번달</button>
-      {{  month + '월' }}
-      <button>다음달</button>
-    </h1>
+
+        <h1>
+          <div style="display:flex; justify-content:center; align-items: center; font-size: 90%;">
+            <div id="beforeBtn">◀</div>
+            <div>{{  month + '월' }}</div>
+            <div id="afterBtn">▶</div>
+          </div>
+        </h1>
+
+      <!-- <span id="beforeBtn">◀</span>
+        {{  month + '월' }}
+      <span id="afterBtn">▶</span> -->
+
+    <div style="display:flex; justify-content: center; font-weight: bold; margin-top: -10px; font-size: 110%;">
+      <div id="listTitle">
+        지출
+      </div>
+      <div style="margin-left:40px;">
+        n원
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content: center; font-weight: bold; font-size: 110%;">
+      <div id="listTitle">
+        수입
+      </div>
+      <div style="margin-left:40px; color: #58BB84;">
+        n원
+      </div>
+    </div>
     
-    <hr>
-    <table>
+    <div style="height:10px; width:100%; background-color:#F0F2F5; margin-top:15px; margin-bottom:10px;"></div>
+
+    <div style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
+      <div>전체내역</div>
+      <div>+ 추가</div>
+    </div>
+    <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
+
+
+    <div v-for="(dumy, idx) in dumies" :key="idx" v-on:click="this.$router.push('/book/'+dumy.memberId)"
+    style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+        <div>
+          <div style="font-weight:bold">
+            {{ dumy.classification }}
+          </div>
+          <div style="font-size:75%; color: gray; margin-top: 2px;">
+            {{month}}.{{ dumy.day }}
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+    <!-- <table>
       <tr>
         <td>분류</td>
-        <td>일자</td>
-        <td>금액</td>
         <td>장소</td>
+        <td>금액</td>
       </tr>
-      <!-- <div>분류</div> | <div>일자</div> | <div>금액</div> | <div>장소</div> -->
+  
       <tr v-for="(dumy, idx) in dumies" :key="idx" v-on:click="this.$router.push('/book/'+dumy.memberId)">
-        <!-- {{ dumy.classification }} | {{ dumy.day }} | {{ dumy.amount }} | {{ dumy.detail }} -->
-        <td>{{ dumy.classification }}</td>
-        <td>{{ dumy.day }}</td>
-        <td>{{ dumy.amount }}</td>
+     
+        <td>
+          <div style="font-weight:bold">
+            {{ dumy.classification }}
+          </div>
+          <div style="font-size:75%; color: gray;">
+            {{month}}.{{ dumy.day }}
+          </div>
+        </td>
         <td>{{ dumy.detail }}</td>
+        <td>{{ dumy.amount }}</td>
       </tr>
-    </table>
+    </table> -->
+    
   </div>
 </template>
 
@@ -95,14 +157,28 @@ table {
   width: 100%
 }
 
-td {
+/* td {
   border: solid black 1px;
 
   ;
-}
+} */
 
 .DivH{
   min-height: 530px;
+}
+
+#listTitle {
+  color:#808080;
+}
+
+#beforeBtn {
+  font-size: 60%;
+  margin: 0px 10px;
+}
+
+#afterBtn {
+  font-size: 60%;
+  margin: 0px 10px;
 }
 </style>
 
