@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="DivH">
     <form action="">
       
       수입<input type="radio" name="label" id="수입" >
@@ -31,5 +31,8 @@ export default {
 </script>
 
 <style>
+.DivH{
+  min-height: 530px;
+}
 
 </style>

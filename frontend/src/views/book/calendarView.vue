@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="DivH">
     <div class="sec_cal">
       <!-- 캘린더 nav -->
       <div class="cal_nav">
@@ -7,7 +7,40 @@
         <div class="year-month">{{ yearMonth }}</div>
         <a href="javascript:;" class="nav-btn go-next" @click="goNext">next</a>
       </div>
-      <div>수입 {{ incom }} | 지출 {{ spend }} | 잔액 {{ incom - spend }}</div>
+
+      <div style="display:flex; justify-content:center;">
+        <div style="display:flex; justify-content:space-between; width: 70%;">
+          <div>
+            <div id="subTitle">
+              수입
+            </div>
+            <div style="color:#4285F4;">
+              {{ incom }}
+            </div>
+          </div>
+    
+          <div>
+            <div id="subTitle">
+              지출
+            </div>
+            <div style="color:#EA4335">
+              {{ spend }}
+            </div>
+          </div>
+    
+          <div>
+            <div id="subTitle">
+              잔액
+            </div>
+            <div style="color:black">
+              {{ incom - spend }}
+            </div>
+          </div>
+      </div>  
+      </div>
+      
+
+      <!-- <div>수입 <p id="income">{{ incom }}</p> | 지출 {{ spend }} | 잔액 {{ incom - spend }}</div> -->
       <div class="cal_wrap">
         <!-- 요일 -->
         <div class="days">
@@ -21,13 +54,27 @@
         </div>
         <!-- 날짜들 -->
         <div class="dates">
-          <div v-for="day in days" :class="day.class" :key="day.index">{{ day.date }}</div>
+          <div v-for="day in days" :class="day.class" :key="day.index" style="height:65px;">
+            {{ day.date }}
+          </div>
         </div>
       </div>
-      <button v-on:click="this.$router.push('/book/list')">목록보기</button>
-      <button v-on:click="this.$router.push('/book/add')">추가하기</button>
+
+      <div style="display:flex; justify-content: end; margin-top: 38px;">
+        <p v-on:click="this.$router.push('/book/list')">
+          <img src="@/assets/list.png" id="calBtn">
+        </p>
+
+        <p v-on:click="addData()">
+        <img src="@/assets/copy.png" id="calBtn">
+        </p>
+
+        <p v-on:click="this.$router.push('/book/add')">
+        <img src="@/assets/add.png" id="addBtn">
+        </p>
+      </div>
+
       <button v-on:click="addData()">dataSet(임시버튼)</button>
-      <button v-on:click="addData()">copy</button>
     </div>
   </div>
 </template>
@@ -45,12 +92,12 @@ export default {
       datas:[
       {
           'category':'incom',
-          'day':1,
+          'day':6,
           'money':100000,
         },
         {
           'category':'spend',
-          'day':1,
+          'day':6,
           'money':10000,
         },
         {
@@ -164,7 +211,7 @@ export default {
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    font-size: 48px;
+    font-size: 33px;
     line-height: 78px;
 }
 
@@ -195,8 +242,8 @@ export default {
 .sec_cal .cal_nav .go-next::before {
     content: "";
     display: block;
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     border: 3px solid #000;
     border-width: 3px 3px 0 0;
     transition: border 0.1s;
@@ -204,7 +251,7 @@ export default {
 
 .sec_cal .cal_nav .go-prev:hover::before,
 .sec_cal .cal_nav .go-next:hover::before {
-    border-color: #ed2a61;
+    border-color: #4285F4;
 }
 
 .sec_cal .cal_nav .go-prev::before {
@@ -267,9 +314,32 @@ export default {
 
 .incom{
   color: blue;
+  font-size: 90%;
+  margin-top: 3px;
+  margin-bottom: -18px;
 }
 
 .spend{
   color: red;
+  font-size: 90%;
+  margin-top: 20px;
+}
+
+#calBtn {
+  width: 42px;
+  margin: 3px;
+}
+
+#addBtn {
+  width: 57px;
+  margin-top: -18px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+
+#subTitle {
+  font-size: 110%;
+  margin-bottom: 3px;
 }
 </style>
