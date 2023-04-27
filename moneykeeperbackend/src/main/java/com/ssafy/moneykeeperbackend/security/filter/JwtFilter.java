@@ -79,8 +79,8 @@ public class JwtFilter extends OncePerRequestFilter {
 		if (requestURI.equals("/api/auth/kakao/callback")) {
 			return false;
 		}
-		// return requestURI.startsWith("/api");
-		return true;
+		return requestURI.startsWith("/api");
+//		return false;
 	}
 
 }
