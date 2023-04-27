@@ -44,6 +44,7 @@ public class SecurityConfig {
 		http
 			.formLogin().disable()
 			.authorizeRequests()
+
 			.antMatchers("/api/auth/kakao/callback").permitAll()
 			.anyRequest().authenticated()
 
@@ -55,6 +56,8 @@ public class SecurityConfig {
 
 			.and()
 			.userDetailsService(customUserDetailService);
+
+		http.headers().frameOptions().disable();
 
 		return http.build();
 	}
