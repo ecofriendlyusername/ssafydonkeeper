@@ -18,7 +18,7 @@
         지출
       </div>
       <div style="margin-left:40px;">
-        n원
+        {{total_spend}}
       </div>
     </div>
 
@@ -27,7 +27,7 @@
         수입
       </div>
       <div style="margin-left:40px; color: #58BB84;">
-        n원
+        {{total_incom}}
       </div>
     </div>
     
@@ -93,7 +93,9 @@ export default {
 
   data() {
     return {
-      month: '4',
+      month: 4,
+      total_incom: 200000,
+      total_spend: 100000,
       dumies: [
         {
           "classification": "외식",
