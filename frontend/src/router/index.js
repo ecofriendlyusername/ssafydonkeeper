@@ -25,7 +25,7 @@ const routes = [
         name: 'list',
         component: () => import('../views/book/listView.vue')
       },
-      
+
       {
         path: ':id',
         name: 'detail',
