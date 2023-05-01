@@ -2,8 +2,8 @@
   <div class="DivH">
     <div style="display: inline-block; height:5px; width:90%; background-color:black; margin-top:15px; margin-bottom:10px;"></div>
     <div style="font-size:120%; font-weight: bold;">
-      <!-- {{ dumy.detail }} -->
-      CU(메인타워점)
+      {{ dumy.detail }}
+      <!-- CU(메인타워점) -->
     </div>
     <div style="display:inline-block; height:2px; width:80%; background-color:#F0F2F5; margin-top:10px; margin-bottom:10px;"></div>
 
