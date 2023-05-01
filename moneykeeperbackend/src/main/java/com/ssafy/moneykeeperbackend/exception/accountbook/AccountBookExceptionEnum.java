@@ -1,21 +1,22 @@
-package com.ssafy.moneykeeperbackend.exception.auth;
+package com.ssafy.moneykeeperbackend.exception.accountbook;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
+import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum AuthExceptionEnum {
-	AUTH_AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0000", "인증되지 않았습니다."),
-	KAKAO_SHOULD_HAVE_EMAIL(HttpStatus.UNAUTHORIZED, "A0001", "카카오 이메일 제공에 동의해주셔야 서비스 이용이 가능합니다."),
-	REQUIRED_RE_LOGIN(HttpStatus.UNAUTHORIZED, "A0002", "재로그인이 필요합니다."),
+public enum AccountBookExceptionEnum {
 
-	REQUIRED_LOGIN_CHECK(HttpStatus.UNAUTHORIZED, "A0003", "로그인된 멤버가 없습니다. 확인 부탁드립니다.");
+	SPENDING_CLASSIFICATION_ID_NULL(HttpStatus.NOT_FOUND, "B0000", "해당 아이디의 소비 분류가 없습니다. 확인해주세요."),
+
+	ASSET_ID_NULL(HttpStatus.NOT_FOUND, "B0001", "해당 아이디의 자산 분류가 없습니다. 확인해주세요.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;

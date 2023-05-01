@@ -1,9 +1,9 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
+import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
+import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
-import com.ssafy.moneykeeperbackend.record.entity.SpendingClassification;
-import com.ssafy.moneykeeperbackend.record.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthRecordRepository;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import lombok.RequiredArgsConstructor;
