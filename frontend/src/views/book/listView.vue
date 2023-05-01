@@ -1,15 +1,15 @@
 <template>
   <div class="DivH">
 
-        <h1>
-          <div style="display:flex; justify-content:center; align-items: center; font-size: 90%;">
-            <div id="beforeBtn">◀</div>
-            <div>{{  month + '월' }}</div>
-            <div id="afterBtn">▶</div>
-          </div>
-        </h1>
+    <h1>
+      <div style="display:flex; justify-content:center; align-items: center; font-size: 90%;">
+        <div id="beforeBtn">◀</div>
+        <div>{{ month + '월' }}</div>
+        <div id="afterBtn">▶</div>
+      </div>
+    </h1>
 
-      <!-- <span id="beforeBtn">◀</span>
+    <!-- <span id="beforeBtn">◀</span>
         {{  month + '월' }}
       <span id="afterBtn">▶</span> -->
 
@@ -18,7 +18,7 @@
         지출
       </div>
       <div style="margin-left:40px;">
-        {{total_spend}}
+        {{ total_spend }}
       </div>
     </div>
 
@@ -27,10 +27,10 @@
         수입
       </div>
       <div style="margin-left:40px; color: #58BB84;">
-        {{total_incom}}
+        {{ total_incom }}
       </div>
     </div>
-    
+
     <div style="height:10px; width:100%; background-color:#F0F2F5; margin-top:15px; margin-bottom:10px;"></div>
 
     <div style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
@@ -40,21 +40,21 @@
     <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
 
 
-    <div v-for="(dumy, idx) in dumies" :key="idx" v-on:click="this.$router.push('/book/'+dumy.memberId)"
-    style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
-        <div>
-          <div style="font-weight:bold">
-            {{ dumy.classification }}
-          </div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{month}}.{{ dumy.day }}
-          </div>
+    <div v-for="(dumy, idx) in dumies" :key="idx" v-on:click="this.$router.push('/book/' + dumy.memberId)"
+      style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+      <div>
+        <div style="font-weight:bold">
+          {{ dumy.classification }}
         </div>
-        <div>
-          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
+        <div style="font-size:75%; color: gray; margin-top: 2px;">
+          {{ month }}.{{ dumy.day }}
         </div>
       </div>
+      <div>
+        <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+        <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
+      </div>
+    </div>
 
 
 
@@ -84,7 +84,7 @@
         <td>{{ dumy.amount }}</td>
       </tr>
     </table> -->
-    
+
   </div>
 </template>
 
@@ -146,7 +146,7 @@ export default {
           "detail": "some detail",
           "memo": "some memo",
           "memberId": 4
-        }   
+        }
       ]
     }
   }
@@ -165,12 +165,12 @@ table {
   ;
 } */
 
-.DivH{
+.DivH {
   min-height: 530px;
 }
 
 #listTitle {
-  color:#808080;
+  color: #808080;
 }
 
 #beforeBtn {
