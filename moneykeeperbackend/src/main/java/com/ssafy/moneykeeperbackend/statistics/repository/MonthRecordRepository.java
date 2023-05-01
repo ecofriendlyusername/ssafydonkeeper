@@ -1,7 +1,7 @@
 package com.ssafy.moneykeeperbackend.statistics.repository;
 
+import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.ssafy.moneykeeperbackend.record.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 

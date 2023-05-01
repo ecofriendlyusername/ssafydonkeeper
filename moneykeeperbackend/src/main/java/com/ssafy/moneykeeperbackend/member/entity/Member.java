@@ -2,10 +2,10 @@ package com.ssafy.moneykeeperbackend.member.entity;
 
 import javax.persistence.*;
 
-import com.ssafy.moneykeeperbackend.budget.entity.Account;
-import com.ssafy.moneykeeperbackend.budget.entity.Budget;
-import com.ssafy.moneykeeperbackend.record.entity.Spending;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthRecord;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
+import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
+import com.ssafy.moneykeeperbackend.common.BaseEntity;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -45,15 +45,14 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Spending> spendings;
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-	List<MonthRecord> monthRecords;
-	@OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-	Account account;
-	@OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-	Budget budget;
 
+	@OneToMany(mappedBy = "member")
+	List<SpendingClassification> spendingClassifications;
+
+	@OneToMany(mappedBy = "member")
+	List<Asset> assets;
 
 	public void setNickname(String name) {
 		this.nickname = name;
