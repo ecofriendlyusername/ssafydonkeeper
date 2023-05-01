@@ -65,7 +65,7 @@
           <img src="@/assets/list.png" id="calBtn">
         </p>
 
-        <p v-on:click="addData()">
+        <p v-on:click="null">
         <img src="@/assets/copy.png" id="calBtn">
         </p>
 

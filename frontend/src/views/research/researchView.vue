@@ -1,27 +1,30 @@
 <template>
   <div>
-      <h1>나의 최근 소비 패턴</h1>
-    <div>
-      {{ research_data }}
-    </div>
+    <h1>나의 최근 소비 패턴</h1>
+    <canvas id="chart"></canvas>
   </div>
 
   <div>
     <h2>소비 맞춤 카드 추천</h2>
-    <div v-for="recom_card in recom_cards" :key="recom_card.id">
-      <img src="" alt=recom_card.path >
-      <div>{{ recom_card.name }} </div>
-      <div>{{ recom_card.company }} </div>
-    </div>
     
+    <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/recom/' + recom_card.id)">
+      <div>
+        <img src="" alt=recom_card.path>
+      </div>
+      <div>
+        <h3>{{ recom_card.name }} </h3>
+        <div>{{ recom_card.company }} </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-
+import Chart from 'chart.js/auto';
 
 export default {
-  data(){
+  data() {
     return {
       research_data: [
         {
@@ -58,12 +61,37 @@ export default {
         },
       ]
     }
+  },
+  mounted() {
+    new Chart(
+      document.getElementById('chart'),
+      {
+        type: 'pie',
+        options: {
+          // plugins: {
+          //   legend: {
+          //     display: false
+          //   }
+          // }
+        },
+        data: {
+          labels: this.research_data.map(row => row.classification),
+          datasets: [
+            {
+              data: this.research_data.map(row => row.percent)
+            }
+          ]
+        }
+      }
+    );
   }
 
 }
 </script>
 
 <style>
-
-
+.cell {
+  display: block;
+  border: black solid 1px;
+}
 </style>
