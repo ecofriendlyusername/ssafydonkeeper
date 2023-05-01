@@ -32,7 +32,7 @@
             <div id="subTitle">
               잔액
             </div>
-            <div style="color:black">
+              <div style="color:black">
               {{ incom - spend }}
             </div>
           </div>

@@ -1,8 +1,8 @@
 <template>
   <div class="DivH">
     <form action="">
-      
-      수입<input type="radio" name="label" id="수입" >
+
+      수입<input type="radio" name="label" id="수입">
       지출<input type="radio" name="label" id="지출">
       기타<input type="radio" name="label" id="기타">
       <br>
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       isCategory: false,
     }
@@ -30,8 +30,7 @@ export default {
 </script>
 
 <style>
-.DivH{
+.DivH {
   min-height: 530px;
 }
-
 </style>

@@ -5,9 +5,9 @@
     <h4>짠테크 챌린지</h4>
     <ul>전체보기</ul>
 
-    <detailViewVue/>
+    <detailViewVue />
 
- 
+
   </div>
 </template>
 
@@ -23,6 +23,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

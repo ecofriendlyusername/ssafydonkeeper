@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>나의 최근 소비 패턴</h1>
+    <h1>나의 최근 소비 패턴</h1>
     <div>
       {{ research_data }}
     </div>
@@ -9,11 +9,11 @@
   <div>
     <h2>소비 맞춤 카드 추천</h2>
     <div v-for="recom_card in recom_cards" :key="recom_card.id">
-      <img src="" alt=recom_card.path >
+      <img src="" alt=recom_card.path>
       <div>{{ recom_card.name }} </div>
       <div>{{ recom_card.company }} </div>
     </div>
-    
+
   </div>
 </template>
 
@@ -21,7 +21,7 @@
 
 
 export default {
-  data(){
+  data() {
     return {
       research_data: [
         {
@@ -63,7 +63,4 @@ export default {
 }
 </script>
 
-<style>
-
-
-</style>
+<style></style>
