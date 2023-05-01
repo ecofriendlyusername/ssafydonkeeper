@@ -46,6 +46,11 @@ const routes = [
         name: 'recom',
         component: () => import('../views/research/researchView.vue')
       },
+      {
+        path: 'recom/:id',
+        name: 'recomCard',
+        component: () => import('../views/research/recomCardView.vue')
+      },
     ]
   },
   {
