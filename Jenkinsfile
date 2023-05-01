@@ -10,7 +10,7 @@ pipeline {
     }
     stage('Build Front Image') {
       steps {
-        dir('front') {
+        dir('frontend') {
           sh 'docker build -t donkeeper-fe .'
         }
       }
