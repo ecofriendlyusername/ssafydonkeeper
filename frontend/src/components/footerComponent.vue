@@ -3,47 +3,47 @@
         <div style="display:flex; justify-content:space-between; padding: 10px 15px;">
             <div>
                 <router-link to="/book/calendar" class="router">
-                <div>
-                    <img src="@/assets/가계부.png" style="width:35px; margin-bottom: 4px;">
-                </div>
-                <div>
-                    가계부
-                </div>
+                    <div>
+                        <img src="@/assets/가계부.png" style="width:35px; margin-bottom: 4px;">
+                    </div>
+                    <div>
+                        가계부
+                    </div>
                 </router-link>
             </div>
 
-            
+
 
             <div>
                 <router-link to="/budget" class="router">
-                <div>
-                    <img src="@/assets/예산.png" style="width:38px; margin-top: 7px; margin-bottom: 8px;">
-                </div>
-                <div>
-                    예산
-                </div>
+                    <div>
+                        <img src="@/assets/예산.png" style="width:38px; margin-top: 7px; margin-bottom: 8px;">
+                    </div>
+                    <div>
+                        예산
+                    </div>
                 </router-link>
             </div>
 
             <div>
                 <router-link to="/research" class="router">
-                <div>
-                    <img src="@/assets/소비패턴.png" style="width:31px; margin-top: 5px; margin-bottom: 3px;">
-                </div>
-                <div>
-                    소비패턴
-                </div>
+                    <div>
+                        <img src="@/assets/소비패턴.png" style="width:31px; margin-top: 5px; margin-bottom: 3px;">
+                    </div>
+                    <div>
+                        소비패턴
+                    </div>
                 </router-link>
             </div>
 
             <div>
                 <router-link to="/comparison" class="router">
-                <div>
-                    <img src="@/assets/자산비교.png" style="width:34px; margin-top: 5px; margin-bottom: 5px;">
-                </div>
-                <div>
-                    자산비교
-                </div>
+                    <div>
+                        <img src="@/assets/자산비교.png" style="width:34px; margin-top: 5px; margin-bottom: 5px;">
+                    </div>
+                    <div>
+                        자산비교
+                    </div>
                 </router-link>
             </div>
         </div>
@@ -63,10 +63,10 @@ export default {
     data() {
         return {
             menuBar: [
-                {name:'가계부', route:'/book/calendar'}, 
-                {name:'예산', route:'/budget'}, 
-                {name:'소비패턴', route:'/research'}, 
-                {name:'자산비교', route:'/comparison'}
+                { name: '가계부', route: '/book/calendar' },
+                { name: '예산', route: '/budget' },
+                { name: '소비패턴', route: '/research' },
+                { name: '자산비교', route: '/comparison' }
             ]
         }
     }
