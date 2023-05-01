@@ -17,8 +17,8 @@ pipeline {
     }
     stage('Run Containers') {
       steps {
-        sh 'docker run -d --name backend-container donkeeper-be'
-        sh 'docker run -d --name frontend-container donkeeper-fe'
+        sh 'docker run -d -p 8080:8080 --name backend-container donkeeper-be'
+        sh 'docker run -d -p 3000:3000 --name frontend-container donkeeper-fe'
       }
     }
   }
