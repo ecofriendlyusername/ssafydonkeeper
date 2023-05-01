@@ -1,8 +1,9 @@
 <template>
   <headerComponent/>
-  <a href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:8081/kakaoCallback&response_type=code"><img src="./assets/kakao_login_medium_narrow.png" alt=""></a>
+  <a href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img src="./assets/kakao_login_medium_narrow.png" alt=""></a>
   
   <div @click = "check">세션 체크</div>
+  <div @click = "postaccountbook">소비내역 쓰기</div>
   <router-view />
   <footerComponent/>
 </template>
@@ -27,6 +28,24 @@ export default {
           })
             .then((res) => {
               console.log("세션")
+              console.log(res.data)
+            })
+    },
+    postaccountbook() {
+      axios({
+            method: 'post',
+            url: `http://localhost:8080/api/account-book/spending`,
+            data: {
+              "assetId" : 17,
+              "spendingClassificationId" : 2,
+              "date" : "2023-05-01",
+              "amount" : 23000, 
+              "detail": "엽닭",
+              "memo": "승현이랑"
+            }
+          })
+            .then((res) => {
+              console.log("post")
               console.log(res.data)
             })
     }

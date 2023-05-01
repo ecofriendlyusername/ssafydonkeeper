@@ -1,6 +1,7 @@
 package com.ssafy.moneykeeperbackend.statistics.entity;
-import com.ssafy.moneykeeperbackend.record.entity.SpendingClassification;
 import lombok.*;
+
+import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -7,14 +7,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
+import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
+import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
+import com.ssafy.moneykeeperbackend.accountbook.repository.AssetRepository;
+import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
+import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
 import com.ssafy.moneykeeperbackend.member.dto.common.MemberDto;
@@ -35,6 +43,12 @@ public class AuthServiceImpl implements AuthService {
 	private PasswordEncoder passwordEncoder;
 
 	private final MemberRepository memberRepository;
+
+	private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
+
+	private final SpendingClassificationRepository spendingClassificationRepository;
+
+	private final AssetRepository assetRepository;
 
 	@Value("${kakao.rest-api-key}")
 	private String API_KEY;
@@ -103,6 +117,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 	}
 
+	@Transactional
 	public MemberDto joinOrLogin(String accessToken) {
 
 		try {
@@ -168,7 +183,8 @@ public class AuthServiceImpl implements AuthService {
 					.role(Role.ROLE_USER)
 					.build();
 
-				memberRepository.saveAndFlush(member);
+				setPrimaryInfo(memberRepository.saveAndFlush(member));
+
 			} else {
 				member.setNickname(nickname);
 				member.setOauthAceessToken(accessToken);
@@ -176,9 +192,9 @@ public class AuthServiceImpl implements AuthService {
 
 			return MemberDto.builder()
 				.id(member.getId())
-				.email(member.getEmail())
-				.nickname(member.getNickname())
-				.password("kakao" + String.valueOf(id))
+				.email(email)
+				.nickname(nickname)
+				.password("kakao" + String.valueOf(id)) // security 비교 시 비밀번호 원문 필요
 				.build();
 
 		} catch (IOException e) {
@@ -186,5 +202,31 @@ public class AuthServiceImpl implements AuthService {
 		}
 	}
 
+	@Transactional
+	public void setPrimaryInfo(Member member) {
+		List<MajorSpendingClassification> majorSpendingClassificationList = majorSpendingClassificationRepository.findAll();
+
+		for (MajorSpendingClassification majorSpendingClassification : majorSpendingClassificationList) {
+			spendingClassificationRepository.saveAndFlush(
+				SpendingClassification.builder()
+					.name(majorSpendingClassification.getName())
+					.majorSpendingClassification(majorSpendingClassification)
+					.member(member)
+					.build()
+			);
+		}
+
+		String[] assets = {"카드", "은행", "현금"};
+		for (String asset : assets) {
+			assetRepository.saveAndFlush(
+				Asset.builder()
+					.name(asset)
+					.member(member)
+					.total_account(Long.parseLong("0"))
+					.build()
+			);
+		}
+
+	}
 
 }
