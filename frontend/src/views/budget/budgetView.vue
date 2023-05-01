@@ -4,7 +4,7 @@
     <p>총 예산: {{ req.total_budget }} ₩</p>
 
     <div class="baseBar">
-      <div class="gageBar"></div>
+      <div class="gaugeBar"></div>
     </div>
 
     <p>사용 예산: {{ req.spend_budget}} ₩</p>
@@ -13,8 +13,15 @@
 
     <div>
       <h3>카테고리별 예산</h3>
-      <div v-for="(budget_category, idx) in req.budget_categories" :key="idx">
-        [{{budget_category.category}}] 전체 예산: {{budget_category.total_budget}} 사용 예산: {{budget_category.spend_budget}} 퍼센트{{ 100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100 }}
+      <div v-for="(budget_category, idx) in req.budget_categories" :key="idx" class="cell">
+        <div>
+          [{{budget_category.category}}]
+        </div>
+        <div>
+          전체 예산: {{budget_category.total_budget}} <br>
+          사용 예산: {{budget_category.spend_budget}} <br>
+          사용 퍼센트: {{ 100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100 }}%
+        </div>
       </div>
     </div>
   </div>
@@ -47,9 +54,11 @@ export default {
       }
     }
   },
-  // mounted: {
-
-  // }
+  mounted() {
+    const gauge = document.querySelector(".gaugeBar");
+    let tmp = 100 - (this.req.total_budget - this.req.spend_budget) / this.req.total_budget * 100
+    gauge.style.width = `${tmp}%`;
+  }
 
 }
 </script>
@@ -63,11 +72,17 @@ export default {
   padding: 2px;
 }
 
-.gageBar {
+.gaugeBar {
   
   width: 200px;
   height: 14px;
   background-color: #ff0;
+}
+
+.cell {
+  display: contents;
+  align-items:center;
+
 }
 
 </style>
