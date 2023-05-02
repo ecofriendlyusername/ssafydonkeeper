@@ -42,14 +42,14 @@ const routes = [
         component: () => import('../views/research/researchView.vue')
       },
       {
-        path: 'recom',
-        name: 'recom',
-        component: () => import('../views/research/researchView.vue')
+        path: 'cardList',
+        name: 'cardList',
+        component: () => import('../views/research/cardListView.vue')
       },
       {
-        path: 'recom/:id',
-        name: 'recomCard',
-        component: () => import('../views/research/recomCardView.vue')
+        path: 'card/:id',
+        name: 'cardDetail',
+        component: () => import('../views/research/cardDetail.vue')
       },
     ]
   },
