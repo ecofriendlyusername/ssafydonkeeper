@@ -1,17 +1,21 @@
 <template>
   <div class="DivH">
-    <div style="display: inline-block; height:5px; width:90%; background-color:black; margin-top:15px; margin-bottom:10px;"></div>
-    <div style="font-size:120%; font-weight: bold;">
-      <!-- {{ dumy.detail }} -->
-      CU(메인타워점)
+    <div
+      style="display: inline-block; height:5px; width:90%; background-color:black; margin-top:15px; margin-bottom:10px;">
     </div>
-    <div style="display:inline-block; height:2px; width:80%; background-color:#F0F2F5; margin-top:10px; margin-bottom:10px;"></div>
+    <div style="font-size:120%; font-weight: bold;">
+      {{ dumy.detail }}
+      <!-- CU(메인타워점) -->
+    </div>
+    <div
+      style="display:inline-block; height:2px; width:80%; background-color:#F0F2F5; margin-top:10px; margin-bottom:10px;">
+    </div>
 
     <div style="width:80%; display: inline-block;">
       <div style="display:flex; justify-content:space-between;">
         <div style="color:#808080">승인일시</div>
         <div>
-          {{ dumy.year }} / {{dumy.month }} / {{dumy.day }}
+          {{ dumy.year }} / {{ dumy.month }} / {{ dumy.day }}
         </div>
       </div>
 
@@ -29,8 +33,10 @@
         </div>
       </div>
 
-      <div style="display:inline-block; height:2px; width:100%; background-color:#F0F2F5; margin-top:10px; margin-bottom:10px;"></div>
-      
+      <div
+        style="display:inline-block; height:2px; width:100%; background-color:#F0F2F5; margin-top:10px; margin-bottom:10px;">
+      </div>
+
       <div style="display:flex; justify-content:space-between; font-size: 120%;">
         <div>상품금액</div>
         <div style="color:#EA4B4E; font-weight:bold">
@@ -41,7 +47,7 @@
     <br>
 
     <button id="detailBtn">수정하기</button>
-    
+
 
   </div>
 </template>
@@ -73,5 +79,4 @@ export default {
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
-}
-</style>
+}</style>

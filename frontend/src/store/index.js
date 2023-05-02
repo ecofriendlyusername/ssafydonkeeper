@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    title:'메인페이지',
+    title: '메인페이지',
   },
   getters: {
     getTitle(state) {

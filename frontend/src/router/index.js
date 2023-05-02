@@ -25,7 +25,7 @@ const routes = [
         name: 'list',
         component: () => import('../views/book/listView.vue')
       },
-      
+
       {
         path: ':id',
         name: 'detail',
@@ -42,9 +42,14 @@ const routes = [
         component: () => import('../views/research/researchView.vue')
       },
       {
-        path: 'recom',
-        name: 'recom',
-        component: () => import('../views/research/researchView.vue')
+        path: 'cardList',
+        name: 'cardList',
+        component: () => import('../views/research/cardListView.vue')
+      },
+      {
+        path: 'card/:id',
+        name: 'cardDetail',
+        component: () => import('../views/research/cardDetail.vue')
       },
     ]
   },

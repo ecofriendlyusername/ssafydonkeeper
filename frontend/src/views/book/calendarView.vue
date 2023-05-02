@@ -18,7 +18,7 @@
               {{ incom }}
             </div>
           </div>
-    
+
           <div>
             <div id="subTitle">
               지출
@@ -27,7 +27,7 @@
               {{ spend }}
             </div>
           </div>
-    
+
           <div>
             <div id="subTitle">
               잔액
@@ -36,9 +36,9 @@
               {{ incom - spend }}
             </div>
           </div>
-      </div>  
+        </div>
       </div>
-      
+
 
       <!-- <div>수입 <p id="income">{{ incom }}</p> | 지출 {{ spend }} | 잔액 {{ incom - spend }}</div> -->
       <div class="cal_wrap">
@@ -65,12 +65,12 @@
           <img src="@/assets/list.png" id="calBtn">
         </p>
 
-        <p v-on:click="addData()">
-        <img src="@/assets/copy.png" id="calBtn">
+        <p v-on:click="null">
+          <img src="@/assets/copy.png" id="calBtn">
         </p>
 
         <p v-on:click="this.$router.push('/book/add')">
-        <img src="@/assets/add.png" id="addBtn">
+          <img src="@/assets/add.png" id="addBtn">
         </p>
       </div>
 
@@ -89,31 +89,31 @@ export default {
       // 임시데이터
       incom: 0,
       spend: 0,
-      datas:[
-      {
-          'category':'incom',
-          'day':6,
-          'money':100000,
+      datas: [
+        {
+          'category': 'incom',
+          'day': 6,
+          'money': 100000,
         },
         {
-          'category':'spend',
-          'day':6,
-          'money':10000,
+          'category': 'spend',
+          'day': 6,
+          'money': 10000,
         },
         {
-          'category':'incom',
-          'day':2,
-          'money':2000,
+          'category': 'incom',
+          'day': 2,
+          'money': 2000,
         },
         {
-          'category':'spend',
-          'day':3,
-          'money':10000,
+          'category': 'spend',
+          'day': 3,
+          'money': 10000,
         },
         {
-          'category':'spend',
-          'day':5,
-          'money':10000,
+          'category': 'spend',
+          'day': 5,
+          'money': 10000,
         },
       ]
     };
@@ -127,11 +127,11 @@ export default {
     // 데이터 추가하는 함수, mount 걸어야 함, async로 renderCalendar다음에 시작되도록 해야 함
     addData() {
       const dayday = document.querySelectorAll('.current');
-      this.datas.forEach(data=>{
+      this.datas.forEach(data => {
         let p = document.createElement("p");
         p.setAttribute('class', data.category)
         p.innerText = data.money;
-        dayday[data.day-1].appendChild(p);
+        dayday[data.day - 1].appendChild(p);
 
         if (data.category == 'incom') {
           this.incom += data.money
@@ -201,125 +201,127 @@ export default {
 
 <style>
 .sec_cal {
-    width: 360px;
-    margin: 0 auto;
-    font-family: "NotoSansR";
+  width: 360px;
+  margin: 0 auto;
+  font-family: "NotoSansR";
 }
 
 .sec_cal .cal_nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-    font-size: 33px;
-    line-height: 78px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 33px;
+  line-height: 78px;
 }
 
 .sec_cal .cal_nav .year-month {
-    width: 300px;
-    text-align: center;
-    line-height: 1;
+  width: 300px;
+  text-align: center;
+  line-height: 1;
 }
 
 .sec_cal .cal_nav .nav {
-    display: flex;
-    border: 1px solid #333333;
-    border-radius: 5px;
+  display: flex;
+  border: 1px solid #333333;
+  border-radius: 5px;
 }
 
 .sec_cal .cal_nav .go-prev,
 .sec_cal .cal_nav .go-next {
-    display: block;
-    width: 50px;
-    height: 78px;
-    font-size: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: block;
+  width: 50px;
+  height: 78px;
+  font-size: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sec_cal .cal_nav .go-prev::before,
 .sec_cal .cal_nav .go-next::before {
-    content: "";
-    display: block;
-    width: 10px;
-    height: 10px;
-    border: 3px solid #000;
-    border-width: 3px 3px 0 0;
-    transition: border 0.1s;
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 3px solid #000;
+  border-width: 3px 3px 0 0;
+  transition: border 0.1s;
 }
 
 .sec_cal .cal_nav .go-prev:hover::before,
 .sec_cal .cal_nav .go-next:hover::before {
-    border-color: #4285F4;
+  border-color: #4285F4;
 }
 
 .sec_cal .cal_nav .go-prev::before {
-    transform: rotate(-135deg);
+  transform: rotate(-135deg);
 }
 
 .sec_cal .cal_nav .go-next::before {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .sec_cal .cal_wrap {
-    padding-top: 40px;
-    position: relative;
-    margin: 0 auto;
+  padding-top: 40px;
+  position: relative;
+  margin: 0 auto;
 }
 
 .sec_cal .cal_wrap .days {
-    display: flex;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+  display: flex;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 .sec_cal .cal_wrap::after {
-    top: 368px;
+  top: 368px;
 }
 
 .sec_cal .cal_wrap .day {
-    /* display:flex; */
-    align-items: center;
-    justify-content: center;
-    width: calc(100% / 7);
-    text-align: left;
-    color: #999;
-    font-size: 12px;
-    text-align: center;
-    border-radius:5px;
+  /* display:flex; */
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 7);
+  text-align: left;
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 5px;
 }
 
-.current.today {background: rgb(242 242 242);}
+.current.today {
+  background: rgb(242 242 242);
+}
 
 .sec_cal .cal_wrap .dates {
-    display: flex;
-    flex-flow: wrap;
-    height: 290px;
+  display: flex;
+  flex-flow: wrap;
+  height: 290px;
 
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n -1) {
-    color: #3c6ffa;
+  color: #3c6ffa;
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n) {
-    color: #ed2a61;
+  color: #ed2a61;
 }
 
 .sec_cal .cal_wrap .day.disable {
-    color: #ddd;
+  color: #ddd;
 }
 
-.incom{
+.incom {
   color: blue;
   font-size: 90%;
   margin-top: 3px;
   margin-bottom: -18px;
 }
 
-.spend{
+.spend {
   color: red;
   font-size: 90%;
   margin-top: 20px;
