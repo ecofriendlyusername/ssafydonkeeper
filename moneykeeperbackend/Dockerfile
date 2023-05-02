@@ -15,7 +15,7 @@ ENV PATH $GRADLE_HOME/bin:$PATH
 WORKDIR /app
 COPY . .
 RUN gradle bootJar
-COPY src/main/resources/application.yml src/main/resources/
+COPY ./src/main/resources/application.yml /app/src/main/resources/
 
 FROM openjdk:11
 COPY --from=builder /app/build/libs/*.jar app.jar
