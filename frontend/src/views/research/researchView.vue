@@ -7,7 +7,7 @@
   <div>
     <h2>소비 맞춤 카드 추천</h2>
     
-    <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/recom/' + recom_card.id)">
+    <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/card/' + recom_card.id)">
       <div>
         <img src="" alt=recom_card.path>
       </div>
@@ -15,8 +15,10 @@
         <h3>{{ recom_card.name }} </h3>
         <div>{{ recom_card.company }} </div>
       </div>
-    </div>
 
+    </div>
+    
+    <div v-on:click="this.$router.push('/research/cardList')">더보기</div>
   </div>
 </template>
 
