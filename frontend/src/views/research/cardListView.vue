@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>소비 맞춤 카드 추천</h2>
-
+    <h2>카드 목록</h2>
+    
     <ul>
       <li>카드1</li>
       <li>카드2</li>
@@ -14,9 +14,11 @@
 
 <script>
 export default {
-  name: 'RecomView'
+    name: 'RecomView'
 
 }
 </script>
 
-<style></style>
+<style>
+
+</style>
