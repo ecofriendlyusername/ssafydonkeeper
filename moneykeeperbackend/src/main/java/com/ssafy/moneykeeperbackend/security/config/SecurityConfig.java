@@ -63,7 +63,7 @@ public class SecurityConfig {
 			.csrf().disable()
 			.formLogin().disable()
 			.authorizeRequests()
-			.antMatchers("/api/auth/kakao/callback").permitAll()
+			.antMatchers("/**").permitAll()
 			.anyRequest().permitAll()
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
@@ -74,6 +74,7 @@ public class SecurityConfig {
 			.and()
 			.userDetailsService(customUserDetailService);
 
+		http.headers().frameOptions().disable();
 		return http.build();
 	}
 
@@ -94,3 +95,6 @@ public class SecurityConfig {
 
 
 }
+
+//			.antMatchers("/api/auth/kakao/callback").permitAll()
+//					.anyRequest().permitAll()

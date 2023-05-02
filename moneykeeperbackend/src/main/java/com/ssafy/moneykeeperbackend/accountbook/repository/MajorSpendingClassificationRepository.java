@@ -11,4 +11,6 @@ import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassificati
 public interface MajorSpendingClassificationRepository extends JpaRepository<MajorSpendingClassification, Long> {
 
 	List<MajorSpendingClassification> findAll();
+
+	MajorSpendingClassification findByName(String sclass);
 }

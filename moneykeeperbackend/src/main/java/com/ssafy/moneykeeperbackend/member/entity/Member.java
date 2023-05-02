@@ -6,6 +6,10 @@ import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
+import com.ssafy.moneykeeperbackend.statistics.entity.IncomeGroup;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
+import com.ssafy.moneykeeperbackend.statistics.entity.SpendingGroup;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -54,6 +58,20 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member")
 	List<Asset> assets;
 
+	@ManyToOne
+	private IncomeGroup incomeGroup;
+	@ManyToOne
+	private SpendingGroup spendingGroup;
+
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	List<MonthSpendingRecordByClass> monthSpendingRecordByClasses;
+
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	List<MonthSpendingRecord> monthSpendingRecords;
+
+	public void setSpendingGroup(SpendingGroup spendingGroup) { this.spendingGroup = spendingGroup; }
+	public void setIncomeGroup(IncomeGroup incomeGroup) { this.incomeGroup = incomeGroup; }
+
 	public void setNickname(String name) {
 		this.nickname = name;
 	}
@@ -61,5 +79,4 @@ public class Member extends BaseEntity {
 	public void setOauthAceessToken(String name) {
 		this.nickname = name;
 	}
-
 }
