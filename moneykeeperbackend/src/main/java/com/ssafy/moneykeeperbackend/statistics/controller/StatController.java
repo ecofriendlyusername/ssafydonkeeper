@@ -3,8 +3,8 @@ package com.ssafy.moneykeeperbackend.statistics.controller;
 import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
 import com.ssafy.moneykeeperbackend.statistics.service.StatService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import java.util.Map;
 public class StatController {
     private final StatService statService;
     @GetMapping("/comparemonths/{months}")
+    @ApiOperation(value = "test", notes = "test")
     public ResponseEntity<?> compareWithRecentXMonths(@PathVariable int months, @RequestPart String id) {
         // Map<String,double[]> map = statService.compareWithRecentXMonths(months, Long.parseLong(id));
         List<CompareWithRecentXDto> li = statService.compareWithRecentXMonths(months, Long.parseLong(id));

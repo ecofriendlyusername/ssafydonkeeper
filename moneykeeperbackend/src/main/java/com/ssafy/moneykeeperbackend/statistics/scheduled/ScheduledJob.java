@@ -47,6 +47,7 @@ public class ScheduledJob {
             statService.buildMonthSpendingRecordByClassesForAUser(member,now);
             statService.buildMonthIncomeRecordForAUser(member,now);
             statService.buildMonthSpendingRecordForAUser(member,now);
+            updateDataService.determineSpendingGroup(member,start,end);
         }
 
         updateDataService.updateSpendingCompData();
