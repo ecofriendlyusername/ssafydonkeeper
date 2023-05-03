@@ -149,7 +149,7 @@ public class TestService {
         buildSpendingGroupForTest();
         buildIncomeGroupForTest();
 
-        String[] sClassStrs = {"영화","배달","외식"};
+        String[] sClassStrs = {"영화","배달","외식","여행","교육"};
 
         for (String s : sClassStrs) {
             MajorSpendingClassification msc =

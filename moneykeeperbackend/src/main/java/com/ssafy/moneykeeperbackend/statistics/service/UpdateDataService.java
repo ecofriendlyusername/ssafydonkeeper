@@ -1,13 +1,17 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
+import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
+import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.entity.IncomeGroup;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
+import com.ssafy.moneykeeperbackend.statistics.entity.SpendingGroup;
 import com.ssafy.moneykeeperbackend.statistics.repository.IncomeGroupRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthIncomeRecordRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordRepository;
+import com.ssafy.moneykeeperbackend.statistics.repository.SpendingGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +30,40 @@ public class UpdateDataService {
     private final MemberRepository memberRepository;
 
     private final IncomeGroupRepository incomeGroupRepository;
+
+    private final SpendingGroupRepository spendingGroupRepository;
+
+    private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
     public void determineSpendingGroup(Member member, LocalDate start, LocalDate end) { // for test purpose
-        List<MonthSpendingRecord> monthSpendingRecordList = monthSpendingRecordRepository.findByMemberAndYmonthBetween(member,start,end);
+        List<MonthSpendingRecord> msrList = monthSpendingRecordRepository.findByMemberAndYmonthBetween(member,start,end);
+
+        if (msrList.isEmpty()) {
+            System.out.println("No month spending records in the past 3 months to determine spending group");
+            return;
+        }
+
+        double total = 0;
+
+        for (MonthSpendingRecord msr : msrList) {
+            total += msr.getAmount();
+        }
+
+        int avg = (int) (total / (double)msrList.size());
+
+        List<SpendingGroup> sgroups = spendingGroupRepository.findAllByOrderByBelowAsc();
+
+        int len = sgroups.size();
+
+        for (int i = 0; i < len-1; i++) {
+            SpendingGroup sg = sgroups.get(i);
+            if (avg < sg.getBelow()) {
+                member.setSpendingGroup(sg);
+                memberRepository.save(member);
+                return;
+            }
+        }
+        member.setSpendingGroup(sgroups.get(len-1));
+        memberRepository.save(member);
     }
 
     public void updateSpendingCompData() {
