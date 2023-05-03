@@ -82,6 +82,7 @@ public class TokenProvider {
 		String accessToken = createAccessToken(email, authorities, request, response); // access tokne 발급
 
 		String refreshToken = Jwts.builder()
+			.setSubject(email)
 			.claim("auth", authorities)
 			.claim("email", email)
 			.setExpiration(new Date(now + refreshTokenValidityTime))
@@ -105,6 +106,7 @@ public class TokenProvider {
 		long now = (new Date()).getTime();
 
 		String accessToken = Jwts.builder()
+			.setSubject(email)
 			.claim("email", email)
 			.claim("auth", authorities)
 			.setExpiration(new Date(now + accessTokenValidityTime))
