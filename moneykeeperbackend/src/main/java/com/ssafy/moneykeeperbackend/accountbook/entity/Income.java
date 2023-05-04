@@ -1,6 +1,6 @@
 package com.ssafy.moneykeeperbackend.accountbook.entity;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
@@ -19,34 +18,40 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asset extends BaseEntity {
+public class Income extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "asset_id")
+	@Column(name = "income_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@NotNull
-	private String name;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "asset_id")
+	private Asset asset;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "income_classification_id")
+	private IncomeClassification incomeClassification;
 
 	@NotNull
-	private Long total_account;
+	private LocalDate date;
 
-	@OneToMany(mappedBy = "asset")
-	List<Spending> spendings;
+	@NotNull
+	private int amount;
 
-	@OneToMany(mappedBy = "asset")
-	List<Income> incomes;
+	private String detail;
+
+	private String memo;
+
 
 }

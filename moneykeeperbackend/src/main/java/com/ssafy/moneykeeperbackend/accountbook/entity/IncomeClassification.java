@@ -19,34 +19,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asset extends BaseEntity {
+public class IncomeClassification extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "asset_id")
+	@Column(name = "income_classification_id")
 	private Long id;
+
+	@NotNull
+	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@NotNull
-	private String name;
-
-	@NotNull
-	private Long total_account;
-
-	@OneToMany(mappedBy = "asset")
-	List<Spending> spendings;
-
-	@OneToMany(mappedBy = "asset")
+	@OneToMany(mappedBy = "incomeClassification")
 	List<Income> incomes;
 
 }
