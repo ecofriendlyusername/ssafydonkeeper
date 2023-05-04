@@ -2,32 +2,40 @@
   <div>
     <h1>이번달 나의 예산</h1>
     
-    <h3 style="display:flex; margin-top:-16px; margin-left: 20px;">총 예산: {{ priceToString(req.total_budget) }} ₩</h3>
+    <h3 style="display:flex; margin-top:-10px; margin-left: 20px;">총 예산: {{ priceToString(req.total_budget) }} ₩</h3>
 
     <div class="baseBar">
       <div class="gaugeBar"></div>
     </div>
 
-    <div id="budgetTitle">
-      <div> <span style="font-weight:bold">사용 예산:</span> {{ priceToString(req.spend_budget) }} ₩</div>
+    <div id="budgetTitle" style="font-size: 17px;">
+      <div> <span style="font-weight:bold;">사용 예산:</span> {{ priceToString(req.spend_budget) }} ₩</div>
     </div>
-    <div id="budgetTitle">
-      <div> <span style="font-weight:bold">남은 예산:</span> {{ priceToString(req.total_budget - req.spend_budget) }} ₩</div>
+    <div id="budgetTitle" style="font-size: 17px;">
+      <div> <span style="font-weight:bold;">남은 예산:</span> {{ priceToString(req.total_budget - req.spend_budget) }} ₩</div>
     </div>
-    <div id="budgetTitle">
-      <div> <span style="font-weight:bold">오늘까지 권장 지출액:</span> 1,200,000 ₩</div>
+    <div id="budgetTitle" style="font-size: 17px;">
+      <div> <span style="font-weight:bold;">오늘까지 권장 지출액:</span> 1,200,000 ₩</div>
     </div>
     
 
-    <div style="margin-top:40px;">
+    <div style="margin-top:45px;">
       <h3 id="budgetTitle">카테고리별 예산</h3>
       <div v-for="(budget_category, idx) in req.budget_categories" :key="idx" class="cell">
         <div>
-          
+          <div id="budgetTitle" style="display:flex; align-items:center; justify-content: space-between;">
+            <div style="display:flex; align-items:center;">
+              <div id="budgetImg"></div>
+              <div style="font-weight: bold; margin-left: 10px; font-size: 16px;">{{budget_category.category}}</div>
+            </div>
+            <div style="color:#808080;">{{ priceToString(100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100) }}%</div>
+            <div style="font-weight: bold;">{{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음 </div>
+          </div>
 
-          [{{budget_category.category}}] | 
+
+          <!-- [{{budget_category.category}}] | 
           {{ priceToString(100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100) }}% | 
-          {{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음
+          {{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음 -->
           
         </div>
       </div>
@@ -103,5 +111,10 @@ export default {
   display:flex;
   margin-left: 20px;
   margin-top: 10px;
+}
+
+#budgetImg {
+  background-color:#DEF0FF; width:35px; height:35px;
+  border-radius: 20px;
 }
 </style>
