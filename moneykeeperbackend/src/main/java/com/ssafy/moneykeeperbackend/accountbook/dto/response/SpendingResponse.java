@@ -10,6 +10,8 @@ import lombok.Getter;
 @Builder
 public class SpendingResponse {
 
+	private Long spendingId;
+
 	private String date;
 
 	private String assetName;
