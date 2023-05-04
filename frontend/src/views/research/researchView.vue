@@ -1,24 +1,40 @@
 <template>
   <div>
     <h1>나의 최근 소비 패턴</h1>
-    <canvas id="chart"></canvas>
   </div>
 
-  <div>
-    <h2>소비 맞춤 카드 추천</h2>
-    
-    <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/card/' + recom_card.id)">
-      <div>
-        <img src="" alt=recom_card.path>
-      </div>
-      <div>
-        <h3>{{ recom_card.name }} </h3>
-        <div>{{ recom_card.company }} </div>
-      </div>
-
+  <div style="display:flex; justify-content: space-between; align-items: center; background-color: #F7F7F7; padding: 20px 10px;">
+    <div>
+      <canvas id="chart" style="width:80%"></canvas>
     </div>
+    <div style="font-size:17px;">
+      <h3>가장 많이 사용한 곳</h3>
+      <p>ㆍ여행 56%</p>
+      <p>ㆍ외식 30%</p>
+      <p>ㆍ쇼핑 15%</p>
+    </div>
+  </div>
+
+  <div style="margin-top:55px;">
+    <h1>소비 맞춤 카드 추천</h1>
     
-    <div v-on:click="this.$router.push('/research/cardList')">더보기</div>
+    <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/card/' + recom_card.id)" style="background-color:#E7E7E7; border-color:#E7E7E7 ;">
+      <div style="display: flex; justify-content: space-between; background-color:white; padding: 10px; margin: 5px;">
+        <div>
+          <img src="" alt=recom_card.path>
+        </div>
+        <div>
+          <div style="display:flex; font-weight: bold;">
+            {{ recom_card.name }}
+          </div>
+          <div style="display:flex">
+            {{ recom_card.company }}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div style="display:flex; justify-content:end; padding:10px;" v-on:click="this.$router.push('/research/cardList')">더보기 > </div>
   </div>
 </template>
 
@@ -58,7 +74,7 @@ export default {
         {
           id: '3',
           img_path: 'path',
-          name: '국민카드 가나다라마바사아자차카드',
+          name: '국민카드 가나다라마바사카드',
           company: '국민카드'
         },
       ]
