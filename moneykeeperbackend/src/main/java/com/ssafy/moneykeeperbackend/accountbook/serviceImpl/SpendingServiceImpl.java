@@ -3,6 +3,8 @@ package com.ssafy.moneykeeperbackend.accountbook.serviceImpl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +59,7 @@ public class SpendingServiceImpl implements SpendingService {
 		spending = spendingRepository.saveAndFlush(spending);
 
 		return SpendingResponse.builder()
+			.spendingId(spending.getId())
 			.amount(spending.getAmount())
 			.spendingClassificationName(spending.getSpendingClassification().getName())
 			.assetName(spending.getAsset().getName())
@@ -75,7 +78,8 @@ public class SpendingServiceImpl implements SpendingService {
 	 * */
 	private SpendingClassification findSpendingClassificationById(Long id) {
 		return spendingClassificationRepository.findById(id)
-			.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.SPENDING_CLASSIFICATION_ID_NULL));
+			.orElseThrow(
+				() -> new AccountBookRuntimeException(AccountBookExceptionEnum.SPENDING_CLASSIFICATION_ID_NULL));
 	}
 
 	/*
@@ -87,5 +91,140 @@ public class SpendingServiceImpl implements SpendingService {
 	private Asset findAssetById(Long id) {
 		return assetRepository.findById(id)
 			.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.ASSET_ID_NULL));
+	}
+
+	/*
+	 * 전체 소비내역 가져오기
+	 *
+	 * @date 2023.05.02
+	 * @author 정민지
+	 * */
+	@Override
+	public Page<SpendingResponse> getAllSpending(Member member, Pageable pageable) {
+		Page<Spending> spendings = spendingRepository.findAllByMember(member, pageable);
+		Page<SpendingResponse> spendingResponses = spendings.map(spending -> SpendingResponse.builder()
+			.spendingId(spending.getId())
+			.spendingClassificationName(spending.getSpendingClassification().getName())
+			.amount(spending.getAmount())
+			.assetName(spending.getAsset().getName())
+			.date(spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.detail(spending.getDetail())
+			.memo(spending.getMemo())
+			.build());
+		return spendingResponses;
+	}
+
+	/*
+	 * 특정 달 소비내역 가져오기
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	@Override
+	public Page<SpendingResponse> getMonthSpending(Member member, int year, int month, Pageable pageable) {
+		LocalDate startDate = LocalDate.of(year, month, 1);
+		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+		Page<Spending> spendings = spendingRepository.findAllByMemberAndDateBetween(member, startDate, endDate, pageable);
+		Page<SpendingResponse> spendingResponses = spendings.map(spending -> SpendingResponse.builder()
+			.spendingId(spending.getId())
+			.spendingClassificationName(spending.getSpendingClassification().getName())
+			.amount(spending.getAmount())
+			.assetName(spending.getAsset().getName())
+			.date(spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.detail(spending.getDetail())
+			.memo(spending.getMemo())
+			.build());
+		return spendingResponses;
+	}
+
+	/*
+	 * 소비내역 디테일 가져오기
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	@Override
+	public SpendingResponse getDetailSpending(Member member, Long spendingId) {
+
+		Spending spending = spendingRepository.findById(spendingId).orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.SPENDING_ID_NULL));
+
+		return SpendingResponse.builder()
+			.spendingId(spending.getId())
+			.amount(spending.getAmount())
+			.spendingClassificationName(spending.getSpendingClassification().getName())
+			.assetName(spending.getAsset().getName())
+			.date(spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.detail(spending.getDetail())
+			.memo(spending.getMemo())
+			.build();
+	}
+
+	/*
+	 * 특정 달 소비 금액 가져오기
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	@Override
+	public int getMonthSpendingAmount(Member member, int year, int month) {
+		LocalDate startDate = LocalDate.of(year, month, 1);
+		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+		return spendingRepository.getTotalAmountByMemberAndDateBetween(member, startDate, endDate);
+	}
+
+
+	/*
+	 * 특정 소비 내역 수정
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public SpendingResponse updateSpending(Member member, Long spendingId, SpendingRequest spendingRequest) {
+		Spending spending = spendingRepository.findById(spendingId).orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.SPENDING_ID_NULL));
+
+		if (spendingRequest.getDate() != null && !spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equals(spendingRequest.getDate())) {
+			spending.setDate(LocalDate.parse(spendingRequest.getDate(), DateTimeFormatter.ISO_DATE));
+		}
+		if (spendingRequest.getAmount() != 0 && spendingRequest.getAmount() != spending.getAmount()) {
+			spending.setAmount(spendingRequest.getAmount());
+		}
+		if (spendingRequest.getAssetId() != null && spendingRequest.getAssetId() != spending.getAsset().getId()) {
+			spending.setAsset(findAssetById(spendingRequest.getAssetId()));
+		}
+		if (spendingRequest.getSpendingClassificationId() != null && spendingRequest.getSpendingClassificationId() != spending.getSpendingClassification().getId()) {
+			spending.setSpendingClassification(findSpendingClassificationById(spendingRequest.getSpendingClassificationId()));
+		}
+		if (spendingRequest.getDetail() != null && !spendingRequest.getDetail().equals(spending.getDetail())) {
+			spending.setDetail(spendingRequest.getDetail());
+		}
+		if (spendingRequest.getMemo() != null && !spendingRequest.getMemo().equals(spending.getMemo())) {
+			spending.setMemo(spendingRequest.getMemo());
+		}
+
+		Spending resultSpending = spendingRepository.save(spending);
+
+		return SpendingResponse.builder()
+			.spendingId(resultSpending.getId())
+			.amount(resultSpending.getAmount())
+			.spendingClassificationName(resultSpending.getSpendingClassification().getName())
+			.assetName(resultSpending.getAsset().getName())
+			.date(resultSpending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.detail(resultSpending.getDetail())
+			.memo(resultSpending.getMemo())
+			.build();
+	}
+
+	/*
+	 * 특정 소비 내역 삭제
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	public void deleteSpending(Long spendingId) {
+		spendingRepository.deleteById(spendingId);
 	}
 }
