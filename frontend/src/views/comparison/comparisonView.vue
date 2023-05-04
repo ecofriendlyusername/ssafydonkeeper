@@ -1,26 +1,37 @@
 <template>
   <div>
     <h1>내 자산 비교</h1>
-    <p>월 250~300만원 그룹은 보통 이만큼 써요</p>
+    <div style="display:flex; padding: 0px 10px; color: #5E29F6; font-weight: bold; font-size: 20px;">
+      월 250~300만원 그룹<span style="color:black;">은</span>
+    </div>
+    <div style="display:flex; padding: 0px 10px; margin-bottom: 20px; font-weight: bold; font-size: 20px;">
+      보통 이만큼 써요
+    </div>
 
     <div class="barChart">
-      <p>나</p>
+      <p style="margin-top:-15px; margin-bottom: 2px;">나</p>
       <div class="myBar">평균 {{ myUsed.spend }} 만원</div>
-      <p>250~300만원 그룹</p>
+      <p style="margin-bottom: 2px;">250~300만원 그룹</p>
       <div class="yourBar">평균 {{ yourUsed.spend }} 만원</div>
     </div>
 
-    <p>여기에 가장 많은 소비를 해요</p>
-    <div class="pieChart">
-      <div>
-        나
-        <canvas id="myPieChart"></canvas>
-      </div>
-      <div>
-        그룹
-        <canvas id="yourPieChart"></canvas>
-      </div>
+    <div style="background-color:#E5E5E5;">
+      <p style="display:flex; padding:10px; font-weight:bold; font-size:20px;">여기에 가장 많은 소비를 해요</p>
+      
+      <div class="pieChart">
+        <div style="width:50%">
+          나
+          <canvas id="myPieChart"></canvas>
+        </div>
+        <div style="width:50%">
+          그룹
+          <canvas id="yourPieChart"></canvas>
+        </div>
     </div>
+    </div>
+
+    
+    
   </div>
 </template>
 
@@ -135,16 +146,19 @@ export default {
 <style>
 .pieChart {
   display: flex;
+  padding-bottom: 20px;
 }
 
 .barChart {
-  border: solid 1px black;
+  /* border: solid 1px black; */
   text-align: justify;
   padding: 20px;
+  background-color: #E5E5E5;
 }
 .myBar {
   height: 20px;
-  background-color: #0ff;
+  background-color: #5E29F6;
+  color: white;
   text-align: right;
   padding: 5px;
 }
@@ -152,7 +166,8 @@ export default {
 .yourBar {
   width: 230px;
   height: 20px;
-  background-color: #0ff;
+  background-color: #4D82E6;
+  color: white;
   text-align: right;
   padding: 5px;
 }
