@@ -1,20 +1,30 @@
 <template>
   <div>
     <h1>이번달 나의 예산</h1>
-    <p>총 예산: {{ priceToString(req.total_budget) }} ₩</p>
+    
+    <h3 style="display:flex; margin-top:-16px; margin-left: 20px;">총 예산: {{ priceToString(req.total_budget) }} ₩</h3>
 
     <div class="baseBar">
       <div class="gaugeBar"></div>
     </div>
 
-    <p>사용 예산: {{ priceToString(req.spend_budget) }} ₩</p>
-    <p>남은 예산: {{ priceToString(req.total_budget - req.spend_budget) }} ₩</p>
-    <p>오늘까지 권장 지출액: 1,200,000 ₩</p>
+    <div id="budgetTitle">
+      <div> <span style="font-weight:bold">사용 예산:</span> {{ priceToString(req.spend_budget) }} ₩</div>
+    </div>
+    <div id="budgetTitle">
+      <div> <span style="font-weight:bold">남은 예산:</span> {{ priceToString(req.total_budget - req.spend_budget) }} ₩</div>
+    </div>
+    <div id="budgetTitle">
+      <div> <span style="font-weight:bold">오늘까지 권장 지출액:</span> 1,200,000 ₩</div>
+    </div>
+    
 
-    <div>
-      <h3>카테고리별 예산</h3>
+    <div style="margin-top:40px;">
+      <h3 id="budgetTitle">카테고리별 예산</h3>
       <div v-for="(budget_category, idx) in req.budget_categories" :key="idx" class="cell">
         <div>
+          
+
           [{{budget_category.category}}] | 
           {{ priceToString(100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100) }}% | 
           {{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음
@@ -70,22 +80,28 @@ export default {
 <style>
 .baseBar {
   width: 300px;
-  height: 14px;
-  background-color: #000;
+  height: 28px;
+  background-color: #E5E5E5;
   margin: 0 auto;
   padding: 2px;
+  border-radius: 25px;
 }
 
 .gaugeBar {
-
   width: 200px;
-  height: 14px;
-  background-color: #ff0;
+  height: 28px;
+  background-color: #4D82E6;
+  border-radius: 25px;
 }
 
 .cell {
   display: contents;
   align-items: center;
+}
 
+#budgetTitle {
+  display:flex;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 </style>
