@@ -199,7 +199,7 @@ public class TokenProvider {
 	 * */
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(secret_key).parseClaimsJws(token);
+			Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
 			// throw new AuthRuntimeException(AuthExceptionEnum.AUTH_JWT_SIGNATURE_EXCEPTION);

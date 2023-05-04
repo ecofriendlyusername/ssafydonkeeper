@@ -36,7 +36,7 @@ public class SpendingController {
 	 * @author 정민지
 	 * */
 	@PostMapping()
-	public ResponseEntity<?> getSessionData(@AuthenticationPrincipal CustomUserDetails member,
+	public ResponseEntity<?> addSpendingRecord(@AuthenticationPrincipal CustomUserDetails member,
 		@RequestBody SpendingRequest spendingRequest, HttpServletRequest request, HttpServletResponse response) {
 		return new ResponseEntity<>(spendingService.addSpendingRecord(spendingRequest, member.getMember()), HttpStatus.OK);
 	}
