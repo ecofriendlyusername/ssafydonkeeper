@@ -82,6 +82,7 @@ public class TokenProvider {
 		String accessToken = createAccessToken(email, authorities, request, response); // access tokne 발급
 
 		String refreshToken = Jwts.builder()
+			.setSubject(email)
 			.claim("auth", authorities)
 			.claim("email", email)
 			.setExpiration(new Date(now + refreshTokenValidityTime))
@@ -105,6 +106,7 @@ public class TokenProvider {
 		long now = (new Date()).getTime();
 
 		String accessToken = Jwts.builder()
+			.setSubject(email)
 			.claim("email", email)
 			.claim("auth", authorities)
 			.setExpiration(new Date(now + accessTokenValidityTime))
@@ -197,7 +199,7 @@ public class TokenProvider {
 	 * */
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(secret_key).parseClaimsJws(token);
+			Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
 			// throw new AuthRuntimeException(AuthExceptionEnum.AUTH_JWT_SIGNATURE_EXCEPTION);
