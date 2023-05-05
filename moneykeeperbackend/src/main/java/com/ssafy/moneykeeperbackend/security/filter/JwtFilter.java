@@ -98,7 +98,7 @@ public class JwtFilter extends OncePerRequestFilter {
 //		if (requestURI.equals("/api/account-book")) {
 //			return true;
 //		}
-		// return requestURI.startsWith("/api");
+//		 return requestURI.startsWith("/api");
 		return false;
 	}
 
