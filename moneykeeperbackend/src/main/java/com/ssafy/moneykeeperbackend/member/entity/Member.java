@@ -3,6 +3,8 @@ package com.ssafy.moneykeeperbackend.member.entity;
 import javax.persistence.*;
 
 import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Income;
+import com.ssafy.moneykeeperbackend.accountbook.entity.IncomeClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
@@ -52,10 +54,16 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Spending> spendings;
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Income> incomes;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<SpendingClassification> spendingClassifications;
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<IncomeClassification> incomeClassifications;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Asset> assets;
 
 	@ManyToOne

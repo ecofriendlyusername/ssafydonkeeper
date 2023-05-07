@@ -70,18 +70,6 @@ public class AuthController {
 		session.setAttribute(accessTokenId, tokenDto.getAccessToken());    // session에 access_token 값을 저장
 		session.setAttribute(refreshTokenId, tokenDto.getRefreshToken());   // session에 refresh_token 값을 저장
 
-		Cookie cookie = new Cookie("access_token_id", accessTokenId);
-		cookie.setPath("/");
-		cookie.setMaxAge((int)accessTokenValidityTime); // 쿠키의 유효 기간을 24시간으로 설정
-		cookie.setHttpOnly(true); // HttpOnly 속성 설정
-		cookie.setSecure(false); // Secure 속성을 비활성화 (HTTP 환경)
-		// cookie.setSecure(true); // https 환경
-		response.addCookie(cookie);
-
-		// SameSite 속성을 Lax로 설정
-		// response.setHeader("Set-Cookie", String.format("%s; %s", cookie.toString(), "SameSite=Lax"));
-		response.setHeader("Set-Cookie", String.format("%s; %s", cookie.toString(), "SameSite=None")); // https 환경
-
 		// access token 쿠키 생성
 		Cookie accessTokenCookie = new Cookie("access_token_id", accessTokenId);
 		accessTokenCookie.setPath("/");

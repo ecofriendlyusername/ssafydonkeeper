@@ -124,8 +124,4 @@ public class PutCardService {
         if (substring.equals("없음")) return 0;
         return Integer.parseInt(substring.split(" ")[0]);
     }
-
-//    public void testenum() {
-//        String
-//    }
 }

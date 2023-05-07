@@ -5,6 +5,34 @@
       src="./assets/kakao_login_medium_narrow.png" alt=""></a>
 
   <div @click="check">세션 체크</div>
+  <br>
+  <div @click="add">add</div>
+  <br>
+  <div @click="get">get</div>
+  <br>  
+  <div @click="monthget">monthget</div>
+  <br>  
+  <div @click="detailget">detailget</div>
+  <br>
+  <div @click="amountget">amountget</div>
+  <br>
+  <div @click="patch">patch</div>
+  <br>
+  <div @click="delet">delet</div>
+
+  <br>
+  <br>
+  <br>
+  <div @click="incomeadd">incomeadd</div>
+  <br>
+  <div @click="incomegetall">incomegetall</div>
+  
+  <br>
+  <div @click="incomemonthget">incomemonthget</div>
+  
+  <br>
+  <div @click="incomedetailget">incomedetailget</div>
+
   <router-view />
   <footerComponent />
 </template>
@@ -31,8 +59,147 @@ export default {
           console.log("세션")
           console.log(res.data)
         })
-    }
-  }
+    },
+    add() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/spending`,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "assetId" : 20,
+          "spendingClassificationId" : 2,
+          "date" : "2023-05-04",
+          "amount" : 27000, 
+          "detail": "엽닭",
+          "memo": "승현이랑"
+        },
+      })
+        .then((res) => {
+          console.log("add")
+          console.log(res.data)
+        })
+    },
+    get() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    monthget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spending/2023/5?page=0&size=10`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    detailget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spending/47`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    amountget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spending/amount/2023/5`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    patch() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/spending/47`,
+        data: {
+          "assetId" : 20,
+          "spendingClassificationId" : 2,
+          "date" : "2023-05-04",
+          "amount" : 54000, 
+          "detail": "엽닭",
+          "memo": "민지랑승현이랑"
+        },
+      })
+        .then((res) => {
+          console.log("patch")
+          console.log(res.data)
+        })
+    },
+    delet() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/spending/48`
+      })
+        .then((res) => {
+          console.log("delete")
+          console.log(res.data)
+        })
+    },
+    incomeadd() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/income`,
+        data: {
+          "assetId" : 21,
+          "incomeClassificationId" : 24,
+          "date" : "2023-05-04",
+          "amount" : 50000, 
+          "detail": "용돈",
+          "memo": "승현이가 줌"
+        },
+      })
+        .then((res) => {
+          console.log("add")
+          console.log(res.data)
+        })
+    },
+    incomegetall() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/income?page=0&size=10`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    incomemonthget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/income/2023/5?page=0&size=10`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    incomedetailget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/income/29`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+  },
+
+  
 }
 </script>
 

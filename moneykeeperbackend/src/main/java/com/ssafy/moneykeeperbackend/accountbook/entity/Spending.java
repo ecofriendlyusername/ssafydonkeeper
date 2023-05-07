@@ -56,4 +56,29 @@ public class Spending extends BaseEntity {
 
 	private String memo;
 
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public void setAsset(Asset asset) {
+		this.asset = asset;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public void setSpendingClassification(
+		SpendingClassification spendingClassification) {
+		this.spendingClassification = spendingClassification;
+	}
+
 }

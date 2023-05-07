@@ -18,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
+import com.ssafy.moneykeeperbackend.accountbook.entity.IncomeClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.AssetRepository;
+import com.ssafy.moneykeeperbackend.accountbook.repository.IncomeClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
@@ -47,6 +49,8 @@ public class AuthServiceImpl implements AuthService {
 	private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
 
 	private final SpendingClassificationRepository spendingClassificationRepository;
+
+	private final IncomeClassificationRepository incomeClassificationRepository;
 
 	private final AssetRepository assetRepository;
 
@@ -216,6 +220,7 @@ public class AuthServiceImpl implements AuthService {
 			);
 		}
 
+
 		String[] assets = {"카드", "은행", "현금"};
 		for (String asset : assets) {
 			assetRepository.saveAndFlush(
@@ -223,6 +228,16 @@ public class AuthServiceImpl implements AuthService {
 					.name(asset)
 					.member(member)
 					.total_account(Long.parseLong("0"))
+					.build()
+			);
+		}
+
+		String[] incomeClassifications = {"월급", "용돈", "부수입", "상여", "금융소득", "기타"};
+		for (String incomeClassification : incomeClassifications) {
+			incomeClassificationRepository.saveAndFlush(
+				IncomeClassification.builder()
+					.member(member)
+					.name(incomeClassification)
 					.build()
 			);
 		}

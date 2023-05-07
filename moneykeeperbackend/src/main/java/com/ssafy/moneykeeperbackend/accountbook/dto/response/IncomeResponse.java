@@ -1,22 +1,19 @@
 package com.ssafy.moneykeeperbackend.accountbook.dto.response;
 
-import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
-import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
-
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class SpendingResponse {
+public class IncomeResponse {
 
-	private Long spendingId;
+	private Long incomeId;
 
 	private String date;
 
 	private String assetName;
 
-	private String spendingClassificationName;
+	private String incomeClassificationName;
 
 	private int amount;
 
