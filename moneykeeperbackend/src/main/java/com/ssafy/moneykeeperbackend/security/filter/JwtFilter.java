@@ -94,6 +94,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	 * @author 정민지
 	 * */
 	private boolean requiresAuthentication(HttpServletRequest request) {
+
 		String requestURI = request.getRequestURI();
 		return requestURI.startsWith("/api/account-book");
 	}

@@ -29,4 +29,15 @@ public class CardController {
     public ResponseEntity<?> test() throws Exception {
         return new ResponseEntity<>("tested", HttpStatus.OK);
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<?> testPost() throws Exception {
+        return new ResponseEntity<>("tested", HttpStatus.OK);
+    }
+
+//    @GetMapping("/testenum")
+//    public ResponseEntity<?> testenum() throws Exception {
+//        putCardService.testenum();
+//        return new ResponseEntity<>("tested", HttpStatus.OK);
+//    }
 }
