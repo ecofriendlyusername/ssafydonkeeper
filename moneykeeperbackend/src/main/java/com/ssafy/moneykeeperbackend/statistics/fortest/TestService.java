@@ -151,30 +151,30 @@ public class TestService {
 //        }
 //    }
 
-    private void generateMockSpendingsWith(Member member, int month) {
-//        String[] months = {"2023-01-","2023-02-","2023-03-","2023-04-","2023-05"};
-//        String[] days = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"};
-
-        List<SpendingClassification> scList = spendingClassificationRepository.findAll();
-        for (int i = 1; i <= 5; i++) {
-            LocalDate localDate = LocalDate.of(2023,i,1);
-            for (int j = 0; j <= 30; j++) {
-                int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
-                LocalDate today = LocalDate.of(2023,i,day);
-
-                int scIdx = ThreadLocalRandom.current().nextInt(0, 13 + 1);
-
-                Spending spending = Spending.builder()
-                        .amount(ThreadLocalRandom.current().nextInt(8000, 150000 + 1))
-                        .detail("some detail")
-                        .spendingClassification(scList.get(scIdx))
-                        .memo("some memo")
-                        .date(today).build();
-
-
-            }
-        }
-    }
+//    private void generateMockSpendingsWith(Member member, int month) {
+////        String[] months = {"2023-01-","2023-02-","2023-03-","2023-04-","2023-05"};
+////        String[] days = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"};
+//
+//        List<SpendingClassification> scList = spendingClassificationRepository.findAll();
+//        for (int i = 1; i <= 5; i++) {
+//            LocalDate localDate = LocalDate.of(2023,i,1);
+//            for (int j = 0; j <= 30; j++) {
+//                int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
+//                LocalDate today = LocalDate.of(2023,i,day);
+//
+//                int scIdx = ThreadLocalRandom.current().nextInt(0, 13 + 1);
+//
+//                Spending spending = Spending.builder()
+//                        .amount(ThreadLocalRandom.current().nextInt(8000, 150000 + 1))
+//                        .detail("some detail")
+//                        .spendingClassification(scList.get(scIdx))
+//                        .memo("some memo")
+//                        .date(today).build();
+//
+//
+//            }
+//        }
+//    }
 
     public Long generateMockMemberWithString(String rs, HashMap<String, MajorSpendingClassification> hm, LocalDate start, LocalDate end) {
         Member member = Member.builder()
@@ -209,7 +209,7 @@ public class TestService {
         // generateMockMonthSpendingRecords(member1);
         // generateMockMonthSpendingRecordByClasses(member1);
         for (int i = 1; i <= 5; i++) {
-            generateMockSpendingsWith(member,i);
+            // generateMockSpendingsWith(member,i);
             generateMockIncomesWith(member,i);
         }
         // generateMockMonthIncomeRecords(member1);
@@ -221,9 +221,9 @@ public class TestService {
     }
 
     private void generateMockIncomesWith(Member member, int i) {
-        Income income = Income.builder()
-                .amount()
-                .build();
+//        Income income = Income.builder()
+//                .amount()
+//                .build();
     }
 
 

@@ -75,28 +75,29 @@ public class ProcessSpendingService {
     }
 
     public void processNewIncome(IncomeRequest incomeRequest, Member member) {
-        LocalDate now = LocalDate.now();
-        LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+        return;
+        //        LocalDate now = LocalDate.now();
+//        LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+//
+//        Optional<MonthIncomeRecord> mirOptional = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
+//
+//        if (!mirOptional.isPresent()) {
+//            // throw new NoSuchRecordException();
+//            System.out.println("Month Spending Record doesn't exist for member with memberId " + member.getId() + ", and ymonth " + ymonth);
+//            return;
+//        }
 
-        Optional<MonthIncomeRecord> mirOptional = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
-
-        if (!mirOptional.isPresent()) {
-            // throw new NoSuchRecordException();
-            System.out.println("Month Spending Record doesn't exist for member with memberId " + member.getId() + ", and ymonth " + ymonth);
-            return;
-        }
-
-        MonthIncomeRecord msr = mirOptional.get();
-
-        Optional<MonthIncomeRecord> optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
-
-        if (optionalMir == null) {
-            System.out.println("MonthSpendingRecord doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + ", name : ");
-            return;
-        }
-
-        MonthIncomeRecord mir = optionalMir.get();
-
-        mir.setAmount(mir.getAmount()+incomeRequest.getAmount());
+//        MonthIncomeRecord msr = mirOptional.get();
+//
+//        Optional<MonthIncomeRecord> optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
+//
+//        if (optionalMir == null) {
+//            System.out.println("MonthSpendingRecord doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + ", name : ");
+//            return;
+//        }
+//
+//        MonthIncomeRecord mir = optionalMir.get();
+//
+//        mir.setAmount(mir.getAmount()+incomeRequest.getAmount());
     }
 }

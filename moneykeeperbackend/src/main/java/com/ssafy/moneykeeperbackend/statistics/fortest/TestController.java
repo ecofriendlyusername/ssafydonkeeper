@@ -30,27 +30,27 @@ public class TestController {
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
 
     private final SpendingService spendingService;
-    @GetMapping("")
-    @ApiOperation(value = "test", notes = "test")
-    public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
-        LocalDate now = LocalDate.now();
-
-        LocalDate lastMonth = now.minusMonths(1);
-
-        LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
-        LocalDate start = end.minusMonths(2);
-        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
-
-        Long testMemberId = testService.generateMockMemberWithString("test", hm,start,end);
-
-        for (int i = 0; i < 50; i++) {
-            Random random = new Random();
-            int rn = random.nextInt(100000000)+1;
-            testService.generateMockMemberWithString(String.valueOf(rn),hm,start,end);
-        }
-
-        updateDataService.updateSpendingCompData();
-
-        return new ResponseEntity<Long>(testMemberId, HttpStatus.OK);
-    }
+//    @GetMapping("")
+//    @ApiOperation(value = "test", notes = "test")
+//    public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
+//        LocalDate now = LocalDate.now();
+//
+//        LocalDate lastMonth = now.minusMonths(1);
+//
+//        LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
+//        LocalDate start = end.minusMonths(2);
+//        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
+//
+//        Long testMemberId = testService.generateMockMemberWithString("test", hm,start,end);
+//
+//        for (int i = 0; i < 50; i++) {
+//            Random random = new Random();
+//            int rn = random.nextInt(100000000)+1;
+//            testService.generateMockMemberWithString(String.valueOf(rn),hm,start,end);
+//        }
+//
+//        updateDataService.updateSpendingCompData();
+//
+//        return new ResponseEntity<Long>(testMemberId, HttpStatus.OK);
+//    }
 }
