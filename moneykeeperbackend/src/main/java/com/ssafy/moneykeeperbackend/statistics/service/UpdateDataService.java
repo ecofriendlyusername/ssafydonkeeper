@@ -80,7 +80,6 @@ public class UpdateDataService {
     public void updateByIncomeGroup(IncomeGroup incomeGroup) {
         List<Member> membersInIG = memberRepository.findByIncomeGroup(incomeGroup);
         if (membersInIG.size() == 0) return;
-        // System.out.println("updateByIncomeGroup.. " + incomeGroup.getBelow());
         LocalDate now = LocalDate.now();
         LocalDate thisMonth = LocalDate.of(now.getYear(),now.getMonth(),1);
         LocalDate lastMonth = thisMonth.minusMonths(1);
@@ -117,23 +116,8 @@ public class UpdateDataService {
 
             MonthSpendingRecord msrLastMonth = optionalLastMonth.get();
 
-//            int memberSpending = msrLastMonth.getAmount();
-//            int tmp;
-//
-//            if (memberSpending > groupAvg) {
-//                int diff = memberSpending - groupAvg;
-//                double p = (double)diff/(double)groupAvg;
-//                tmp = (int) (p * 100);
-//            } else {
-//                int diff = groupAvg - memberSpending;
-//                double p = (double)diff/(double)groupAvg;
-//                tmp = - (int) (p * 100);
-//            }
-//            System.out.println("setting month spending record percent for : " + member.getId() + ", with : " + lastMonth + ", percent: " + tmp);
-//            if (tmp == 101) {
-//                System.out.println("tmp 101, groupAvg : " + groupAvg + ", memberSpending : " + memberSpending);
-//            }
             msrLastMonth.setGroupAvg(groupAvg);
+            msrLastMonth.setIncomeGroup(incomeGroup);
             monthSpendingRecordRepository.save(msrLastMonth);
         }
     }
