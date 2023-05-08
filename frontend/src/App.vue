@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <headerComponent />
   <div class="test" v-on:click="logout">
     loginCheck: {{ loginCheck }} <br>
@@ -48,19 +47,9 @@ import axios from 'axios'
 axios.defaults.withCredentials = true; // 백엔드에서 cookie 세팅 할 수 있으려면 axios에 기본으로 되어있어야 한다. axios 한곳으로 몰아서 쓸거면 거기에 이거 작성해주세요.
 import headerComponent from "@/components/headerComponent.vue";
 import footerComponent from "@/components/footerComponent.vue";
-=======
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 
 export default {
-  name: 'App',
   components: {
-<<<<<<< HEAD
     headerComponent,
     footerComponent
   },
@@ -224,10 +213,6 @@ export default {
   },
 
   
-=======
-    HelloWorld
-  }
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 }
 </script>
 
@@ -238,7 +223,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-<<<<<<< HEAD
 }
 
 nav {
@@ -248,8 +232,5 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
-=======
-  margin-top: 60px;
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 }
 </style>
