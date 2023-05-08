@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -101,15 +102,14 @@ public class TestService {
     }
 
     public void generateMockMonthIncomeRecords(Member member) {
-        Random random = new Random();
-        // System.out.println("generating month income record for : " + member.getId());
         for (int i = 1; i <= 5; i++) {
+            int randomNum = ThreadLocalRandom.current().nextInt(150, 600 + 1);
             LocalDate month = LocalDate.of(2023,i,1);
             MonthIncomeRecord monthIncomeRecord =
                     MonthIncomeRecord.builder()
                             .month(month)
                             .member(member)
-                            .amount((random.nextInt(200)+1)*10000)
+                            .amount(randomNum*10000)
                             .build();
 
             monthIncomeRecordRepository.save(monthIncomeRecord);
@@ -117,14 +117,17 @@ public class TestService {
     }
 
     public void buildSpendingGroupForTest() {
-        int[] spent = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+        int[] base = {0,300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000};
 
-        int len = spent.length;
+        int[] below = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+
+        int len = below.length;
 
         for (int i = 0; i < len; i++) {
             SpendingGroup spendingGroup = SpendingGroup
                     .builder()
-                    .below(spent[i])
+                    .below(below[i])
+                    .base(base[i])
                     .build();
             spendingGroupRepository.save(spendingGroup);
         }
@@ -133,14 +136,17 @@ public class TestService {
     }
 
     public void buildIncomeGroupForTest() {
-        int[] income = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+        int[] base = {0,300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000};
 
-        int len = income.length;
+        int[] below = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+
+        int len = below.length;
 
         for (int i = 0; i < len; i++) {
             IncomeGroup incomeGroup = IncomeGroup
                     .builder()
-                    .below(income[i])
+                    .base(base[i])
+                    .below(below[i])
                     .build();
             incomeGroupRepository.save(incomeGroup);
         }
