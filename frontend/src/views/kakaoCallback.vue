@@ -23,11 +23,17 @@ export default {
             data: { // 인자로 보낼 데이터
                 "code": this.$route.query.code
             }
-
         })
-            .then((res) => {
-                console.log(res.data)
-            })
+        .then((res) => {
+            console.log(res.data)
+            this.$store.dispatch('setLoginCheck', true)
+            this.$router.push('/book/calendar')
+        })
+        .catch(err => {
+            this.$store.dispatch('setLoginCheck', true)
+            this.$router.push('/book/calendar')
+            console.log(err);
+        })
 
     }
 
