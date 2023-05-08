@@ -1,22 +1,26 @@
 package com.ssafy.moneykeeperbackend.card.controller;
 
+import com.ssafy.moneykeeperbackend.card.dto.CardDto;
+import com.ssafy.moneykeeperbackend.card.service.CardService;
 import com.ssafy.moneykeeperbackend.card.service.PutCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/card")
 public class CardController {
     private final PutCardService putCardService;
-    @GetMapping("/cards")
-    public ResponseEntity<?> recommendCard(@RequestPart Long id) {
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    private final CardService cardService;
+    @GetMapping("/cards")
+    public ResponseEntity<?> recommendCard(@RequestPart String id) {
+        List<CardDto> cardDtoList = cardService.getCards(Long.parseLong(id));
+        return new ResponseEntity<>(cardDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/savecards")

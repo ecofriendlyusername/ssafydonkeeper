@@ -43,7 +43,7 @@ public class TestController {
 
         Long testMemberId = testService.generateMockMemberWithString("test", hm,start,end);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 30; i++) {
             Random random = new Random();
             int rn = random.nextInt(100000000)+1;
             testService.generateMockMemberWithString(String.valueOf(rn),hm,start,end);

@@ -239,7 +239,7 @@ public class StatService {
 
         for (MajorSpendingClassification msc : mscs) {
             MonthSpendingRecordByClass msrbc = MonthSpendingRecordByClass.builder()
-                    .month(month)
+                    .ymonth(month)
                     .amount(0)
                     .majorSpendingClass(msc)
                     .member(member)
@@ -269,5 +269,52 @@ public class StatService {
                 .groupAvg(msr.getGroupAvg())
                 .amount(msr.getAmount()).build();
         return msrd;
+    }
+
+    public HashMap<String,Integer> getThreeMonthSpendingAvgByClass(Member member, LocalDate firstMonth, LocalDate lastMonth) {
+        // cache this, update when month doesn't match
+
+        List<MonthSpendingRecordByClass> msrcList = monthSpendingRecordByClassRepository.findByMemberAndYmonthBetween(member,firstMonth,lastMonth);
+
+        int mscCount = (int) majorSpendingClassificationRepository.count();
+
+        int listSize = msrcList.size();
+
+        int realMonths = listSize / mscCount;
+
+        if (realMonths == 0) return null;
+
+        HashMap<String,Integer> data = new HashMap<>();
+
+        data.put("total",0);
+
+        for (MonthSpendingRecordByClass msrc : msrcList) {
+            String name = msrc.getMajorSpendingClass().getName();
+            data.put(name,data.getOrDefault(name,0)+msrc.getAmount());
+            data.put("total",data.get("total")+msrc.getAmount());
+        }
+
+        for (String key : data.keySet()) {
+            data.put(key,data.get(key)/realMonths);
+        }
+
+        return data;
+    }
+
+    public int getThreeMonthIncomeAvg(Member member, LocalDate firstMonth, LocalDate lastMonth) {
+        List<MonthIncomeRecord> mirList = monthIncomeRecordRepository.findByMemberAndYmonthBetween(member,firstMonth,lastMonth);
+        System.out.println(member.getId() + " " + firstMonth + " " + lastMonth);
+
+        int listSize = mirList.size();
+
+        if (listSize == 0) return -1;
+
+        int total = 0;
+
+        for (MonthIncomeRecord mir : mirList) {
+            total += mir.getAmount();
+        }
+
+        return total / listSize;
     }
 }
