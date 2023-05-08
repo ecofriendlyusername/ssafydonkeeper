@@ -1,14 +1,17 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
+import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MonthIncomeRecordDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
-import com.ssafy.moneykeeperbackend.statistics.entity.*;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
+import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
+import com.ssafy.moneykeeperbackend.statistics.entity.SpendingGroup;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthIncomeRecordRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordByClassRepository;
 import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordRepository;
@@ -196,13 +199,9 @@ public class StatService {
 
         System.out.println(msr.getYmonth() + " " + msr.getAmount() + " " + msr.getGroupAvg());
 
-        IncomeGroup incomeGroup = msr.getIncomeGroup();
-
         TotalAndComparedDto tcd = TotalAndComparedDto.builder()
                 .total(msr.getAmount())
                 .groupAvg(msr.getGroupAvg())
-                .base(incomeGroup.getBase())
-                .below(incomeGroup.getBelow())
                 .build();
 
         return tcd;
@@ -270,27 +269,5 @@ public class StatService {
                 .groupAvg(msr.getGroupAvg())
                 .amount(msr.getAmount()).build();
         return msrd;
-    }
-
-    public MonthIncomeRecordDto getMonthIncome(int year, int month, Long memberId) {
-        LocalDate ymonth = LocalDate.of(year,month,1);
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (!optionalMember.isPresent()) {
-            // ...
-            System.out.println("member iwth memberId : " + memberId + " doesn't exist");
-            return null;
-        }
-        Optional<MonthIncomeRecord> optionalMIR = monthIncomeRecordRepository.findByMemberAndYmonth(optionalMember.get(),ymonth);
-
-        if (!optionalMIR.isPresent()) {
-            System.out.println("Month Spending Record for member : " + memberId + " doesn't exist");
-            return null;
-        }
-
-        MonthIncomeRecord mir = optionalMIR.get();
-
-        MonthIncomeRecordDto mird = MonthIncomeRecordDto.builder()
-                .amount(mir.getAmount()).build();
-        return mird;
     }
 }

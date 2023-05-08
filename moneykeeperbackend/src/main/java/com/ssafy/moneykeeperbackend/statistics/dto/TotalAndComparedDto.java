@@ -8,16 +8,10 @@ import lombok.*;
 public class TotalAndComparedDto {
     private int total;
 
-    private int base;
-
-    private int below;
-
     private int groupAvg;
     @Builder
-    public TotalAndComparedDto(int total, int groupAvg, int base, int below) {
+    public TotalAndComparedDto(int total, int groupAvg) {
         this.total = total;
         this.groupAvg = groupAvg;
-        this.base = base;
-        this.below = below;
     }
 }
