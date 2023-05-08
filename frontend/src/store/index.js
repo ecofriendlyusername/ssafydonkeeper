@@ -2,21 +2,21 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    title: '메인페이지',
+    loginCheck: false,
   },
   getters: {
-    getTitle(state) {
-      return state.title;
+    getLoginCheck(state) {
+      return state.loginCheck;
     }
   },
   mutations: {
-    setTitle(state, payload) {
-      state.title = payload;
+    setLoginCheck(state, payload) {
+      state.loginCheck = payload;
     }
   },
   actions: {
-    setTitle({ commit }, payload) {
-      commit("setTitle", payload);
+    setLoginCheck({ commit }, payload) {
+      commit("setLoginCheck", payload);
     }
   },
   modules: {
