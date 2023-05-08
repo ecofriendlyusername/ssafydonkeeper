@@ -20,7 +20,6 @@ import com.ssafy.moneykeeperbackend.accountbook.service.SpendingService;
 import com.ssafy.moneykeeperbackend.exception.accountbook.AccountBookExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.accountbook.AccountBookRuntimeException;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.ssafy.moneykeeperbackend.member.serviceImpl.MemberServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
