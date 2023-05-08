@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
+import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;

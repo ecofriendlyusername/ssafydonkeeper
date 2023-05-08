@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.statistics.fortest;
 
+import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.service.SpendingService;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -31,14 +33,20 @@ public class TestController {
     @GetMapping("")
     @ApiOperation(value = "test", notes = "test")
     public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
-        testService.initCommonForTest();
+        LocalDate now = LocalDate.now();
 
-        Long testMemberId = testService.generateMockMemberWith("test");
+        LocalDate lastMonth = now.minusMonths(1);
+
+        LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
+        LocalDate start = end.minusMonths(2);
+        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
+
+        Long testMemberId = testService.generateMockMemberWithString("test", hm,start,end);
 
         for (int i = 0; i < 50; i++) {
             Random random = new Random();
             int rn = random.nextInt(100000000)+1;
-            testService.generateMockMemberWith(String.valueOf(rn));
+            testService.generateMockMemberWithString(String.valueOf(rn),hm,start,end);
         }
 
         updateDataService.updateSpendingCompData();
