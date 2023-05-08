@@ -1,11 +1,13 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
 import com.ssafy.moneykeeperbackend.accountbook.dto.request.IncomeRequest;
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Income;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
+import com.ssafy.moneykeeperbackend.exception.statistics.NoSuchRecordException;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
@@ -34,14 +36,14 @@ public class ProcessSpendingService {
 
     private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
 
-    public void processNewSpending(SpendingRequest spendingRequest, Member member) {
-        LocalDate now = LocalDate.now();
-        LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+    public void processNewSpending(Spending spending, Member member) {
+        LocalDate date = spending.getDate();
+        LocalDate ymonth = LocalDate.of(date.getYear(),date.getMonth(),1);
 
-        Optional<SpendingClassification> optionalSC = spendingClassificationRepository.findById(spendingRequest.getSpendingClassificationId());
+        Optional<SpendingClassification> optionalSC = spendingClassificationRepository.findById(spending.getSpendingClassification().getId());
 
         if (!optionalSC.isPresent()) {
-            System.out.println("spending classification with id " + spendingRequest.getSpendingClassificationId() + " doesn't exist");
+            System.out.println("spending classification with id " + spending.getSpendingClassification().getId() + " doesn't exist");
             return;
         }
 
@@ -50,15 +52,14 @@ public class ProcessSpendingService {
         MajorSpendingClassification msc = sc.getMajorSpendingClassification();
 
         if (msc == null) {
-            System.out.println("major spending classification doesn't exist for spending classification with id " + spendingRequest.getSpendingClassificationId());
+            System.out.println("major spending classification doesn't exist for spending classification with id " + spending.getSpendingClassification().getId());
             return;
         }
 
         Optional<MonthSpendingRecord> msrOptional = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
         if (!msrOptional.isPresent()) {
-            // throw new NoSuchRecordException();
             System.out.println("Month Spending Record doesn't exist for member with memberId " + member.getId() + ", and ymonth " + ymonth);
-            return;
+            throw new NoSuchRecordException();
         }
 
         MonthSpendingRecord msr = msrOptional.get();
@@ -66,17 +67,17 @@ public class ProcessSpendingService {
         MonthSpendingRecordByClass msrc = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member,ymonth,msc);
 
         if (msrc == null) {
-            System.out.println("MonthSpendingRecord doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + " and major spending class id : " + msc.getId() + ", name : " + msc.getName());
-            return;
+            System.out.println("MonthSpendingRecordByClass doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + " and major spending class id : " + msc.getId() + ", name : " + msc.getName());
+            throw new NoSuchRecordException();
         }
 
-        msr.setAmount(msr.getAmount()+spendingRequest.getAmount());
-        msrc.setAmount(msrc.getAmount()+spendingRequest.getAmount());
+        msr.setAmount(msr.getAmount()+spending.getAmount());
+        msrc.setAmount(msrc.getAmount()+spending.getAmount());
     }
 
-    public void processNewIncome(IncomeRequest incomeRequest, Member member) {
-        LocalDate now = LocalDate.now();
-        LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+    public void processNewIncome(Income income, Member member) {
+        LocalDate date = income.getDate();
+        LocalDate ymonth = LocalDate.of(date.getYear(),date.getMonth(),1);
 
         Optional<MonthIncomeRecord> mirOptional = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
@@ -97,6 +98,6 @@ public class ProcessSpendingService {
 
         MonthIncomeRecord mir = optionalMir.get();
 
-        mir.setAmount(mir.getAmount()+incomeRequest.getAmount());
+        mir.setAmount(mir.getAmount()+income.getAmount());
     }
 }
