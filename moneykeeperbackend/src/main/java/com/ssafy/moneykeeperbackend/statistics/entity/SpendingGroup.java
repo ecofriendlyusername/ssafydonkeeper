@@ -16,15 +16,12 @@ public class SpendingGroup {
     private Long id;
     @NonNull
     private int below;
-
-    private int base;
     private int groupAvg;
     @OneToMany(mappedBy = "spendingGroup", fetch = FetchType.LAZY)
     private List<Member> member;
 
     @Builder
-    public SpendingGroup(int below, int base) {
-        this.base = base;
+    public SpendingGroup(int below) {
         this.below = below;
     }
 }

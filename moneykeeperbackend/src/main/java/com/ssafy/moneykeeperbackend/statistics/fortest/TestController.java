@@ -29,9 +29,7 @@ public class TestController {
 
     private final SpendingService spendingService;
     @GetMapping("")
-    @ApiOperation(value = "테스트할 때 더미데이터(유저 등)를 넣기 위한 엔드포인트. \n"
-            +"현재는 소비, 수입은 생성하지 않음, 통계를 위한 전체소비, 전체수입만 생성됨(뭔말인지 알필요 X)", notes = "생성된 유저 중 한 유저의 아이디를 값으로 돌려줌. \n" +
-            "이 아이디를 comparemonths compareusers 엔드포인트에 접근할 때 사용하면 됨")
+    @ApiOperation(value = "test", notes = "test")
     public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
         testService.initCommonForTest();
 
