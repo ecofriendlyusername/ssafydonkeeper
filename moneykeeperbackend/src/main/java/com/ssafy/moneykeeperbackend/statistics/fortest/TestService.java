@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
-public class TestService {
+public class TestService { //
 
     private final UpdateDataService updateDataService;
 
