@@ -16,18 +16,11 @@ public class IncomeGroup {
     private Long id;
     @NonNull
     private int below;
-
-    @NonNull
-    private int base;
-    @OneToMany(mappedBy = "incomeGroup", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "spendingGroup", fetch = FetchType.LAZY)
     private List<Member> member;
 
-    @OneToMany(mappedBy = "incomeGroup", fetch = FetchType.LAZY)
-    private List<MonthSpendingRecord> monthSpendingRecords;
-
     @Builder
-    public IncomeGroup(int below, int base) {
-        this.base = base;
+    public IncomeGroup(int below) {
         this.below = below;
     }
 }

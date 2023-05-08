@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <headerComponent />
   <div class="test" v-on:click="logout">
     loginCheck: {{ loginCheck }} <br>
@@ -8,8 +7,7 @@
     <a
       href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
         src="./assets/kakao_login_medium_narrow.png" alt=""></a>
-
-    <div @click="check">세션 체크</div>
+        <div @click="check">세션 체크</div>
     <br>
     <div @click="add">add</div>
     <br>
@@ -24,7 +22,6 @@
     <div @click="patch">patch</div>
     <br>
     <div @click="delet">delet</div>
-
     <br>
     <br>
     <br>
@@ -38,7 +35,6 @@
     <br>
     <div @click="incomedetailget">incomedetailget</div>
   </div>
-
   <router-view />
   <footerComponent />
 </template>
@@ -48,19 +44,9 @@ import axios from 'axios'
 axios.defaults.withCredentials = true; // 백엔드에서 cookie 세팅 할 수 있으려면 axios에 기본으로 되어있어야 한다. axios 한곳으로 몰아서 쓸거면 거기에 이거 작성해주세요.
 import headerComponent from "@/components/headerComponent.vue";
 import footerComponent from "@/components/footerComponent.vue";
-=======
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 
 export default {
-  name: 'App',
   components: {
-<<<<<<< HEAD
     headerComponent,
     footerComponent
   },
@@ -75,37 +61,6 @@ export default {
       this.$store.state.loginCheck = false
     },
     check() {
-      axios({
-        method: 'get',
-        url: `http://localhost:8080/api/auth/session`,
-      })
-        .then((res) => {
-          console.log("세션")
-          console.log(res.data)
-        })
-    },
-    add() {
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/account-book/spending`,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          "assetId" : 20,
-          "spendingClassificationId" : 2,
-          "date" : "2023-05-04",
-          "amount" : 27000, 
-          "detail": "엽닭",
-          "memo": "승현이랑"
-        },
-      })
-        .then((res) => {
-          console.log("add")
-          console.log(res.data)
-        })
-    },
-    get() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
@@ -158,7 +113,7 @@ export default {
           "memo": "민지랑승현이랑"
         },
       })
-        .then((res) => {
+      .then((res) => {
           console.log("patch")
           console.log(res.data)
         })
@@ -224,13 +179,8 @@ export default {
   },
 
   
-=======
-    HelloWorld
-  }
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 }
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -238,7 +188,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-<<<<<<< HEAD
 }
 
 nav {
@@ -248,8 +197,5 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
-=======
-  margin-top: 60px;
->>>>>>> 120a249d50e1dc51d8dfd6e995d7852aba811715
 }
 </style>
