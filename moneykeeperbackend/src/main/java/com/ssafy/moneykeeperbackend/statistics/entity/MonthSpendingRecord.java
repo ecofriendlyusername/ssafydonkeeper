@@ -18,9 +18,6 @@ public class MonthSpendingRecord {
     @GeneratedValue
     private Long id;
     private int amount;
-    @ManyToOne
-    private IncomeGroup incomeGroup;
-
     private int groupAvg;
     @ManyToOne
     private Member member;
