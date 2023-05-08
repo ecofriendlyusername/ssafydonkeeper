@@ -7,8 +7,7 @@
     <a
       href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
         src="./assets/kakao_login_medium_narrow.png" alt=""></a>
-
-    <div @click="check">세션 체크</div>
+        <div @click="check">세션 체크</div>
     <br>
     <div @click="add">add</div>
     <br>
@@ -23,7 +22,6 @@
     <div @click="patch">patch</div>
     <br>
     <div @click="delet">delet</div>
-
     <br>
     <br>
     <br>
@@ -37,7 +35,6 @@
     <br>
     <div @click="incomedetailget">incomedetailget</div>
   </div>
-
   <router-view />
   <footerComponent />
 </template>
@@ -64,37 +61,6 @@ export default {
       this.$store.state.loginCheck = false
     },
     check() {
-      axios({
-        method: 'get',
-        url: `http://localhost:8080/api/auth/session`,
-      })
-        .then((res) => {
-          console.log("세션")
-          console.log(res.data)
-        })
-    },
-    add() {
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/account-book/spending`,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          "assetId" : 20,
-          "spendingClassificationId" : 2,
-          "date" : "2023-05-04",
-          "amount" : 27000, 
-          "detail": "엽닭",
-          "memo": "승현이랑"
-        },
-      })
-        .then((res) => {
-          console.log("add")
-          console.log(res.data)
-        })
-    },
-    get() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
@@ -147,7 +113,7 @@ export default {
           "memo": "민지랑승현이랑"
         },
       })
-        .then((res) => {
+      .then((res) => {
           console.log("patch")
           console.log(res.data)
         })
@@ -215,7 +181,6 @@ export default {
   
 }
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
