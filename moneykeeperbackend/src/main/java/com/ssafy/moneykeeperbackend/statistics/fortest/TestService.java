@@ -2,14 +2,12 @@ package com.ssafy.moneykeeperbackend.statistics.fortest;
 
 import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.*;
-import com.ssafy.moneykeeperbackend.accountbook.repository.AssetRepository;
-import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
-import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
-import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingRepository;
+import com.ssafy.moneykeeperbackend.accountbook.repository.*;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.entity.*;
 import com.ssafy.moneykeeperbackend.statistics.repository.*;
+import com.ssafy.moneykeeperbackend.statistics.service.ProcessSpendingService;
 import com.ssafy.moneykeeperbackend.statistics.service.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,14 +17,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
-public class TestService {
+public class TestService { //
 
     private final UpdateDataService updateDataService;
 
     private final SpendingRepository spendingRepository;
+
+    private final IncomeRepository incomeRepository;
 
     private final MemberRepository memberRepository;
     private final AssetRepository assetRepository;
@@ -35,6 +36,8 @@ public class TestService {
     private final SpendingClassificationRepository spendingClassificationRepository;
     // private final IncomeClassificationRepository incomeClassificationRepository;
     private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
+
+    private final ProcessSpendingService processSpendingService;
 
     private final MonthIncomeRecordRepository monthIncomeRecordRepository;
 
@@ -82,7 +85,7 @@ public class TestService {
     }
 
     public void buildSpendingGroupForTest() {
-        int[] spent = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+        int[] spent = {300000,500000,1000000,3000000,5000000,7000000,Integer.MAX_VALUE};
 
         int len = spent.length;
 
@@ -98,14 +101,16 @@ public class TestService {
     }
 
     public void buildIncomeGroupForTest() {
-        int[] income = {300000,400000,500000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,Integer.MAX_VALUE};
+        int[] below = {300000,500000,1000000,3000000,5000000,7000000,Integer.MAX_VALUE};
+        int[] base = {0,300000,500000,1000000,3000000,5000000,7000000};
 
-        int len = income.length;
+        int len = below.length;
 
         for (int i = 0; i < len; i++) {
             IncomeGroup incomeGroup = IncomeGroup
                     .builder()
-                    .below(income[i])
+                    .below(below[i])
+                    .base(base[i])
                     .build();
             incomeGroupRepository.save(incomeGroup);
         }
@@ -151,14 +156,14 @@ public class TestService {
 //        }
 //    }
 
-    private void generateMockSpendingsWith(Member member, int month) {
+    private void generateMockSpendingsWith(Member member) {
 //        String[] months = {"2023-01-","2023-02-","2023-03-","2023-04-","2023-05"};
 //        String[] days = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"};
 
-        List<SpendingClassification> scList = spendingClassificationRepository.findAll();
+        List<SpendingClassification> scList = spendingClassificationRepository.findByMember(member);
         for (int i = 1; i <= 5; i++) {
             LocalDate localDate = LocalDate.of(2023,i,1);
-            for (int j = 0; j <= 30; j++) {
+            for (int j = 0; j <= 20; j++) {
                 int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
                 LocalDate today = LocalDate.of(2023,i,day);
 
@@ -170,8 +175,9 @@ public class TestService {
                         .spendingClassification(scList.get(scIdx))
                         .memo("some memo")
                         .date(today).build();
+                spendingRepository.save(spending);
 
-
+                processSpendingService.processNewSpending(spending,member);
             }
         }
     }
@@ -205,13 +211,15 @@ public class TestService {
                     .name(s)
                     .majorSpendingClassification(msc)
                     .build();
+            spendingClassificationRepository.save(sc);
         }
         // generateMockMonthSpendingRecords(member1);
         // generateMockMonthSpendingRecordByClasses(member1);
-        for (int i = 1; i <= 5; i++) {
-            generateMockSpendingsWith(member,i);
-            generateMockIncomesWith(member,i);
-        }
+        generateMonthSpendingRecord(member,hm);
+        generateMonthIncomeRecord(member);
+
+        generateMockSpendingsWith(member);
+        generateMockIncomesWith(member);
         // generateMockMonthIncomeRecords(member1);
 
          updateDataService.determineIncomeGroup(member,start,end);
@@ -220,10 +228,63 @@ public class TestService {
         // return member.getId();
     }
 
-    private void generateMockIncomesWith(Member member, int i) {
-        Income income = Income.builder()
-                .amount()
-                .build();
+    private void generateMonthIncomeRecord(Member member) {
+        for (int i = 1; i <= 5; i++) {
+            MonthIncomeRecord monthIncomeRecord =
+                    MonthIncomeRecord.builder()
+                            .month(LocalDate.of(2023,i,1))
+                            .member(member)
+                            .amount(0)
+                            .build();
+            monthIncomeRecordRepository.save(monthIncomeRecord);
+        }
+    }
+
+    private void generateMonthSpendingRecord(Member member, HashMap<String,MajorSpendingClassification> hm) {
+        for (int i = 1; i <= 5; i++) {
+            MonthSpendingRecord msr =
+                    MonthSpendingRecord.builder()
+                            .ymonth(LocalDate.of(2023,i,1))
+                            .member(member)
+                            .amount(0)
+                            .build();
+            monthSpendingRecordRepository.save(msr);
+        }
+
+        for (MajorSpendingClassification msc : hm.values()) {
+            for (int i = 1; i <= 5; i++) {
+                LocalDate ymonth = LocalDate.of(2023,i,1);
+                MonthSpendingRecordByClass msrc =
+                        MonthSpendingRecordByClass.builder()
+                                .ymonth(ymonth)
+                                .member(member)
+                                .majorSpendingClass(msc)
+                                .amount(0)
+                                .build();
+                // System.out.println(msc.getName() + " " + member.getId());
+                monthSpendingRecordByClassRepository.save(msrc);
+            }
+        }
+    }
+
+    private void generateMockIncomesWith(Member member) {
+        for (int i = 1; i <= 5; i++) {
+            LocalDate localDate = LocalDate.of(2023,i,1);
+            int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
+            LocalDate today = LocalDate.of(2023,i,day);
+
+//            int scIdx = ThreadLocalRandom.current().nextInt(0, 13 + 1);
+
+            Income income = Income.builder()
+                    .amount(ThreadLocalRandom.current().nextInt(8000, 150000 + 1))
+                    .detail("some detail")
+                    .memo("some memo")
+                    .date(today).build();
+            incomeRepository.save(income);
+
+
+            processSpendingService.processNewIncome(income,member);
+        }
     }
 
 

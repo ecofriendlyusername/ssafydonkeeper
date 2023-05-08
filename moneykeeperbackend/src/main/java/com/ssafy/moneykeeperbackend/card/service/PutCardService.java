@@ -1,25 +1,29 @@
 package com.ssafy.moneykeeperbackend.card.service;
 
+import com.ssafy.moneykeeperbackend.card.entity.Card;
+import com.ssafy.moneykeeperbackend.card.enums.Benefit;
+import com.ssafy.moneykeeperbackend.card.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
 public class PutCardService {
-    HashSet<String> companies = new HashSet<>();
-    HashSet<String> keywords = new HashSet<>();
-
-    HashSet<Character> everyKoreanChars = new HashSet<>();
+    HashSet<String> bfs = new HashSet<>();
+    private final CardRepository cardRepository;
 
     boolean[] skip = new boolean[60000];
     @Value("${file.image.path}")
     private String absolutePath;
     public void saveCards() throws Exception {
-        for (int i = 0; i <= 127; i++) skip[i] = true;
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(
@@ -29,7 +33,8 @@ public class PutCardService {
             String line = reader.readLine();
 
             while (line != null) {
-                saveCard(line);
+                try {saveCard(line);}
+                catch (Exception e) {}
                 line = reader.readLine();
             }
             reader.close();
@@ -37,91 +42,96 @@ public class PutCardService {
             e.printStackTrace();
         }
 
-//        for (String company : companies) {
-//            System.out.print(company + " ");
-//        }
-        for (String keyword : keywords) System.out.print(keyword + " ");
+        for (String keyword : bfs) System.out.print(keyword + " ");
 
-        System.out.println();
+        System.out.println("done");
     }
 
     public void saveCard(String card) throws Exception {
-        int i = 0;
-        int len = card.length();
-        int j = i;
-        while (card.charAt(j) != ',') j++;
-        String name = card.substring(i,j);
-        if (name.length() == 0 || card.charAt(j+1) == ',') return;
-        j += 2;
-        i = j;
-        while (card.charAt(j) != ',') j++;
-        String company = card.substring(i,j);
+        String[] temp = card.split(",  ");
 
-        int bsi = i + 1; // benefit start index
+        String imgPath = temp[0];
+        String name = temp[1];
+        int isCredit = name.contains("check") || name.contains("체크") ? 0 : 1;
+        String company = temp[2];
 
-        i = len-1;
+        String[] benefits = temp[3].split("\\?");
 
-        while (card.charAt(i) != ',') i--;
+        int fee;
 
-
-        int minimunSpending = -1;
-
-        try {
-            getMinimumSpending(card.substring(i+2,len));
-        } catch (Exception e) {
-            return;
-        }
-
-        int annualFee;
-
-        int ani = card.indexOf("국내전용");
-        if (ani == -1) ani = card.indexOf("해외겸용");
-
-        int bei = ani-1;
-        if (ani == -1) return;
-        StringBuilder sb = new StringBuilder();
-        i = ani + 4;
-        annualFee = card.charAt(i) != ' ' ? Integer.parseInt(findFee(i,card)) : Integer.parseInt(findFee(i+1,card));
-
-        getKeywords(bsi,bei,card);
-        System.out.println("카드명: " + name);
-        System.out.println("회사: " + company);
-        System.out.println("연회비: " + annualFee);
-        System.out.println();
-        companies.add(company);
-    }
-
-    private void getKeywords(int bsi, int bei, String card) {
-        int i = bsi;
-        StringBuilder keyword = new StringBuilder();
-        while (i <= bei) {
-            if (skip[card.charAt(i)]) {
-                if (keyword.length() != 0) {
-                    keywords.add(keyword.toString());
+        if (temp[5].charAt(0) == '없') fee = 0;
+        else {
+            int i = temp[5].charAt(4) == ' ' ? 5 : 4;
+            if (temp[5].charAt(i) == '없') fee = 0;
+            else {
+                try {StringBuilder sb = new StringBuilder();
+                while (i < temp[5].length()) {
+                    char c = temp[5].charAt(i);
+                    if (c == '원' || c == ' ') break;
+                    if (c == ',') {
+                        i++;
+                        continue;
+                    }
+                    sb.append(c);
+                    i++;
                 }
-                keyword = new StringBuilder();
-            } else {
-               keyword.append(card.charAt(i));
+                fee = Integer.parseInt(sb.toString());}
+                catch (Exception e) {
+                    return;
+                }
             }
-            i++;
         }
-    }
 
-    private String findFee(int i, String card) {
-        if (card.charAt(i) == '없') return "0";
+        String[] str = temp[6].split(" ");
+
+        int minimum = str.length == 1 ? 0 : Integer.parseInt(str[0]) * 10000;
+
+        String[] benefitDetails = temp[4].split("\\?");
+
         StringBuilder sb = new StringBuilder();
-        while (card.charAt(i) != '원') {
-            if (card.charAt(i) == ',') {
-                i++;
-            } else {
-                sb.append(card.charAt(i++));
-            }
-        }
-        return sb.toString().trim();
-    }
 
-    private int getMinimumSpending(String substring) throws Exception {
-        if (substring.equals("없음")) return 0;
-        return Integer.parseInt(substring.split(" ")[0]);
+        for (int i = 0; i < benefitDetails.length-1; i++) {
+            sb.append(benefitDetails[i] + "\n");
+        }
+        sb.append(benefitDetails[benefitDetails.length-1]);
+
+        HashMap<String,Integer> hm = new HashMap<>();
+
+        if (benefits.length >= 1) {
+            String benefitUp = benefits[0].toUpperCase();
+            String benefit = Benefit.valueOf(benefitUp).getLabel();
+            hm.put(benefit,hm.getOrDefault(benefit,0)+1);
+        }
+        if (benefits.length >= 2) {
+            String benefitUp = benefits[1].toUpperCase();
+            String benefit = Benefit.valueOf(benefitUp).getLabel();
+            hm.put(benefit,hm.getOrDefault(benefit,0)+1);
+        }
+        if (benefits.length >= 3) {
+            String benefitUp = benefits[2].substring(0, benefits[2].length()).toUpperCase();
+            String benefit = Benefit.valueOf(benefitUp).getLabel();
+            hm.put(benefit,hm.getOrDefault(benefit,0)+1);
+        }
+
+        StringBuilder sb2 = new StringBuilder();
+
+        for (String key : hm.keySet()) {
+            sb2.append(key + ":" + hm.get(key)+ " ");
+        }
+
+        Card cardObject = Card.builder()
+                .name(name)
+                .company(company)
+                .annualFee(fee)
+                .minimumSpending(minimum)
+                .benefitDetail(sb.toString())
+                .isCredit(isCredit)
+                .imgPath(imgPath)
+                .benefitImportant(sb2.toString())
+                .build();
+
+        cardRepository.save(cardObject);
+
+        System.out.println();
     }
 }

@@ -26,10 +26,10 @@ public class MonthSpendingRecordByClass {
     @ManyToOne
     private Member member;
     @Builder
-    public MonthSpendingRecordByClass(Member member, LocalDate month, MajorSpendingClassification majorSpendingClass, int amount) {
+    public MonthSpendingRecordByClass(Member member, LocalDate ymonth, MajorSpendingClassification majorSpendingClass, int amount) {
         this.majorSpendingClass = majorSpendingClass;
         this.amount = amount;
-        this.ymonth = month;
+        this.ymonth = ymonth;
         this.member = member;
     }
 }
