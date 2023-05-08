@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.accountbook.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface SpendingClassificationRepository extends JpaRepository<Spending
 
 	Optional<SpendingClassification> findById(Long id);
 
+    List<SpendingClassification> findByMember(Member member);
 }
