@@ -1,37 +1,42 @@
 <template>
   <headerComponent />
-  <a
-    href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
-      src="./assets/kakao_login_medium_narrow.png" alt=""></a>
+  <div class="test" v-on:click="logout">
+    loginCheck: {{ loginCheck }} <br>
+    누르면 로그인 풀림</div>
+  <div class="test" v-if="!loginCheck">
+    <a
+      href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
+        src="./assets/kakao_login_medium_narrow.png" alt=""></a>
 
-  <div @click="check">세션 체크</div>
-  <br>
-  <div @click="add">add</div>
-  <br>
-  <div @click="get">get</div>
-  <br>  
-  <div @click="monthget">monthget</div>
-  <br>  
-  <div @click="detailget">detailget</div>
-  <br>
-  <div @click="amountget">amountget</div>
-  <br>
-  <div @click="patch">patch</div>
-  <br>
-  <div @click="delet">delet</div>
+    <div @click="check">세션 체크</div>
+    <br>
+    <div @click="add">add</div>
+    <br>
+    <div @click="get">get</div>
+    <br>  
+    <div @click="monthget">monthget</div>
+    <br>  
+    <div @click="detailget">detailget</div>
+    <br>
+    <div @click="amountget">amountget</div>
+    <br>
+    <div @click="patch">patch</div>
+    <br>
+    <div @click="delet">delet</div>
 
-  <br>
-  <br>
-  <br>
-  <div @click="incomeadd">incomeadd</div>
-  <br>
-  <div @click="incomegetall">incomegetall</div>
-  
-  <br>
-  <div @click="incomemonthget">incomemonthget</div>
-  
-  <br>
-  <div @click="incomedetailget">incomedetailget</div>
+    <br>
+    <br>
+    <br>
+    <div @click="incomeadd">incomeadd</div>
+    <br>
+    <div @click="incomegetall">incomegetall</div>
+    
+    <br>
+    <div @click="incomemonthget">incomemonthget</div>
+    
+    <br>
+    <div @click="incomedetailget">incomedetailget</div>
+  </div>
 
   <router-view />
   <footerComponent />
@@ -48,8 +53,16 @@ export default {
     headerComponent,
     footerComponent
   },
+  computed: {
+    loginCheck() {
+      return this.$store.state.loginCheck
+    }
+  },
 
   methods: {
+    logout() {
+      this.$store.state.loginCheck = false
+    },
     check() {
       axios({
         method: 'get',
@@ -86,30 +99,30 @@ export default {
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
       })
-        .then((res) => {
-          console.log("get")
-          console.log(res.data)
-        })
+      .then((res) => {
+        console.log("get")
+        console.log(res.data)
+      })
     },
     monthget() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending/2023/5?page=0&size=10`
       })
-        .then((res) => {
-          console.log("get")
-          console.log(res.data)
-        })
+      .then((res) => {
+        console.log("get")
+        console.log(res.data)
+      })
     },
     detailget() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending/47`
       })
-        .then((res) => {
-          console.log("get")
-          console.log(res.data)
-        })
+      .then((res) => {
+        console.log("get")
+        console.log(res.data)
+      })
     },
     amountget() {
       axios({
