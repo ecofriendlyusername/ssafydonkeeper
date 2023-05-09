@@ -1,6 +1,5 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.IncomeRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Income;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
@@ -24,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProcessSpendingService {
+public class ProcessRecordService {
 
     private final MonthSpendingRecordRepository monthSpendingRecordRepository;
 

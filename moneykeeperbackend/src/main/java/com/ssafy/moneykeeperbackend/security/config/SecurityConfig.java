@@ -106,6 +106,3 @@ public class SecurityConfig {
 
 
 }
-
-//			.antMatchers("/api/auth/kakao/callback").permitAll()
-//					.anyRequest().permitAll()

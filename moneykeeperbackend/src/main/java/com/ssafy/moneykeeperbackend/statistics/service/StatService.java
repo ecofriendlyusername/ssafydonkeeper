@@ -1,14 +1,10 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
-import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MSRCDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
+import com.ssafy.moneykeeperbackend.statistics.dto.*;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
@@ -347,5 +343,24 @@ public class StatService {
             li.add(msrcDto);
         }
         return li;
+    }
+
+    public int getMonthIncome(int year, int month, Long memberId) {
+        LocalDate ymonth = LocalDate.of(year,month,1);
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if (!optionalMember.isPresent()) {
+            System.out.println("member iwth memberId : " + memberId + " doesn't exist");
+            return -1;
+        }
+        Optional<MonthIncomeRecord> optionalMIR = monthIncomeRecordRepository.findByMemberAndYmonth(optionalMember.get(),ymonth);
+
+        if (!optionalMIR.isPresent()) {
+            System.out.println("Month Spending Record for member : " + memberId + " doesn't exist");
+            return -1;
+        }
+
+        MonthIncomeRecord mir = optionalMIR.get();
+
+        return mir.getAmount();
     }
 }

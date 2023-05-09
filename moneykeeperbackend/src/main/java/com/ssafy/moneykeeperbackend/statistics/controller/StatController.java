@@ -1,9 +1,6 @@
 package com.ssafy.moneykeeperbackend.statistics.controller;
 
-import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MSRCDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
+import com.ssafy.moneykeeperbackend.statistics.dto.*;
 import com.ssafy.moneykeeperbackend.statistics.service.StatService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +28,12 @@ public class StatController {
     public ResponseEntity<?> getMonthSpending(@PathVariable int year, @PathVariable int month, @RequestParam String id) {
         MonthSpendingRecordDto msr = statService.getMonthSpending(year,month,Long.valueOf(id));
         return new ResponseEntity<MonthSpendingRecordDto>(msr,HttpStatus.OK);
+    }
+
+    @GetMapping("/income/{year}/{month}")
+    public ResponseEntity<?> getMonthIncome(@PathVariable int year, @PathVariable int month, @RequestParam String id) {
+        int income = statService.getMonthIncome(year,month,Long.valueOf(id));
+        return new ResponseEntity<Integer>(income,HttpStatus.OK);
     }
 
     @GetMapping("/compareusers/{year}/{month}")

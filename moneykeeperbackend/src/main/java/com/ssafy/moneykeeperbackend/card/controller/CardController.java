@@ -38,10 +38,4 @@ public class CardController {
     public ResponseEntity<?> testPost() throws Exception {
         return new ResponseEntity<>("tested", HttpStatus.OK);
     }
-
-//    @GetMapping("/testenum")
-//    public ResponseEntity<?> testenum() throws Exception {
-//        putCardService.testenum();
-//        return new ResponseEntity<>("tested", HttpStatus.OK);
-//    }
 }
