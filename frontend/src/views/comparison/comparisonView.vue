@@ -10,9 +10,9 @@
 
     <div class="barChart">
       <p style="margin-top:-15px; margin-bottom: 2px;">나</p>
-      <div class="myBar">평균 {{ myUsed.spend }} 만원</div>
+      <div class="myBar">평균 {{ Math.round(groupData.total / 10000) }} 만원</div>
       <p style="margin-bottom: 2px;">250~300만원 그룹</p>
-      <div class="yourBar">평균 {{ yourUsed.spend }} 만원</div>
+      <div class="yourBar">평균 {{ Math.round(groupData.groupAvg / 10000) }} 만원</div>
     </div>
 
     <div style="background-color:#E5E5E5;">
@@ -37,10 +37,17 @@
 
 <script>
 import Chart from 'chart.js/auto';
+import axios from 'axios';
 
 export default {
   data() {
     return {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth(),
+      groupData:{
+        groupAvg: 1536415,
+        total: 1248094
+      },
       myUsed: {
         spend: 300,
         categories: [
@@ -75,70 +82,84 @@ export default {
           }
         ]
       },
-
-      challange: [
-        {
-          id: 1,
-          name: '외식비 줄이기',
-          users: 1481
-        },
-        {
-          id: 2,
-          name: '배달음식 줄이기',
-          users: 1011
-        },
-        {
-          id: 3,
-          name: '기름값 줄이기',
-          users: 921
-        }
-      ]
     }
   },
-  mounted() {
-    new Chart(
-      document.getElementById('myPieChart'),
-      {
-        type: 'pie',
-        options: {
-          // plugins: {
-          //   legend: {
-          //     display: false
-          //   }
-          // }
-        },
-        data: {
-          labels: this.myUsed.categories.map(row => row.classification),
-          datasets: [
-            {
-              data: this.myUsed.categories.map(row => row.percent)
-            }
-          ]
+  methods: {
+    getData(){
+      axios.get(process.env.VUE_APP_API_URL + `/statistics/compareusers/${this.year}/${this.month}?id=1148`)
+      .then(res => {
+        this.groupData = res.data;
+      })
+    },
+    barChartSet(){
+      if (this.groupData.total > this.groupData.groupAvg) {
+        const your = document.querySelector('.yourBar');
+        if (this.groupData.total < this.groupData.groupAvg/2) {
+          your.style.width = '50%';
+        } else {
+          your.style.width = '80%';
+        }
+      } else {
+        const my = document.querySelector('.myBar');
+        if (this.groupData.groupAvg < this.groupData.total/2) {
+          my.style.width = '50%';
+        } else {
+          my.style.width = '80%';
         }
       }
-    );
+    },
+    pieChartAdd(){
+      new Chart(
+        document.getElementById('myPieChart'),
+        {
+          type: 'pie',
+          options: {
+            // plugins: {
+            //   legend: {
+            //     display: false
+            //   }
+            // }
+          },
+          data: {
+            labels: this.myUsed.categories.map(row => row.classification),
+            datasets: [
+              {
+                data: this.myUsed.categories.map(row => row.percent)
+              }
+            ]
+          }
+        }
+      );
 
-    new Chart(
-      document.getElementById('yourPieChart'),
-      {
-        type: 'pie',
-        options: {
-          // plugins: {
-          //   legend: {
-          //     display: false
-          //   }
-          // }
-        },
-        data: {
-          labels: this.yourUsed.categories.map(row => row.classification),
-          datasets: [
-            {
-              data: this.yourUsed.categories.map(row => row.percent)
-            }
-          ]
+      new Chart(
+        document.getElementById('yourPieChart'),
+        {
+          type: 'pie',
+          options: {
+            // plugins: {
+            //   legend: {
+            //     display: false
+            //   }
+            // }
+          },
+          data: {
+            labels: this.yourUsed.categories.map(row => row.classification),
+            datasets: [
+              {
+                data: this.yourUsed.categories.map(row => row.percent)
+              }
+            ]
+          }
         }
-      }
-    );
+      );
+    }
+  },
+  async mounted() {
+    await this.getData();
+    await this.barChartSet();
+    await this.pieChartAdd();
+
+    
   }
 }
 </script>
@@ -164,7 +185,6 @@ export default {
 }
 
 .yourBar {
-  width: 230px;
   height: 20px;
   background-color: #4D82E6;
   color: white;

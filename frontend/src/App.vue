@@ -7,19 +7,19 @@
       href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
         src="./assets/kakao_login_medium_narrow.png" alt=""></a>
   <div class="test" v-if="loginCheck">
-    
+
     <div @click="check">세션 체크</div>
 
-    
+
     <br>
     <div @click="budgetadd">budgetadd</div>
-    
+
     <br>
     <div @click="budgetmonthget">budgetmonthget</div>
-    
+
     <br>
     <div @click="budgetpatch">budgetpatch</div>
-    
+
     <br>
     <div @click="budgetdelet">budgetdelet</div>
 
@@ -30,6 +30,12 @@
     <div @click="getDateTotalAmmount">getDateTotalAmmount</div>
 
 
+
+  <div class="test" v-if="!loginCheck">
+    <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
+      <img src="./assets/kakao_login_medium_narrow.png" alt="">
+    </a>
+    <div @click="check">세션 체크</div>
     <br>
     <div @click="add">add</div>
     <br>
@@ -58,7 +64,7 @@
     <div @click="incomedetailget">incomedetailget</div>
     <br>
     <div @click="incomepatch">incomepatch</div>
-    
+
     <br>
     <div @click="incomedelet">incomedelet</div>
   </div>
@@ -73,6 +79,11 @@ import headerComponent from "@/components/headerComponent.vue";
 import footerComponent from "@/components/footerComponent.vue";
 
 export default {
+  data() {
+    return {
+      kakaoUrl: process.env.VUE_APP_URL
+    }
+  },
   components: {
     headerComponent,
     footerComponent
@@ -92,7 +103,7 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 1000000, 
+          "amount" : 1000000,
         },
       })
         .then((res) => {
@@ -117,7 +128,7 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 500000, 
+          "amount" : 500000,
         },
       })
         .then((res) => {
@@ -157,7 +168,7 @@ export default {
         console.log(res.data)
       })
     },
-    
+
     logout() {
       this.$store.state.loginCheck = false
     },
@@ -179,7 +190,7 @@ export default {
           "assetId" : 50,
           "spendingClassificationId" : 32,
           "date" : "2023-05-04",
-          "amount" : 50000, 
+          "amount" : 50000,
           "detail": "엽닭",
           "memo": "승현이랑"
         },
@@ -313,7 +324,7 @@ export default {
           "assetId" : 21,
           "incomeClassificationId" : 24,
           "date" : "2023-05-09",
-          "amount" : 5050, 
+          "amount" : 5050,
           "detail": "용돈",
           "memo": "승현이가 줬당"
         },
