@@ -4,7 +4,7 @@
       style="display: inline-block; height:5px; width:90%; background-color:black; margin-top:15px; margin-bottom:10px;">
     </div>
     <div style="font-size:120%; font-weight: bold;">
-      {{ dumy.detail }}
+      {{ data.detail }}
       <!-- CU(메인타워점) -->
     </div>
     <div
@@ -15,21 +15,21 @@
       <div style="display:flex; justify-content:space-between;">
         <div style="color:#808080">승인일시</div>
         <div>
-          {{ dumy.year }} / {{ dumy.month }} / {{ dumy.day }}
+          {{ data.year }} / {{ data.month }} / {{ data.day }}
         </div>
       </div>
 
       <div style="display:flex; justify-content:space-between; margin-top:15px;">
         <div style="color:#808080">상품분류</div>
         <div>
-          {{ dumy.classification }}
+          {{ data.classification }}
         </div>
       </div>
 
       <div style="display:flex; justify-content:space-between; margin-top:15px;">
         <div style="color:#808080">메모</div>
         <div>
-          {{ dumy.memo }}
+          {{ data.memo }}
         </div>
       </div>
 
@@ -40,7 +40,7 @@
       <div style="display:flex; justify-content:space-between; font-size: 120%;">
         <div>상품금액</div>
         <div style="color:#EA4B4E; font-weight:bold">
-          {{ dumy.amount }}원
+          {{ data.amount }}원
         </div>
       </div>
     </div>
@@ -53,10 +53,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
-      dumy: {
+      id: this.$route.query.id,
+      classification: this.$route.query.classification,
+      data: {
         "id": 19,
         "classification": "배달",
         "year": 2023,
@@ -68,6 +71,14 @@ export default {
         "memberId": 4
       },
     }
+  },
+  mounted() {
+    console.log(this.id)
+    console.log(this.classification)
+    axios.get(`'/account-book/${this.classification}/${this.id}'`)
+    .then(res => {
+      console.log(res.data);
+    })
   }
 }
 </script>
