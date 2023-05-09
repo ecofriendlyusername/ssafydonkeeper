@@ -27,7 +27,7 @@ public class MajorSpendingClassification extends BaseEntity {
 	@Id
 	@GeneratedValue
 	@Column(name = "major_spending_classification_id")
-	private int id;
+	private Long id;
 
 	@NotNull
 	private String name;

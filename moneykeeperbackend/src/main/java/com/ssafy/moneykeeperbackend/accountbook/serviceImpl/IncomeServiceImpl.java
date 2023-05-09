@@ -55,7 +55,7 @@ public class IncomeServiceImpl implements IncomeService {
 	public IncomeResponse addIncomeRecord(IncomeRequest incomeRequest, Member member) {
 
 		Income income = Income.builder()
-			.incomeClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()))
+			.incomeClassification(findIncomeClassificationById(incomeRequest.getClassificationId()))
 			.asset(findAssetById(incomeRequest.getAssetId()))
 			.memo(incomeRequest.getMemo())
 			.amount(incomeRequest.getAmount())
@@ -208,9 +208,9 @@ public class IncomeServiceImpl implements IncomeService {
 		if (incomeRequest.getAssetId() != null && incomeRequest.getAssetId() != income.getAsset().getId()) {
 			income.setAsset(findAssetById(incomeRequest.getAssetId()));
 		}
-		if (incomeRequest.getIncomeClassificationId() != null
-			&& incomeRequest.getIncomeClassificationId() != income.getIncomeClassification().getId()) {
-			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()));
+		if (incomeRequest.getClassificationId() != null
+			&& incomeRequest.getClassificationId() != income.getIncomeClassification().getId()) {
+			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getClassificationId()));
 		}
 		if (incomeRequest.getDetail() != null && !incomeRequest.getDetail().equals(income.getDetail())) {
 			income.setDetail(incomeRequest.getDetail());

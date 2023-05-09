@@ -7,8 +7,21 @@
   </div>
     <div class="test" v-if="loginCheck">
 
+      
+
     <div @click="check">세션 체크</div>
 
+    <br>
+    <div @click="incomeClassificationGet">incomeClassificationGet</div>
+
+    <br>
+    <div @click="SpendingClassificationadd">SpendingClassificationadd</div>
+
+    <br>
+    <div @click="SpendingClassificationGet">SpendingClassificationGet</div>
+    
+    <br>
+    <div @click="AssetGet">AssetGet</div>
 
     <br>
     <div @click="budgetadd">budgetadd</div>
@@ -86,6 +99,59 @@ export default {
   },
 
   methods: {
+    SpendingClassificationGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spendingclassification`,
+        
+      })
+        .then((res) => {
+          console.log("spendingclassification")
+          console.log(res.data)
+        })
+      
+    },
+    SpendingClassificationadd() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/spendingclassification`,
+        data: {
+          "majorSpendingClassificationId" : 0,
+          "name" : "승현이랑 외식"
+        }
+      })
+        .then((res) => {
+          console.log("spendingclassification")
+          console.log(res.data)
+        })
+      
+    },
+
+
+    incomeClassificationGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/incomeclassification`,
+        
+      })
+        .then((res) => {
+          console.log("incomeClassificationGet")
+          console.log(res.data)
+        })
+      
+    },
+    AssetGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/asset`,
+        
+      })
+        .then((res) => {
+          console.log("AssetGet")
+          console.log(res.data)
+        })
+      
+    },
 
     budgetadd() {
       axios({

@@ -49,7 +49,7 @@ public class SpendingServiceImpl implements SpendingService {
 
 		Spending spending = Spending.builder()
 			.member(member)
-			.spendingClassification(findSpendingClassificationById(spendingRequest.getSpendingClassificationId()))
+			.spendingClassification(findSpendingClassificationById(spendingRequest.getClassificationId()))
 			.date(LocalDate.parse(spendingRequest.getDate(), DateTimeFormatter.ISO_DATE))
 			.asset(findAssetById(spendingRequest.getAssetId()))
 			.amount(spendingRequest.getAmount())
@@ -197,8 +197,8 @@ public class SpendingServiceImpl implements SpendingService {
 		if (spendingRequest.getAssetId() != null && spendingRequest.getAssetId() != spending.getAsset().getId()) {
 			spending.setAsset(findAssetById(spendingRequest.getAssetId()));
 		}
-		if (spendingRequest.getSpendingClassificationId() != null && spendingRequest.getSpendingClassificationId() != spending.getSpendingClassification().getId()) {
-			spending.setSpendingClassification(findSpendingClassificationById(spendingRequest.getSpendingClassificationId()));
+		if (spendingRequest.getClassificationId() != null && spendingRequest.getClassificationId() != spending.getSpendingClassification().getId()) {
+			spending.setSpendingClassification(findSpendingClassificationById(spendingRequest.getClassificationId()));
 		}
 		if (spendingRequest.getDetail() != null && !spendingRequest.getDetail().equals(spending.getDetail())) {
 			spending.setDetail(spendingRequest.getDetail());
