@@ -27,9 +27,8 @@ public class PutCardService {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(absolutePath + "/cards.txt"), "UTF-8"));
+                    new FileInputStream(absolutePath + "/card_pure.txt"), "UTF-8"));
 
-            reader.readLine();
             String line = reader.readLine();
 
             while (line != null) {

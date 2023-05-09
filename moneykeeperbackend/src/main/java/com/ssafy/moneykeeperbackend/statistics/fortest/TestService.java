@@ -144,24 +144,12 @@ public class TestService { //
         return hm;
     }
 
-//    private void generateMockMonthSpendingRecords(Member member) {
-//        for (int i = 1; i <= 5; i++) {
-//            MonthSpendingRecord msr = MonthSpendingRecord.builder()
-//                    .groupAvg(-1)
-//                    .amount(0)
-//                    .member(member)
-//                    .ymonth(LocalDate.of(2023,i,1))
-//                    .build();
-//            monthSpendingRecordRepository.save(msr);
-//        }
-//    }
-
     private void generateMockSpendingsWith(Member member) {
 //        String[] months = {"2023-01-","2023-02-","2023-03-","2023-04-","2023-05"};
 //        String[] days = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"};
 
         List<SpendingClassification> scList = spendingClassificationRepository.findByMember(member);
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 2; i <= 5; i++) {
             LocalDate localDate = LocalDate.of(2023,i,1);
             for (int j = 0; j <= 20; j++) {
                 int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
@@ -172,6 +160,7 @@ public class TestService { //
                 Spending spending = Spending.builder()
                         .amount(ThreadLocalRandom.current().nextInt(8000, 150000 + 1))
                         .detail("some detail")
+                        .member(member)
                         .spendingClassification(scList.get(scIdx))
                         .memo("some memo")
                         .date(today).build();
@@ -229,7 +218,7 @@ public class TestService { //
     }
 
     private void generateMonthIncomeRecord(Member member) {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 2; i <= 5; i++) {
             MonthIncomeRecord monthIncomeRecord =
                     MonthIncomeRecord.builder()
                             .month(LocalDate.of(2023,i,1))
@@ -241,7 +230,7 @@ public class TestService { //
     }
 
     private void generateMonthSpendingRecord(Member member, HashMap<String,MajorSpendingClassification> hm) {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 2; i <= 5; i++) {
             MonthSpendingRecord msr =
                     MonthSpendingRecord.builder()
                             .ymonth(LocalDate.of(2023,i,1))
@@ -252,7 +241,7 @@ public class TestService { //
         }
 
         for (MajorSpendingClassification msc : hm.values()) {
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 2; i <= 5; i++) {
                 LocalDate ymonth = LocalDate.of(2023,i,1);
                 MonthSpendingRecordByClass msrc =
                         MonthSpendingRecordByClass.builder()
@@ -268,16 +257,17 @@ public class TestService { //
     }
 
     private void generateMockIncomesWith(Member member) {
-        for (int i = 1; i <= 5; i++) {
-            LocalDate localDate = LocalDate.of(2023,i,1);
+        for (int i = 2; i <= 5; i++) {
+//            LocalDate localDate = LocalDate.of(2023,i,1);
             int day = ThreadLocalRandom.current().nextInt(1, 28 + 1);
             LocalDate today = LocalDate.of(2023,i,day);
 
 //            int scIdx = ThreadLocalRandom.current().nextInt(0, 13 + 1);
 
             Income income = Income.builder()
-                    .amount(ThreadLocalRandom.current().nextInt(8000, 150000 + 1))
+                    .amount(ThreadLocalRandom.current().nextInt(1500000, 9500000 + 1))
                     .detail("some detail")
+                    .member(member)
                     .memo("some memo")
                     .date(today).build();
             incomeRepository.save(income);
