@@ -16,7 +16,7 @@ export default {
     mounted() {
         axios({
             method: 'post',
-            url: `http://localhost:8080/api/auth/kakao/callback`,
+            url: `http://k8c209.p.ssafy.io:8080/api/auth/kakao/callback`,
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
