@@ -2,11 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'main',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/mainPageView.vue')
-  // },
   {
     path: '/book',
     children: [
@@ -25,10 +20,9 @@ const routes = [
         name: 'list',
         component: () => import('../views/book/listView.vue')
       },
-
       {
-        path: ':id',
-        name: 'detail',
+        path: 'detail',
+        name: 'bookDetail',
         component: () => import('../views/book/detailView.vue')
       },
     ]
