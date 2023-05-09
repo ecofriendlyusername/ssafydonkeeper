@@ -29,11 +29,12 @@
 
     <div style="height:10px; width:100%; background-color:#F0F2F5; margin-top:15px; margin-bottom:10px;"></div>
 
-    <div v-if="IS">
+    <!-- 지출내역 칸 -->
+    <div v-show="IS">
       <div
         style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
-        <div>소비내역</div>
-        <div>+ 추가</div>
+        <div>지출내역</div>
+        <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
       <div v-for="(dumy, idx) in spend_dumies" :key="idx"
@@ -41,10 +42,10 @@
         style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
         <div>
           <div style="font-weight:bold">
-            {{ dumy.classification }}
+            {{ dumy.spendingClassificationName }}
           </div>
           <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{ dumy.month }}.{{ dumy.day }}
+            {{ dumy.date }}
           </div>
         </div>
         <div>
@@ -54,11 +55,12 @@
       </div>
     </div>
 
-    <div v-else>
+    <!-- 수입내역 칸 -->
+    <div v-show="!IS">
       <div
         style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
         <div>수입내역</div>
-        <div>+ 추가</div>
+        <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
       <div v-for="(dumy, idx) in incom_dumies" :key="idx"
@@ -82,16 +84,15 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
 
   data() {
     return {
       year: new Date().getFullYear(),
-      month: new Date().getMonth(),
+      month: new Date().getMonth()+1,
       page_number: 1,
       page_size: 10,
-
+      // 수입인지 지출인지 체크
       IS: true,
 
       total_incom: 200000,
@@ -107,13 +108,13 @@ export default {
   methods: {
     getData() {
       console.log(this.year, this.month, this.page_number)
-      axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
         this.spend_dumies=res.data
       })
 
-      axios.get(process.env.VUE_APP_API_URL + `/account-book/income/${this.year}/${this.month}`)
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/income/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
         this.incom_dumies = res.data
