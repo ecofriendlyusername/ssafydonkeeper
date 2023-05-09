@@ -21,6 +21,8 @@ public interface IncomeService {
 
 	IncomeResponse getDetailIncome(Member member, Long incomeId);
 
+	int getMonthIncomeAmount(Member member, int year, int month);
+
 	IncomeResponse updateIncome(Member member, Long incomeId, IncomeRequest incomeRequest);
 
 	void deleteIncome(Long incomeId);

@@ -172,6 +172,20 @@ public class IncomeServiceImpl implements IncomeService {
 	}
 
 	/*
+	 * 특정 달 수입 금액 가져오기
+	 *
+	 * @date 2023.05.09
+	 * @author 정민지
+	 * */
+	@Override
+	public int getMonthIncomeAmount(Member member, int year, int month) {
+		LocalDate startDate = LocalDate.of(year, month, 1);
+		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+		return incomeRepository.getTotalAmountByMemberAndDateBetween(member, startDate, endDate);
+	}
+
+	/*
 	 * 특정 수입 내역 수정
 	 *
 	 * @date 2023.05.04

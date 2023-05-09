@@ -13,6 +13,8 @@ import com.ssafy.moneykeeperbackend.accountbook.dto.response.MonthTatalAmountRes
 import com.ssafy.moneykeeperbackend.accountbook.dto.response.TotalAmountResponse;
 import com.ssafy.moneykeeperbackend.accountbook.repository.IncomeRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingRepository;
+import com.ssafy.moneykeeperbackend.accountbook.service.IncomeService;
+import com.ssafy.moneykeeperbackend.accountbook.service.SpendingService;
 import com.ssafy.moneykeeperbackend.accountbook.service.TotalService;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 
@@ -28,6 +30,10 @@ public class TotalServiceImpl implements TotalService {
 
 	private final SpendingRepository spendingRepository;
 
+	private final SpendingService spendingService;
+
+	private final IncomeService incomeService;
+
 	/*
 	 * 특정 달의 매일 소비/ 수입 금액과 총 소비/ 수입 금액 가져오기
 	 *
@@ -38,20 +44,13 @@ public class TotalServiceImpl implements TotalService {
 	public MonthTatalAmountResponse getMonthTotalAmmount(Member member, int year, int month) {
 
 		List<DateTotalAmountResponse> dateTotalAmountResponses = new ArrayList<>();
-		int totalIncomeAmount = 0;
-		int totalSpendingAmount = 0;
 
 		YearMonth yearMonth = YearMonth.of(year, month);
 		int daysInMonth = yearMonth.lengthOfMonth();
 
 		for (int day = 1; day <= daysInMonth; day++) {
 			LocalDate date = LocalDate.of(year, month, day);
-
 			DateTotalAmountResponse dateTotalAmountResponse = getDateTotalAmmount(member, date);
-
-			totalIncomeAmount += dateTotalAmountResponse.getIncomeAmount();
-			totalSpendingAmount += dateTotalAmountResponse.getSpendingAmount();
-
 			dateTotalAmountResponses.add(dateTotalAmountResponse);
 		}
 
@@ -59,8 +58,8 @@ public class TotalServiceImpl implements TotalService {
 			.month(String.format("%d-%02d", year, month))
 			.details(dateTotalAmountResponses)
 			.total(TotalAmountResponse.builder()
-				.totalIncomeAmount(totalIncomeAmount)
-				.totalSpendingAmount(totalSpendingAmount)
+				.totalIncomeAmount(incomeService.getMonthIncomeAmount(member, year, month))
+				.totalSpendingAmount(spendingService.getMonthSpendingAmount(member, year, month))
 				.build())
 			.build();
 	}

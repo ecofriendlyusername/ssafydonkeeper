@@ -4,6 +4,7 @@
     <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
+  </div>
     <div class="test" v-if="loginCheck">
 
     <div @click="check">세션 체크</div>
@@ -57,7 +58,7 @@
     <br>
     <div @click="incomedelet">incomedelet</div>
     </div>
-  </div>
+  
   <router-view />
   <footerComponent />
 </template>
