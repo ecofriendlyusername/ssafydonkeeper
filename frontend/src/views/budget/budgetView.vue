@@ -18,6 +18,7 @@
       <div> <span style="font-weight:bold;">오늘까지 권장 지출액:</span> 1,200,000 ₩</div>
     </div>
     
+    <button v-on:click="this.$router.push('/budget/set')">예산 설정하기</button>
 
     <div style="margin-top:45px;">
       <h3 id="budgetTitle">카테고리별 예산</h3>
