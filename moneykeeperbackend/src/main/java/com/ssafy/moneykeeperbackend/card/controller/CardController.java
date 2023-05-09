@@ -18,7 +18,7 @@ public class CardController {
 
     private final CardService cardService;
     @GetMapping("/cards")
-    public ResponseEntity<?> recommendCard(@RequestPart String id) {
+    public ResponseEntity<?> recommendCard(@RequestParam String id) {
         List<CardDto> cardDtoList = cardService.getCards(Long.parseLong(id));
         return new ResponseEntity<>(cardDtoList, HttpStatus.OK);
     }
