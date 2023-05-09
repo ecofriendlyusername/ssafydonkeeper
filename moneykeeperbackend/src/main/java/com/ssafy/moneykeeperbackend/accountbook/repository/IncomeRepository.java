@@ -23,7 +23,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
 	List<Income> findAllByMemberOrderByDateDescCreatedAtDesc(Member member);
 
-	Page<Income> findAllByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate, Pageable pageable);
+	List<Income> findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(Member member, LocalDate startDate, LocalDate endDate);
 
 	@Query("SELECT COALESCE(SUM(s.amount), 0) FROM Income s WHERE s.date = :date AND s.member = :member")
 	int getTotalIncomeOnDateForMember(@Param("date") LocalDate date, @Param("member") Member member);

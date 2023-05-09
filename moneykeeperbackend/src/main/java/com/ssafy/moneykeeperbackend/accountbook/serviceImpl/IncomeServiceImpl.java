@@ -44,7 +44,6 @@ public class IncomeServiceImpl implements IncomeService {
 
 	private final IncomeRepository incomeRepository;
 
-
 	/*
 	 * 소비 내역 입력
 	 *
@@ -112,8 +111,7 @@ public class IncomeServiceImpl implements IncomeService {
 	public List<IncomeResponse> getAllIncome(Member member, Pageable pageable) {
 		List<Income> incomes = incomeRepository.findAllByMemberOrderByDateDescCreatedAtDesc(member);
 
-		return incomes.stream()
-			.map(income -> IncomeResponse.builder()
+		return incomes.stream().map(income -> IncomeResponse.builder()
 				.incomeId(income.getId())
 				.incomeClassificationName(income.getIncomeClassification().getName())
 				.amount(income.getAmount())
@@ -132,21 +130,22 @@ public class IncomeServiceImpl implements IncomeService {
 	 * @author 정민지
 	 * */
 	@Override
-	public Page<IncomeResponse> getMonthIncome(Member member, int year, int month, Pageable pageable) {
+	public List<IncomeResponse> getMonthIncome(Member member, int year, int month) {
 		LocalDate startDate = LocalDate.of(year, month, 1);
 		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-		Page<Income> incomes = incomeRepository.findAllByMemberAndDateBetween(member, startDate, endDate, pageable);
-		Page<IncomeResponse> incomeResponses = incomes.map(income -> IncomeResponse.builder()
-			.incomeId(income.getId())
-			.incomeClassificationName(income.getIncomeClassification().getName())
-			.amount(income.getAmount())
-			.assetName(income.getAsset().getName())
-			.date(income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-			.detail(income.getDetail())
-			.memo(income.getMemo())
-			.build());
-		return incomeResponses;
+		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member, startDate, endDate);
+		return incomes.stream()
+				.map(income -> IncomeResponse.builder()
+				.incomeId(income.getId())
+				.incomeClassificationName(income.getIncomeClassification().getName())
+				.amount(income.getAmount())
+				.assetName(income.getAsset().getName())
+				.date(income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+				.detail(income.getDetail())
+				.memo(income.getMemo())
+				.build())
+			.collect(Collectors.toList());
 	}
 
 	/*
@@ -158,7 +157,8 @@ public class IncomeServiceImpl implements IncomeService {
 	@Override
 	public IncomeResponse getDetailIncome(Member member, Long incomeId) {
 
-		Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.INCOME_ID_NULL));
+		Income income = incomeRepository.findById(incomeId)
+			.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.INCOME_ID_NULL));
 
 		return IncomeResponse.builder()
 			.incomeId(income.getId())
@@ -180,9 +180,12 @@ public class IncomeServiceImpl implements IncomeService {
 	@Transactional
 	@Override
 	public IncomeResponse updateIncome(Member member, Long incomeId, IncomeRequest incomeRequest) {
-		Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.INCOME_ID_NULL));
+		Income income = incomeRepository.findById(incomeId)
+			.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.INCOME_ID_NULL));
 
-		if (incomeRequest.getDate() != null && !income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equals(incomeRequest.getDate())) {
+		if (incomeRequest.getDate() != null && !income.getDate()
+			.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+			.equals(incomeRequest.getDate())) {
 			income.setDate(LocalDate.parse(incomeRequest.getDate(), DateTimeFormatter.ISO_DATE));
 		}
 		if (incomeRequest.getAmount() != 0 && incomeRequest.getAmount() != income.getAmount()) {
@@ -191,7 +194,8 @@ public class IncomeServiceImpl implements IncomeService {
 		if (incomeRequest.getAssetId() != null && incomeRequest.getAssetId() != income.getAsset().getId()) {
 			income.setAsset(findAssetById(incomeRequest.getAssetId()));
 		}
-		if (incomeRequest.getIncomeClassificationId() != null && incomeRequest.getIncomeClassificationId() != income.getIncomeClassification().getId()) {
+		if (incomeRequest.getIncomeClassificationId() != null
+			&& incomeRequest.getIncomeClassificationId() != income.getIncomeClassification().getId()) {
 			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()));
 		}
 		if (incomeRequest.getDetail() != null && !incomeRequest.getDetail().equals(income.getDetail())) {

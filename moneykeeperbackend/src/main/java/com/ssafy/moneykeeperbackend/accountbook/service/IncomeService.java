@@ -17,7 +17,7 @@ public interface IncomeService {
 
 	List<IncomeResponse> getAllIncome(Member member, Pageable pageable);
 
-	Page<IncomeResponse> getMonthIncome(Member member, int year, int month, Pageable pageable);
+	List<IncomeResponse> getMonthIncome(Member member, int year, int month);
 
 	IncomeResponse getDetailIncome(Member member, Long incomeId);
 

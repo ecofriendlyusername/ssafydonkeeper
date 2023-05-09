@@ -77,7 +77,7 @@ public class IncomeController {
 		@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date"), Sort.Order.asc("createdAt")));
 		return new ResponseEntity<>(
-			incomeService.getMonthIncome(member.getMember(), year, month, pageable).getContent(),
+			incomeService.getMonthIncome(member.getMember(), year, month),
 			HttpStatus.OK);
 	}
 
