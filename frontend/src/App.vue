@@ -3,11 +3,12 @@
   <div class="test" v-on:click="logout">
     loginCheck: {{ loginCheck }} <br>
     누르면 로그인 풀림</div>
+
   <div class="test" v-if="!loginCheck">
-    <a
-      href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
-        src="./assets/kakao_login_medium_narrow.png" alt=""></a>
-        <div @click="check">세션 체크</div>
+    <a :href=kakaoUrl>
+      <img src="./assets/kakao_login_medium_narrow.png" alt="">
+    </a>
+    <div @click="check">세션 체크</div>
     <br>
     <div @click="add">add</div>
     <br>
@@ -46,6 +47,11 @@ import headerComponent from "@/components/headerComponent.vue";
 import footerComponent from "@/components/footerComponent.vue";
 
 export default {
+  data() {
+    return {
+      kakaoUrl:"https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=" + process.env.VUE_APP_URL + "/kakaoCallback&response_type=code"
+    }
+  },
   components: {
     headerComponent,
     footerComponent
