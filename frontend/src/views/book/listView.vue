@@ -81,7 +81,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 export default {
 
   data() {
@@ -195,10 +195,10 @@ export default {
   methods: {
     getData() {
       console.log(this.year, this.month, this.page_number)
-      // axios.get(`'/account-book/spending/${this.year}/${this.month}?page=${this.page_number}&size=${this.page_size}'`)
-      // .then(res => {
-      //   console.log(res.data)
-      // })
+      axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
+      .then(res => {
+        console.log(res.data)
+      })
     },
     before() {
       this.month = this.month === 1 ? 12 : this.month - 1;
