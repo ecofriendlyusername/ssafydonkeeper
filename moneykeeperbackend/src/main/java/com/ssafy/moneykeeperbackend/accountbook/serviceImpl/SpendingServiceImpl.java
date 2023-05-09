@@ -226,6 +226,8 @@ public class SpendingServiceImpl implements SpendingService {
 	 * @date 2023.05.04
 	 * @author 정민지
 	 * */
+	@Transactional
+	@Override
 	public void deleteSpending(Long spendingId) {
 		spendingRepository.deleteById(spendingId);
 	}

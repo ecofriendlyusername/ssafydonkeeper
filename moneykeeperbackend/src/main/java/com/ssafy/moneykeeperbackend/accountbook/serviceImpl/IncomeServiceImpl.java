@@ -224,6 +224,8 @@ public class IncomeServiceImpl implements IncomeService {
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
+	@Transactional
+	@Override
 	public void deleteIncome(Long incomeId) {
 		incomeRepository.deleteById(incomeId);
 	}

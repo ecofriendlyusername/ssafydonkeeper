@@ -10,6 +10,19 @@
     
     <div @click="check">세션 체크</div>
 
+    
+    <br>
+    <div @click="budgetadd">budgetadd</div>
+    
+    <br>
+    <div @click="budgetmonthget">budgetmonthget</div>
+    
+    <br>
+    <div @click="budgetpatch">budgetpatch</div>
+    
+    <br>
+    <div @click="budgetdelet">budgetdelet</div>
+
     <br>
     <div @click="getMonthTotalAmmount">getMonthTotalAmmount</div>
 
@@ -71,6 +84,59 @@ export default {
   },
 
   methods: {
+
+    budgetadd() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/budget`,
+        data: {
+          "year" : 2023,
+          "month" : 5,
+          "amount" : 1000000, 
+        },
+      })
+        .then((res) => {
+          console.log("add")
+          console.log(res.data)
+        })
+    },
+    budgetmonthget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/budget/2023/5`,
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    budgetpatch() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/budget`,
+        data: {
+          "year" : 2023,
+          "month" : 5,
+          "amount" : 500000, 
+        },
+      })
+        .then((res) => {
+          console.log("budgetpatch")
+          console.log(res.data)
+        })
+    },
+    budgetdelet() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/budget/2023/5`
+      })
+        .then((res) => {
+          console.log("delete")
+          console.log(res.data)
+        })
+    },
+
+
     getMonthTotalAmmount() {
       axios({
         method: 'get',

@@ -45,7 +45,7 @@ public class IncomeController {
 	 * */
 	@PostMapping()
 	public ResponseEntity<?> addIncomeRecord(@AuthenticationPrincipal CustomUserDetails member,
-		@RequestBody IncomeRequest incomeRequest, HttpServletRequest request, HttpServletResponse response) {
+		@RequestBody IncomeRequest incomeRequest) {
 		return new ResponseEntity<>(incomeService.addIncomeRecord(incomeRequest, member.getMember()),
 			HttpStatus.OK);
 	}
