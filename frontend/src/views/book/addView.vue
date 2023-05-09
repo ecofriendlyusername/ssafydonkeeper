@@ -1,29 +1,52 @@
 <template>
   <div class="DivH">
-    <form action="">
+    <br>
+    <label for="assetId">assetId: </label><input type="text" id="assetId"><br><br>
+    <label for="incomeClassificationId">incomeClassificationId: </label><input type="text" id="incomeClassificationId"><br><br>
+    <label for="date">date: </label><input type="date" id="date"><br><br>
+    <label for="amount">amount: </label><input type="number" id="amount"><br><br>
+    <label for="detail">detail: </label><input type="text" id="detail"><br><br>
+    <label for="memo">memo: </label><input type="text" id="memo"><br><br>
+    <button v-on:click=incomeadd()>저장하기</button>
 
-      수입<input type="radio" name="label" id="수입">
-      지출<input type="radio" name="label" id="지출">
-      기타<input type="radio" name="label" id="기타">
-      <br>
-
-      <label for="날짜">날짜</label><input type="date" name="날짜" id=""><br>
-      <label for="자산">자산</label><input type="text" name="자산" id=""><br>
-      <label for="분류" v-on:click="isCategory = true">분류</label><input type="text" name="분류" id=""><br>
-      <label for="금액">금액</label><input type="text" name="금액" id=""><br>
-      <label for="내용">내용</label><input type="text" name="내용" id=""><br>
-
-      <button type="submit">저장하기</button>
-    </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       isCategory: false,
     }
+  },
+  methods: {
+    getData(){
+      axios.get()
+    },
+    incomeadd() {
+      console.log(document.querySelector("#date").value)
+      axios({
+        method: 'post',
+        url: process.env.VUE_APP_API_URL + `/account-book/income`,
+        data: {
+          "assetId" : 4,
+          "incomeClassificationId" : 5,
+          "date" : document.querySelector("#date").value,
+          "amount" : document.querySelector("#amount").value, 
+          "detail": document.querySelector("#detail").value,
+          "memo": document.querySelector("#memo").value
+        },
+      })
+      .then((res) => {
+        console.log("add")
+        console.log(res.data)
+      })
+      .catch(err=>{console.log(err)})
+    },
+  },
+  mounted() {
+    this.getData()
   },
 
 }
