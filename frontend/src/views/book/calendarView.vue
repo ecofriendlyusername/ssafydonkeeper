@@ -73,8 +73,6 @@
           <img src="@/assets/add.png" id="addBtn">
         </p>
       </div>
-
-      <button v-on:click="addData()">dataSet(임시버튼)</button>
     </div>
   </div>
 </template>
@@ -193,8 +191,8 @@ export default {
     }
   },
   async mounted() {
-    this.renderCalendar();
-    // this.addData();
+    await this.renderCalendar();
+    await this.addData();
   }
 };
 </script>
