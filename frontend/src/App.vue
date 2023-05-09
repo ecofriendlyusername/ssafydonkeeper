@@ -8,7 +8,15 @@
         src="./assets/kakao_login_medium_narrow.png" alt=""></a>
   <div class="test" v-if="loginCheck">
     
-        <div @click="check">세션 체크</div>
+    <div @click="check">세션 체크</div>
+
+    <br>
+    <div @click="getMonthTotalAmmount">getMonthTotalAmmount</div>
+
+    <br>
+    <div @click="getDateTotalAmmount">getDateTotalAmmount</div>
+
+
     <br>
     <div @click="add">add</div>
     <br>
@@ -63,6 +71,27 @@ export default {
   },
 
   methods: {
+    getMonthTotalAmmount() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/total/amount/2023/5`
+      })
+      .then((res) => {
+        console.log("get")
+        console.log(res.data)
+      })
+    },
+    getDateTotalAmmount() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/total/amount/2023/5/4`
+      })
+      .then((res) => {
+        console.log("get")
+        console.log(res.data)
+      })
+    },
+    
     logout() {
       this.$store.state.loginCheck = false
     },
@@ -75,6 +104,34 @@ export default {
         console.log("get")
         console.log(res.data)
       })
+    },
+    add() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/spending`,
+        data: {
+          "assetId" : 50,
+          "spendingClassificationId" : 32,
+          "date" : "2023-05-04",
+          "amount" : 50000, 
+          "detail": "엽닭",
+          "memo": "승현이랑"
+        },
+      })
+        .then((res) => {
+          console.log("add")
+          console.log(res.data)
+        })
+    },
+    get() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
     monthget() {
       axios({

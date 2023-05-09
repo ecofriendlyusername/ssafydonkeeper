@@ -61,7 +61,7 @@ public class IncomeController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date"), Sort.Order.asc("createdAt")));
-		return new ResponseEntity<>(incomeService.getAllIncome(member.getMember(), pageable).getContent(),
+		return new ResponseEntity<>(incomeService.getAllIncome(member.getMember(), pageable),
 			HttpStatus.OK);
 	}
 

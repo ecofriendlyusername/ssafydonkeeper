@@ -2,6 +2,8 @@ package com.ssafy.moneykeeperbackend.accountbook.serviceImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -107,18 +109,20 @@ public class IncomeServiceImpl implements IncomeService {
 	 * @author 정민지
 	 * */
 	@Override
-	public Page<IncomeResponse> getAllIncome(Member member, Pageable pageable) {
-		Page<Income> incomes = incomeRepository.findAllByMember(member, pageable);
-		Page<IncomeResponse> incomeResponses = incomes.map(income -> IncomeResponse.builder()
-			.incomeId(income.getId())
-			.incomeClassificationName(income.getIncomeClassification().getName())
-			.amount(income.getAmount())
-			.assetName(income.getAsset().getName())
-			.date(income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-			.detail(income.getDetail())
-			.memo(income.getMemo())
-			.build());
-		return incomeResponses;
+	public List<IncomeResponse> getAllIncome(Member member, Pageable pageable) {
+		List<Income> incomes = incomeRepository.findAllByMemberOrderByDateDescCreatedAtDesc(member);
+
+		return incomes.stream()
+			.map(income -> IncomeResponse.builder()
+				.incomeId(income.getId())
+				.incomeClassificationName(income.getIncomeClassification().getName())
+				.amount(income.getAmount())
+				.assetName(income.getAsset().getName())
+				.date(income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+				.detail(income.getDetail())
+				.memo(income.getMemo())
+				.build())
+			.collect(Collectors.toList());
 	}
 
 	/*
