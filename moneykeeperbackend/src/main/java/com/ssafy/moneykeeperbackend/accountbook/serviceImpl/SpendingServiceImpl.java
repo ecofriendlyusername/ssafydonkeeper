@@ -2,6 +2,8 @@ package com.ssafy.moneykeeperbackend.accountbook.serviceImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,9 +101,10 @@ public class SpendingServiceImpl implements SpendingService {
 	 * @author 정민지
 	 * */
 	@Override
-	public Page<SpendingResponse> getAllSpending(Member member, Pageable pageable) {
-		Page<Spending> spendings = spendingRepository.findAllByMember(member, pageable);
-		Page<SpendingResponse> spendingResponses = spendings.map(spending -> SpendingResponse.builder()
+	public List<SpendingResponse> getAllSpending(Member member) {
+		List<Spending> spendings = spendingRepository.findAllByMemberOrderByDateDescCreatedAtDesc(member);
+		return spendings.stream()
+			.map(spending -> SpendingResponse.builder()
 			.spendingId(spending.getId())
 			.spendingClassificationName(spending.getSpendingClassification().getName())
 			.amount(spending.getAmount())
@@ -109,8 +112,8 @@ public class SpendingServiceImpl implements SpendingService {
 			.date(spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 			.detail(spending.getDetail())
 			.memo(spending.getMemo())
-			.build());
-		return spendingResponses;
+			.build())
+			.collect(Collectors.toList());
 	}
 
 	/*
@@ -120,12 +123,12 @@ public class SpendingServiceImpl implements SpendingService {
 	 * @author 정민지
 	 * */
 	@Override
-	public Page<SpendingResponse> getMonthSpending(Member member, int year, int month, Pageable pageable) {
+	public List<SpendingResponse> getMonthSpending(Member member, int year, int month) {
 		LocalDate startDate = LocalDate.of(year, month, 1);
 		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-		Page<Spending> spendings = spendingRepository.findAllByMemberAndDateBetween(member, startDate, endDate, pageable);
-		Page<SpendingResponse> spendingResponses = spendings.map(spending -> SpendingResponse.builder()
+		List<Spending> spendings = spendingRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member, startDate, endDate);
+		return spendings.stream().map(spending -> SpendingResponse.builder()
 			.spendingId(spending.getId())
 			.spendingClassificationName(spending.getSpendingClassification().getName())
 			.amount(spending.getAmount())
@@ -133,8 +136,8 @@ public class SpendingServiceImpl implements SpendingService {
 			.date(spending.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 			.detail(spending.getDetail())
 			.memo(spending.getMemo())
-			.build());
-		return spendingResponses;
+			.build())
+			.collect(Collectors.toList());
 	}
 
 	/*
@@ -223,6 +226,8 @@ public class SpendingServiceImpl implements SpendingService {
 	 * @date 2023.05.04
 	 * @author 정민지
 	 * */
+	@Transactional
+	@Override
 	public void deleteSpending(Long spendingId) {
 		spendingRepository.deleteById(spendingId);
 	}
