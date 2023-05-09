@@ -6,6 +6,7 @@ import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassifi
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
+import com.ssafy.moneykeeperbackend.statistics.dto.MSRCDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
 import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
@@ -46,6 +47,8 @@ public class StatService {
 
         if (!optionalMember.isPresent()) {
             // .. ?
+            System.out.println("user doesn't exist stat service");
+            // throw new NoSuchMemberException();
         }
         Member member = optionalMember.get();
         List<CompareWithRecentXDto> li = new ArrayList<>();
@@ -316,5 +319,33 @@ public class StatService {
         }
 
         return total / listSize;
+    }
+
+    public List<MSRCDto> thisMonthSpendingByCategory(int year, int month, long memberId) {
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
+
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+
+        if (!optionalMember.isPresent()) {
+            System.out.println("user doesn't exist stat service");
+        }
+        Member member = optionalMember.get();
+        List<MSRCDto> li = new ArrayList<>();
+        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+
+        for (MajorSpendingClassification msc : mscList) {
+            MonthSpendingRecordByClass cur = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member, curMonth, msc);
+
+
+            MSRCDto msrcDto = MSRCDto.builder()
+                    .amount(cur.getAmount())
+                    .category(msc.getName())
+                    .build();
+
+            li.add(msrcDto);
+        }
+        return li;
     }
 }

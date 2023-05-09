@@ -16,7 +16,7 @@ export default {
     mounted() {
         axios({
             method: 'post',
-            url: `http://k8c209.p.ssafy.io:8080/api/auth/kakao/callback`,
+            url: process.env.VUE_APP_API_URL+`/auth/kakao/callback`,
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
@@ -30,8 +30,6 @@ export default {
             this.$router.push('/book/calendar')
         })
         .catch(err => {
-            this.$store.dispatch('setLoginCheck', true)
-            this.$router.push('/book/calendar')
             console.log(err);
         })
 

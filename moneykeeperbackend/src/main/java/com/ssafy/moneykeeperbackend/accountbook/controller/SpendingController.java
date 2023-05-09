@@ -58,7 +58,7 @@ public class SpendingController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date"), Sort.Order.asc("createdAt")));
-		return new ResponseEntity<>(spendingService.getAllSpending(member.getMember(), pageable).getContent(),
+		return new ResponseEntity<>(spendingService.getAllSpending(member.getMember()),
 			HttpStatus.OK);
 	}
 
@@ -74,7 +74,7 @@ public class SpendingController {
 		@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date"), Sort.Order.asc("createdAt")));
 		return new ResponseEntity<>(
-			spendingService.getMonthSpending(member.getMember(), year, month, pageable).getContent(),
+			spendingService.getMonthSpending(member.getMember(), year, month),
 			HttpStatus.OK);
 	}
 
@@ -112,7 +112,8 @@ public class SpendingController {
 	@PatchMapping("/{spendingId}")
 	public ResponseEntity<?> updateSpending(@AuthenticationPrincipal CustomUserDetails member,
 		@PathVariable Long spendingId, @RequestBody SpendingRequest spendingRequest) {
-		return new ResponseEntity<>(spendingService.updateSpending(member.getMember(), spendingId, spendingRequest), HttpStatus.OK);
+		return new ResponseEntity<>(spendingService.updateSpending(member.getMember(), spendingId, spendingRequest),
+			HttpStatus.OK);
 	}
 
 	/*
