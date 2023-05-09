@@ -1,5 +1,7 @@
 package com.ssafy.moneykeeperbackend.accountbook.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,17 +15,17 @@ public interface IncomeService {
 
 	IncomeResponse addIncomeRecord(IncomeRequest incomeRequest, Member member);
 
-	Page<IncomeResponse> getAllIncome(Member member, Pageable pageable);
+	List<IncomeResponse> getAllIncome(Member member, Pageable pageable);
 
-	Page<IncomeResponse> getMonthIncome(Member member, int year, int month, Pageable pageable);
+	List<IncomeResponse> getMonthIncome(Member member, int year, int month);
 
 	IncomeResponse getDetailIncome(Member member, Long incomeId);
-	//
-	// int getMonthSpendingAmount(Member member, int year, int month);
-	//
-	// SpendingResponse updateSpending(Member member, Long spendingId, SpendingRequest spendingRequest);
-	//
-	// void deleteSpending(Long spendingId);
+
+	int getMonthIncomeAmount(Member member, int year, int month);
+
+	IncomeResponse updateIncome(Member member, Long incomeId, IncomeRequest incomeRequest);
+
+	void deleteIncome(Long incomeId);
 
 
 }

@@ -7,10 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.session.MapSessionRepository;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
@@ -59,7 +62,10 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors()
+		http.headers().frameOptions().disable()
+
+			.and()
+			.cors()
 
 			.and()
 			.csrf().disable()
@@ -75,7 +81,8 @@ public class SecurityConfig {
 			.formLogin().disable()
 			.authorizeRequests()
 			.antMatchers("/api/auth/kakao/callback").permitAll()
-					.anyRequest().permitAll()
+			.anyRequest().permitAll()
+
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 
@@ -85,7 +92,6 @@ public class SecurityConfig {
 			.and()
 			.userDetailsService(customUserDetailService);
 
-		http.headers().frameOptions().disable();
 		return http.build();
 	}
 
@@ -104,8 +110,4 @@ public class SecurityConfig {
 		};
 	}
 
-
 }
-
-//			.antMatchers("/api/auth/kakao/callback").permitAll()
-//					.anyRequest().permitAll()

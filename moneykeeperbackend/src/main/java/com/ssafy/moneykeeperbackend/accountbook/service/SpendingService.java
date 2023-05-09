@@ -1,5 +1,7 @@
 package com.ssafy.moneykeeperbackend.accountbook.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,9 +13,9 @@ public interface SpendingService {
 
 	SpendingResponse addSpendingRecord(SpendingRequest spendingRequest, Member member);
 
-	Page<SpendingResponse> getAllSpending(Member member, Pageable pageable);
+	List<SpendingResponse> getAllSpending(Member member);
 
-	Page<SpendingResponse> getMonthSpending(Member member, int year, int month, Pageable pageable);
+	List<SpendingResponse> getMonthSpending(Member member, int year, int month);
 
 	SpendingResponse getDetailSpending(Member member, Long spendingId);
 
