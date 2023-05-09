@@ -5,7 +5,7 @@
     누르면 로그인 풀림</div>
 
   <div class="test" v-if="!loginCheck">
-    <a :href=kakaoUrl>
+    <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
     <div @click="check">세션 체크</div>
@@ -49,7 +49,7 @@ import footerComponent from "@/components/footerComponent.vue";
 export default {
   data() {
     return {
-      kakaoUrl:"https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=" + process.env.VUE_APP_URL + "/kakaoCallback&response_type=code"
+      kakaoUrl: process.env.VUE_APP_URL
     }
   },
   components: {
