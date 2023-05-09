@@ -15,9 +15,10 @@
     "chart.js": "^4.3.0",
     "chartjs": "^0.3.24",
     "core-js": "^3.8.3",
+    "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0",
-    "vue": "^3.2.13"
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
