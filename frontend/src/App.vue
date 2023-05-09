@@ -1,12 +1,10 @@
 <template>
   <headerComponent />
-  <div class="test" v-on:click="logout">
-    loginCheck: {{ loginCheck }} <br>
-    누르면 로그인 풀림</div>
-    <a
-      href="https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=http://localhost:3000/kakaoCallback&response_type=code"><img
-        src="./assets/kakao_login_medium_narrow.png" alt=""></a>
-  <div class="test" v-if="loginCheck">
+  <div class="test" v-if="!loginCheck">
+    <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
+      <img src="./assets/kakao_login_medium_narrow.png" alt="">
+    </a>
+    <div class="test" v-if="loginCheck">
 
     <div @click="check">세션 체크</div>
 
@@ -29,15 +27,6 @@
     <br>
     <div @click="getDateTotalAmmount">getDateTotalAmmount</div>
 
-
-
-  <div class="test" v-if="!loginCheck">
-    <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
-      <img src="./assets/kakao_login_medium_narrow.png" alt="">
-    </a>
-    <div @click="check">세션 체크</div>
-    <br>
-    <div @click="add">add</div>
     <br>
     <div @click="get">get</div>
     <br>  
@@ -67,6 +56,7 @@
 
     <br>
     <div @click="incomedelet">incomedelet</div>
+    </div>
   </div>
   <router-view />
   <footerComponent />
