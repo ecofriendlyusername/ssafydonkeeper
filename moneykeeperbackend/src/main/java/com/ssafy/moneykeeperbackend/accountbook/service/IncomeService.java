@@ -18,12 +18,10 @@ public interface IncomeService {
 	Page<IncomeResponse> getMonthIncome(Member member, int year, int month, Pageable pageable);
 
 	IncomeResponse getDetailIncome(Member member, Long incomeId);
-	//
-	// int getMonthSpendingAmount(Member member, int year, int month);
-	//
-	// SpendingResponse updateSpending(Member member, Long spendingId, SpendingRequest spendingRequest);
-	//
-	// void deleteSpending(Long spendingId);
+
+	IncomeResponse updateIncome(Member member, Long incomeId, IncomeRequest incomeRequest);
+
+	void deleteIncome(Long incomeId);
 
 
 }

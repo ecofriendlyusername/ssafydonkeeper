@@ -92,41 +92,28 @@ public class IncomeController {
 		@PathVariable Long incomeId) {
 		return new ResponseEntity<>(incomeService.getDetailIncome(member.getMember(), incomeId), HttpStatus.OK);
 	}
-	//
-	// /*
-	//  * 특정 달 소비 금액 가져오기
-	//  *
-	//  * @date 2023.05.04
-	//  * @author 정민지
-	//  * */
-	// @GetMapping("/amount/{year}/{month}")
-	// public ResponseEntity<?> getMonthSpendingAmount(@AuthenticationPrincipal CustomUserDetails member,
-	// 	@PathVariable int year, @PathVariable int month) {
-	// 	return new ResponseEntity<>(spendingService.getMonthSpendingAmount(member.getMember(), year, month),
-	// 		HttpStatus.OK);
-	// }
-	//
-	// /*
-	//  * 특정 소비 내역 수정
-	//  *
-	//  * @date 2023.05.04
-	//  * @author 정민지
-	//  * */
-	// @PatchMapping("/{spendingId}")
-	// public ResponseEntity<?> updateSpending(@AuthenticationPrincipal CustomUserDetails member,
-	// 	@PathVariable Long spendingId, @RequestBody SpendingRequest spendingRequest) {
-	// 	return new ResponseEntity<>(spendingService.updateSpending(member.getMember(), spendingId, spendingRequest), HttpStatus.OK);
-	// }
-	//
-	// /*
-	//  * 특정 소비 내역 삭제
-	//  *
-	//  * @date 2023.05.04
-	//  * @author 정민지
-	//  * */
-	// @DeleteMapping("/{spendingId}")
-	// public ResponseEntity<?> deleteSpending(@PathVariable Long spendingId) {
-	// 	spendingService.deleteSpending(spendingId);
-	// 	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	// }
+
+	/*
+	 * 특정 수입 내역 수정
+	 *
+	 * @date 2023.05.09
+	 * @author 정민지
+	 * */
+	@PatchMapping("/{incomeId}")
+	public ResponseEntity<?> updateIncome(@AuthenticationPrincipal CustomUserDetails member,
+		@PathVariable Long incomeId, @RequestBody IncomeRequest incomeRequest) {
+		return new ResponseEntity<>(incomeService.updateIncome(member.getMember(), incomeId, incomeRequest), HttpStatus.OK);
+	}
+
+	/*
+	 * 특정 수입 내역 삭제
+	 *
+	 * @date 2023.05.09
+	 * @author 정민지
+	 * */
+	@DeleteMapping("/{incomeId}")
+	public ResponseEntity<?> deleteIncome(@PathVariable Long incomeId) {
+		incomeService.deleteIncome(incomeId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }
