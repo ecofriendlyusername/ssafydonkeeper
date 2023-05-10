@@ -37,21 +37,29 @@
         <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
-      <div v-for="(dumy, idx) in spend_dumies" :key="idx"
-        v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'spending' } })"
-        style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
-        <div>
-          <div style="font-weight:bold">
-            {{ dumy.spendingClassificationName }}
+      <div v-if="spendData.length != 0">
+        <div v-for="(dumy, idx) in spendData" :key="idx"
+          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'spending' } })"
+          style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+          <div>
+            <div style="font-weight:bold">
+              {{ dumy.spendingClassificationName }}
+            </div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">
+              {{ dumy.date }}
+            </div>
           </div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{ dumy.date }}
+          <div>
+            <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
           </div>
         </div>
-        <div>
-          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
-        </div>
+      
+      </div>
+      <div v-else>
+        <p>
+          데이터가 없어요
+        </p>
       </div>
     </div>
 
@@ -63,21 +71,29 @@
         <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
-      <div v-for="(dumy, idx) in incom_dumies" :key="idx"
-        v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'income' } })"
-        style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
-        <div>
-          <div style="font-weight:bold">
-            {{ dumy.incomeClassificationName }}
+      
+      <div v-if="incomeData.length != 0">
+        <div v-for="(dumy, idx) in incomeData" :key="idx"
+          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'income' } })"
+          style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+          <div>
+            <div style="font-weight:bold">
+              {{ dumy.incomeClassificationName }}
+            </div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">
+              {{ dumy.date }}
+            </div>
           </div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{ dumy.date }}
+          <div>
+            <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
           </div>
         </div>
-        <div>
-          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
-        </div>
+      </div>
+      <div v-else>
+        <p>
+          데이터가 없어요
+        </p>
       </div>
     </div>
   </div>
@@ -97,8 +113,8 @@ export default {
 
       total_incom: 200000,
       total_spend: 100000,
-      incom_dumies: [],
-      spend_dumies: []
+      incomeData: [],
+      spendData: []
         
     }
   },
@@ -111,13 +127,13 @@ export default {
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
-        this.spend_dumies=res.data
+        this.spendData=res.data
       })
 
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/income/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
-        this.incom_dumies = res.data
+        this.incomeData = res.data
       })
     },
     before() {

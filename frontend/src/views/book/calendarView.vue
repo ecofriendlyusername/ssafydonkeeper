@@ -83,37 +83,13 @@ export default {
     return {
       today: new Date(),
       thisMonth: new Date(),
+      year:new Date().getFullYear(),
+      month:new Date().getMonth()+1,
       days: [],
       // 임시데이터
       incom: 0,
       spend: 0,
-      datas: [
-        {
-          'category': 'incom',
-          'day': 6,
-          'money': 100000,
-        },
-        {
-          'category': 'spend',
-          'day': 6,
-          'money': 10000,
-        },
-        {
-          'category': 'incom',
-          'day': 2,
-          'money': 2000,
-        },
-        {
-          'category': 'spend',
-          'day': 3,
-          'money': 10000,
-        },
-        {
-          'category': 'spend',
-          'day': 5,
-          'money': 10000,
-        },
-      ]
+      datas: [],
     };
   },
   computed: {
@@ -122,6 +98,10 @@ export default {
     }
   },
   methods: {
+    getData(){
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/total/amount/${this.year}/${this.month}`)
+      .then(res=>{console.log(res.data.details)})
+    },
     // 데이터 추가하는 함수, mount 걸어야 함, async로 renderCalendar다음에 시작되도록 해야 함
     addData() {
       const dayday = document.querySelectorAll('.current');
@@ -191,6 +171,7 @@ export default {
     }
   },
   async mounted() {
+    this.getData()
     await this.renderCalendar();
     await this.addData();
   }
