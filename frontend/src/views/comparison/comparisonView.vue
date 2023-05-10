@@ -37,7 +37,6 @@
 
 <script>
 import Chart from 'chart.js/auto';
-import axios from 'axios';
 
 export default {
   data() {
@@ -86,10 +85,12 @@ export default {
   },
   methods: {
     getData(){
-      axios.get(process.env.VUE_APP_API_URL + `/statistics/compareusers/${this.year}/${this.month}?id=1148`)
+      this.axios.get(process.env.VUE_APP_API_URL + `/statistics/compareusers/${this.year}/${this.month}`)
       .then(res => {
+        console.log(res.data);
         this.groupData = res.data;
       })
+      .catch(err=>{console.log(err);})
     },
     barChartSet(){
       if (this.groupData.total > this.groupData.groupAvg) {
@@ -114,11 +115,11 @@ export default {
         {
           type: 'pie',
           options: {
-            // plugins: {
-            //   legend: {
-            //     display: false
-            //   }
-            // }
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
           },
           data: {
             labels: this.myUsed.categories.map(row => row.classification),
@@ -136,11 +137,11 @@ export default {
         {
           type: 'pie',
           options: {
-            // plugins: {
-            //   legend: {
-            //     display: false
-            //   }
-            // }
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
           },
           data: {
             labels: this.yourUsed.categories.map(row => row.classification),
