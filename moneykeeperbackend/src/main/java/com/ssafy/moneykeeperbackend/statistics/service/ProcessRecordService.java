@@ -1,13 +1,12 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.IncomeRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Income;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
-import com.ssafy.moneykeeperbackend.exception.statistics.NoSuchRecordException;
+import com.ssafy.moneykeeperbackend.exception.statistics.FailedToGenerateRecordException;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
 import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
@@ -24,7 +23,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProcessSpendingService {
+public class ProcessRecordService {
+
+    private final StatService statService;
 
     private final MonthSpendingRecordRepository monthSpendingRecordRepository;
 
@@ -57,18 +58,21 @@ public class ProcessSpendingService {
         }
 
         Optional<MonthSpendingRecord> msrOptional = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
-        if (!msrOptional.isPresent()) {
-            System.out.println("Month Spending Record doesn't exist for member with memberId " + member.getId() + ", and ymonth " + ymonth);
-            throw new NoSuchRecordException();
-        }
 
-        MonthSpendingRecord msr = msrOptional.get();
+        MonthSpendingRecord msr = msrOptional.isEmpty() ? statService.buildMonthSpendingRecordForAUser(member,ymonth) : msrOptional.get();
 
         MonthSpendingRecordByClass msrc = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member,ymonth,msc);
 
         if (msrc == null) {
-            System.out.println("MonthSpendingRecordByClass doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + " and major spending class id : " + msc.getId() + ", name : " + msc.getName());
-            throw new NoSuchRecordException();
+            statService.buildMonthSpendingRecordByClassesForAUser(member,ymonth);
+        }
+
+        msrc = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member,ymonth,msc);
+
+        if (msrc == null) {
+            // throw new FailedToGenerateRecordException();
+            System.out.println("X");
+            // for now
         }
 
         msr.setAmount(msr.getAmount()+spending.getAmount());
@@ -81,22 +85,19 @@ public class ProcessSpendingService {
 
         Optional<MonthIncomeRecord> mirOptional = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
-        if (!mirOptional.isPresent()) {
-            // throw new NoSuchRecordException();
-            System.out.println("Month Spending Record doesn't exist for member with memberId " + member.getId() + ", and ymonth " + ymonth);
-            return;
+        if (mirOptional.isEmpty()) {
+            statService.buildMonthIncomeRecordForAUser(member,ymonth);
         }
-
-        MonthIncomeRecord msr = mirOptional.get();
 
         Optional<MonthIncomeRecord> optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
-        if (optionalMir == null) {
-            System.out.println("MonthSpendingRecord doesn't exist for member with memberId " + member.getId() + " and ymonth : " + ymonth + ", name : ");
-            return;
+        if (optionalMir.isEmpty()) {
+            // throw new FailedToGenerateRecordException();
+            System.out.println("x");
+            // for now
         }
 
-        MonthIncomeRecord mir = optionalMir.get();
+        MonthIncomeRecord mir = mirOptional.get();
 
         mir.setAmount(mir.getAmount()+income.getAmount());
     }

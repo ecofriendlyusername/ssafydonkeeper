@@ -48,6 +48,8 @@
 export default {
   data() {
     return {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth()+1,
       req: {
         total_budget: 2000000,
         spend_budget: 1000000,
@@ -73,11 +75,18 @@ export default {
   },
 
   methods: {
+    getData(){
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/budget/${this.year}/${this.month}`)
+      .then(res => {
+        console.log(res.data);
+      })
+    },
     priceToString(price) {
       return Math.round(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
   },
   mounted() {
+    this.getData()
     const gauge = document.querySelector(".gaugeBar");
     let tmp = 100 - (this.req.total_budget - this.req.spend_budget) / this.req.total_budget * 100
     gauge.style.width = `${tmp}%`;

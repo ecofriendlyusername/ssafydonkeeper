@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class SpendingServiceImpl implements SpendingService {
+
+	private final ProcessRecordService processRecordService;
 
 	private final SpendingRepository spendingRepository;
 
@@ -59,6 +62,8 @@ public class SpendingServiceImpl implements SpendingService {
 
 		spending = spendingRepository.saveAndFlush(spending);
 
+		processRecordService.processNewSpending(spending,member);
+
 		return SpendingResponse.builder()
 			.spendingId(spending.getId())
 			.amount(spending.getAmount())
@@ -68,7 +73,6 @@ public class SpendingServiceImpl implements SpendingService {
 			.detail(spending.getDetail())
 			.memo(spending.getMemo())
 			.build();
-
 	}
 
 	/*

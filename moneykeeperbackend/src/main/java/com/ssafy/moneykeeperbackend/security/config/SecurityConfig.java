@@ -95,19 +95,19 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedOrigins("http://127.0.0.1:8081", "http://localhost:8081", "http://localhost:8080", "http://127.0.0.1:8080",
-						"http://127.0.0.1:3000", "http://localhost:3000", "http://donkeeper.com", "http://k8c209.p.ssafy.io")
-					.allowedMethods("*")
-					.allowedHeaders("*")
-					.allowCredentials(true);
-			}
-		};
-	}
+@Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                    .allowedOrigins("http://127.0.0.1:8081", "http://localhost:8081", "http://localhost:8080", "http://127.0.0.1:8080",
+                        "http://127.0.0.1:3000", "http://localhost:3000", "http://donkeeper.com", "http://k8c209.p.ssafy.io")
+                    .allowedMethods("*")
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
+            }
+        };
+    }
 
 }

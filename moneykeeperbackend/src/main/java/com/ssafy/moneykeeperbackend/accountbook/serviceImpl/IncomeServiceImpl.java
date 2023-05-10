@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class IncomeServiceImpl implements IncomeService {
 
+	private final ProcessRecordService processRecordService;
+
 	private final IncomeClassificationRepository incomeClassificationRepository;
 
 	private final AssetRepository assetRepository;
@@ -66,6 +69,8 @@ public class IncomeServiceImpl implements IncomeService {
 
 		Income resultIncome = incomeRepository.saveAndFlush(income);
 
+		processRecordService.processNewIncome(resultIncome,member);
+		
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
 			.amount(resultIncome.getAmount())
