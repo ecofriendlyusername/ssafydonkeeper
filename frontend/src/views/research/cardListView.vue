@@ -14,7 +14,23 @@
 
 <script>
 export default {
-    name: 'RecomView'
+  name: 'RecomView',
+  data() {
+    return {
+      cardData: [],
+    }
+  },
+  methods: {
+    getData(){
+      this.axios.get(process.env.VUE_APP_API_URL + `/card/cards`)
+      .then(res => {
+        console.log(res.data);
+      })
+    }
+  },
+  mounted(){
+    this.getData()
+  }
 
 }
 </script>
