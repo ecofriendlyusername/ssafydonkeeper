@@ -3,9 +3,11 @@ package com.ssafy.moneykeeperbackend.card.controller;
 import com.ssafy.moneykeeperbackend.card.dto.CardDto;
 import com.ssafy.moneykeeperbackend.card.service.CardService;
 import com.ssafy.moneykeeperbackend.card.service.PutCardService;
+import com.ssafy.moneykeeperbackend.security.userDetail.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class CardController {
 
     private final CardService cardService;
     @GetMapping("/cards")
-    public ResponseEntity<?> recommendCard(@RequestParam String id) {
-        List<CardDto> cardDtoList = cardService.getCards(Long.parseLong(id));
+    public ResponseEntity<?> recommendCard(@AuthenticationPrincipal CustomUserDetails member) {
+        List<CardDto> cardDtoList = cardService.getCards(member.getMember());
         return new ResponseEntity<>(cardDtoList, HttpStatus.OK);
     }
 

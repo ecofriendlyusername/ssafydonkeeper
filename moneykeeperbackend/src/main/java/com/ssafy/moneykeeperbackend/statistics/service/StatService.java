@@ -32,21 +32,13 @@ public class StatService {
     private final MonthIncomeRecordRepository monthIncomeRecordRepository;
 
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
-    public List<CompareWithRecentXDto> compareWithRecentXMonths(int months, Long memberId) {
+    public List<CompareWithRecentXDto> compareWithRecentXMonths(int months, Member member) {
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
         LocalDate firstMonth = curMonth.minusMonths(months);
         LocalDate lastMonth = curMonth.minusMonths(1);
 
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (!optionalMember.isPresent()) {
-            // .. ?
-            System.out.println("user doesn't exist stat service");
-            // throw new NoSuchMemberException();
-        }
-        Member member = optionalMember.get();
         List<CompareWithRecentXDto> li = new ArrayList<>();
         //        List<MonthSpendingRecordByClass> curMonthSpendingRecordList = monthSpendingRecordByClassRepository.findByMemberAndYmonth(member,curMonth);
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
@@ -173,23 +165,13 @@ public class StatService {
         memberRepository.save(member);
     }
 
-    public TotalAndComparedDto compareWithUsers(int year, int month, long memberId) {
+    public TotalAndComparedDto compareWithUsers(int year, int month, Member member) {
         LocalDate ymonth = LocalDate.of(year,month,1);
-
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (!optionalMember.isPresent()) {
-            System.out.println("no member with memberId : " + memberId);
-            return null;
-            // do something
-        }
-
-        Member member = optionalMember.get();
 
         Optional<MonthSpendingRecord> optionalMonthSpendingRecord = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (!optionalMonthSpendingRecord.isPresent()) {
-            System.out.println("no spending record for member " + memberId + " , with ymonth " + ymonth);
+            System.out.println("no spending record for member " + member.getId() + " , with ymonth " + ymonth);
             return null;
             // for now
         }
@@ -214,14 +196,14 @@ public class StatService {
         buildMonthSpendingRecordByClassesForAUser(member,ymonth);
     }
 
-    public void buildMonthSpendingRecordForAUser(Member member, LocalDate ymonth) {
+    public MonthSpendingRecord buildMonthSpendingRecordForAUser(Member member, LocalDate ymonth) {
         MonthSpendingRecord msr = MonthSpendingRecord.builder()
                 .member(member)
                 .amount(0)
                 .ymonth(ymonth)
                 .groupAvg(-1)
                 .build();
-        monthSpendingRecordRepository.save(msr);
+        return monthSpendingRecordRepository.save(msr);
     }
 
     public void buildMonthIncomeRecordForAUser(Member member, LocalDate ymonth) {
@@ -247,18 +229,12 @@ public class StatService {
         }
     }
 
-    public MonthSpendingRecordDto getMonthSpending(int year, int month, Long memberId) {
+    public MonthSpendingRecordDto getMonthSpending(int year, int month, Member member) {
         LocalDate ymonth = LocalDate.of(year,month,1);
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (!optionalMember.isPresent()) {
-            // ...
-            System.out.println("member iwth memberId : " + memberId + " doesn't exist");
-            return null;
-        }
-        Optional<MonthSpendingRecord> optionalMSR = monthSpendingRecordRepository.findByMemberAndYmonth(optionalMember.get(),ymonth);
+        Optional<MonthSpendingRecord> optionalMSR = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (!optionalMSR.isPresent()) {
-            System.out.println("Month Spending Record for member : " + memberId + " doesn't exist");
+            System.out.println("Month Spending Record for member : " + member.getId() + " doesn't exist");
             return null;
         }
 
@@ -317,17 +293,11 @@ public class StatService {
         return total / listSize;
     }
 
-    public List<MSRCDto> thisMonthSpendingByCategory(int year, int month, long memberId) {
+    public List<MSRCDto> thisMonthSpendingByCategory(int year, int month, Member member) {
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
 
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (!optionalMember.isPresent()) {
-            System.out.println("user doesn't exist stat service");
-        }
-        Member member = optionalMember.get();
         List<MSRCDto> li = new ArrayList<>();
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
 
@@ -345,17 +315,13 @@ public class StatService {
         return li;
     }
 
-    public int getMonthIncome(int year, int month, Long memberId) {
+    public int getMonthIncome(int year, int month, Member member) {
         LocalDate ymonth = LocalDate.of(year,month,1);
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (!optionalMember.isPresent()) {
-            System.out.println("member iwth memberId : " + memberId + " doesn't exist");
-            return -1;
-        }
-        Optional<MonthIncomeRecord> optionalMIR = monthIncomeRecordRepository.findByMemberAndYmonth(optionalMember.get(),ymonth);
+
+        Optional<MonthIncomeRecord> optionalMIR = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (!optionalMIR.isPresent()) {
-            System.out.println("Month Spending Record for member : " + memberId + " doesn't exist");
+            System.out.println("Month Spending Record for member : " + member.getId() + " doesn't exist");
             return -1;
         }
 
