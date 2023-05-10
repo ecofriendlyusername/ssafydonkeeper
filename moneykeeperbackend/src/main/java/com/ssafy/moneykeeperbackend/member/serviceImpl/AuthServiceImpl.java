@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import com.ssafy.moneykeeperbackend.statistics.service.InitForNewMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,6 +41,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+	private final InitForNewMemberService initForNewMemberService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -241,6 +244,8 @@ public class AuthServiceImpl implements AuthService {
 					.build()
 			);
 		}
+
+		initForNewMemberService.initForNewMember(member);
 
 	}
 

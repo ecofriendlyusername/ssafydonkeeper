@@ -53,6 +53,7 @@ public class FileTransferService {
         if (line.contains("연세")) return false;
         if (line.contains("Biz")) return false;
         if (line.contains("Business")) return false;
+        if (line.contains("렌탈")) return false;
         String[] s = line.split(",  ");
         if (s.length < 7) return false;
         for (int i = 0; i < 7; i++) {
