@@ -32,6 +32,12 @@
             <div style="color:#808080;">{{ priceToString(100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100) }}%</div>
             <div style="font-weight: bold;">{{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음 </div>
           </div>
+
+
+          <!-- [{{budget_category.category}}] | 
+          {{ priceToString(100 - (budget_category.total_budget - budget_category.spend_budget) / budget_category.total_budget * 100) }}% | 
+          {{ priceToString(budget_category.total_budget - budget_category.spend_budget) }}원 남음 -->
+          
         </div>
       </div>
     </div>
@@ -39,12 +45,11 @@
 </template>
 
 <script>
-// import axios from 'axios';
 export default {
   data() {
     return {
-      year:2023,
-      month:5,
+      year: new Date().getFullYear(),
+      month: new Date().getMonth()+1,
       req: {
         total_budget: 2000000,
         spend_budget: 1000000,
@@ -72,9 +77,9 @@ export default {
   methods: {
     getData(){
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/budget/${this.year}/${this.month}`)
-      .then((res)=>{console.log(res.data)})
-
-      // this.axios.get(process.env.VUE_APP_API_URL + `/api/statistics/monthlyspendingbycat/{year}/{month}`)
+      .then(res => {
+        console.log(res.data);
+      })
     },
     priceToString(price) {
       return Math.round(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
