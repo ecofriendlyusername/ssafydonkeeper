@@ -24,17 +24,7 @@ public class CardService {
 
     private final MemberRepository memberRepository;
 
-    public List<CardDto> getCards(Long memberId) {
-
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
-
-        if (!memberOptional.isPresent()) {
-            System.out.println("Member doesn't exist");
-            return null;
-        }
-
-        System.out.println("here");
-
+    public List<CardDto> getCards(Member member) {
         LocalDate now = LocalDate.now();
 
         LocalDate lastMonthSameDay = now.minusMonths(1);
@@ -42,7 +32,6 @@ public class CardService {
         LocalDate lastMonth = LocalDate.of(lastMonthSameDay.getYear(),lastMonthSameDay.getMonth(),1);
         LocalDate firstMonth = lastMonth.minusMonths(2);
 
-        Member member = memberOptional.get();
 
         HashMap<String,Integer> spendingAvgsByClasses = statService.getThreeMonthSpendingAvgByClass(member,firstMonth,lastMonth);
 
