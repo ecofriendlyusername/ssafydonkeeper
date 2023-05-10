@@ -2,7 +2,6 @@ package com.ssafy.moneykeeperbackend.card.controller;
 
 import com.ssafy.moneykeeperbackend.card.dto.CardDto;
 import com.ssafy.moneykeeperbackend.card.dto.CardSimpleDto;
-import com.ssafy.moneykeeperbackend.card.entity.Card;
 import com.ssafy.moneykeeperbackend.card.service.CardService;
 import com.ssafy.moneykeeperbackend.card.service.PutCardService;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
@@ -47,12 +46,6 @@ public class CardController {
         }
         CardDto card = cardService.getCard(id);
         return new ResponseEntity<>(card, HttpStatus.OK);
-    }
-
-    @GetMapping("/savecards")
-    public ResponseEntity<?> saveCards() throws Exception {
-        putCardService.saveCards();
-        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping("/test")

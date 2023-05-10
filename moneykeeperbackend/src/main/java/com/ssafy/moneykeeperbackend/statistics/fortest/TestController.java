@@ -3,6 +3,7 @@ package com.ssafy.moneykeeperbackend.statistics.fortest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.service.SpendingService;
+import com.ssafy.moneykeeperbackend.card.service.PutCardService;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.entity.IncomeGroup;
@@ -29,6 +30,8 @@ import java.util.Random;
 @RequestMapping("/api/test")
 public class TestController {
     private final UpdateDataService updateDataService;
+
+    private final PutCardService putCardService;
     private final TestService testService;
 
     private final MemberRepository memberRepository;
@@ -91,6 +94,14 @@ public class TestController {
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
         updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,end,mscList);
 
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("/savecards")
+    public ResponseEntity<?> saveCards() throws Exception {
+        putCardService.saveCards();
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
