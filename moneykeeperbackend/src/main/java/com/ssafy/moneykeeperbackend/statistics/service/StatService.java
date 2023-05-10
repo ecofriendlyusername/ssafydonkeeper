@@ -179,7 +179,7 @@ public class StatService {
 
             genereateRecordService.generateRecordForMonth(member, ymonth);
 
-            //throw new NoSuchElementException();
+            // throw new NoSuchElementException();
             // for now
         }
 
@@ -199,6 +199,8 @@ public class StatService {
             // updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
             updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
         }
+
+        incomeGroup = member.getIncomeGroup();
         //determineIncomeGroupAndUpdateGroupSpending(Member member, LocalDate lastMonth, LocalDate start, LocalDate end, List<MajorSpendingClassification> mscList)
 
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
@@ -213,13 +215,17 @@ public class StatService {
         LocalDate start = ymonth.minusMonths(2);
 
         // System.out.println("end : " + end + ", start : " + start);
+        int months = 1;
+
+        int groupTotal = 0;
 
         for (MajorSpendingClassification msc : mscList) {
             GroupSpending gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
 
             if (gs == null) {
 //                genereateRecordService.generateGroupSpending(ymonth);
-//                System.out.println(incomeGroup.getId() + " " + msc.getName() + " " + ymonth);
+                System.out.println(msc.getName() + " " + ymonth);
+                  System.out.println(incomeGroup.getId() + " " + msc.getName() + " " + ymonth);
 //                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
                 throw new NoSuchElementException();
             }
@@ -234,11 +240,17 @@ public class StatService {
 
             int total = 0;
 
-            int months = msrcList.size();
+            months = msrcList.size();
+
+            if (months == 0) {
+                throw new NoSuchElementException();
+            }
 
             for (MonthSpendingRecordByClass msrc : msrcList) {
                 total += msrc.getAmount();
             }
+
+            groupTotal += total;
 
             SpendingDataDto sddUser = SpendingDataDto.builder()
                     .amount( (int) ((double)total/(double)months)  )
@@ -257,8 +269,8 @@ public class StatService {
                 .user(user)
                 .group(group)
                 .total(msr.getAmount())
-                .groupAvg(msr.getGroupAvg()).build();
-
+                .groupAvg((int)((double)groupTotal/(double)months)).build();
+// msr.getGroupAvg()
         // System.out.println("?");
         return cwud;
     }

@@ -1,6 +1,7 @@
 package com.ssafy.moneykeeperbackend.card.service;
 
 import com.ssafy.moneykeeperbackend.card.dto.CardDto;
+import com.ssafy.moneykeeperbackend.card.dto.CardSimpleDto;
 import com.ssafy.moneykeeperbackend.card.entity.Card;
 import com.ssafy.moneykeeperbackend.card.repository.CardRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
@@ -24,7 +25,7 @@ public class CardService {
 
     private final MemberRepository memberRepository;
 
-    public List<CardDto> getCards(Member member) {
+    public List<CardSimpleDto> getCards(Member member) {
         LocalDate now = LocalDate.now();
 
         LocalDate lastMonthSameDay = now.minusMonths(1);
@@ -76,53 +77,46 @@ public class CardService {
             pq.offer(a);
         }
 
-        List<CardDto> cardDtoList = new ArrayList<>(10);
+        List<CardSimpleDto> cardSimpleDtoList = new ArrayList<>(10);
 
         int i = 0;
         while (i < 10 && !pq.isEmpty()) {
             int cardNum = pq.poll()[3];
             Card card = cardList.get(cardNum);
 
-            CardDto cardDto = CardDto.builder()
+            CardSimpleDto cardSimpleDto = CardSimpleDto.builder()
                     .id(card.getId())
                     .company(card.getCompany())
                     .name(card.getName())
-                    .benefits(card.getBenefitDetail())
-                    .minimumSpending(card.getMinimumSpending())
-                    .annualFee(card.getAnnualFee())
                     .imgPath(card.getImgPath())
                     .build();
-
-            cardDtoList.add(cardDto);
+            cardSimpleDtoList.add(cardSimpleDto);
 
             i++;
         }
 
-        return cardDtoList;
+        return cardSimpleDtoList;
     }
 
-    private List<CardDto> getDisplayCard() {
+    private List<CardSimpleDto> getDisplayCard() {
         String[] displayCards = {"삼성카드 taptap O","청춘대로 싱글 체크카드","MULTI Young(멀티 영) 카드",
                 "IBK 무직타이거 카드(신용)","I’m YOLO 플래티넘","삼성플래티늄체크카드"};
 
-        List<CardDto> cardDtoList = new ArrayList<>();
+        List<CardSimpleDto> cardSimpleDtoList = new ArrayList<>();
 
         for (String displayCard : displayCards) {
             Card card = cardRepository.findByName(displayCard);
 
-            CardDto cardDto = CardDto.builder()
+            CardSimpleDto cardSimpleDto = CardSimpleDto.builder()
                     .id(card.getId())
                     .company(card.getCompany())
                     .name(card.getName())
-                    .benefits(card.getBenefitDetail())
-                    .minimumSpending(card.getMinimumSpending())
-                    .annualFee(card.getAnnualFee())
                     .imgPath(card.getImgPath())
                     .build();
-            cardDtoList.add(cardDto);
+            cardSimpleDtoList.add(cardSimpleDto);
         }
 
-        return cardDtoList;
+        return cardSimpleDtoList;
     }
 
     private int similarity(Card card, HashMap<String,Integer> spendingAvgByClasses) {
@@ -148,6 +142,7 @@ public class CardService {
         Card card = cardOptional.get();
 
         CardDto cardDto = CardDto.builder()
+                .id(card.getId())
                 .company(card.getCompany())
                 .name(card.getName())
                 .benefits(card.getBenefitDetail())

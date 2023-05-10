@@ -1,6 +1,7 @@
 package com.ssafy.moneykeeperbackend.card.controller;
 
 import com.ssafy.moneykeeperbackend.card.dto.CardDto;
+import com.ssafy.moneykeeperbackend.card.dto.CardSimpleDto;
 import com.ssafy.moneykeeperbackend.card.entity.Card;
 import com.ssafy.moneykeeperbackend.card.service.CardService;
 import com.ssafy.moneykeeperbackend.card.service.PutCardService;
@@ -32,7 +33,7 @@ public class CardController {
         } else {
             mem = member.getMember();
         }
-        List<CardDto> cardDtoList = cardService.getCards(mem);
+        List<CardSimpleDto> cardDtoList = cardService.getCards(mem);
         return new ResponseEntity<>(cardDtoList, HttpStatus.OK);
     }
 
