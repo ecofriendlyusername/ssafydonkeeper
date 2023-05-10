@@ -50,6 +50,14 @@ public class CardService {
 
         List<Card> cardList = cardRepository.findByIsCreditAndAnnualFeeLessThanAndMinimumSpendingLessThan(isCredit,annualFee,spendingAvgTotal);
 
+        if (cardList.size() == 0) {
+            return getDisplayCard();
+        }
+
+        for (Card card : cardList) {
+            System.out.println(card.getName() + " " + card.getBenefitDetail() + " " + card.getBenefitImportant());
+        }
+
         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> (a[0]==b[0] ? (a[1]==b[1] ? b[2] - a[2] : b[1] - a[1]) : b[0] - a[0]));
 
         System.out.println("spendingAvgTotal : " + spendingAvgTotal);
@@ -76,6 +84,7 @@ public class CardService {
             Card card = cardList.get(cardNum);
 
             CardDto cardDto = CardDto.builder()
+                    .id(card.getId())
                     .company(card.getCompany())
                     .name(card.getName())
                     .benefits(card.getBenefitDetail())
@@ -92,6 +101,30 @@ public class CardService {
         return cardDtoList;
     }
 
+    private List<CardDto> getDisplayCard() {
+        String[] displayCards = {"삼성카드 taptap O","청춘대로 싱글 체크카드","MULTI Young(멀티 영) 카드",
+                "IBK 무직타이거 카드(신용)","I’m YOLO 플래티넘","삼성플래티늄체크카드"};
+
+        List<CardDto> cardDtoList = new ArrayList<>();
+
+        for (String displayCard : displayCards) {
+            Card card = cardRepository.findByName(displayCard);
+
+            CardDto cardDto = CardDto.builder()
+                    .id(card.getId())
+                    .company(card.getCompany())
+                    .name(card.getName())
+                    .benefits(card.getBenefitDetail())
+                    .minimumSpending(card.getMinimumSpending())
+                    .annualFee(card.getAnnualFee())
+                    .imgPath(card.getImgPath())
+                    .build();
+            cardDtoList.add(cardDto);
+        }
+
+        return cardDtoList;
+    }
+
     private int similarity(Card card, HashMap<String,Integer> spendingAvgByClasses) {
         int dotProduct = 0;
 
@@ -99,14 +132,30 @@ public class CardService {
 
         for (String benefit : benefitStr) {
             String[] parsedBenefit = benefit.split(":");
-            System.out.println(parsedBenefit[0]);
             int a = spendingAvgByClasses.get(parsedBenefit[0]);
             int b = Integer.parseInt(parsedBenefit[1]);
-            System.out.println(parsedBenefit[0]);
-            System.out.println("a : " + a + ", b : " + b);
             dotProduct += a * b;
         }
 
         return dotProduct;
+    }
+
+    public CardDto getCard(Long id) {
+        Optional<Card> cardOptional = cardRepository.findById(id);
+
+        if (cardOptional.isEmpty()) return null;
+
+        Card card = cardOptional.get();
+
+        CardDto cardDto = CardDto.builder()
+                .company(card.getCompany())
+                .name(card.getName())
+                .benefits(card.getBenefitDetail())
+                .minimumSpending(card.getMinimumSpending())
+                .annualFee(card.getAnnualFee())
+                .imgPath(card.getImgPath())
+                .build();
+
+        return cardDto;
     }
 }

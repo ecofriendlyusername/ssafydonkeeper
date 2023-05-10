@@ -185,7 +185,7 @@ public class TestService { //
         }
     }
 
-    public Long generateMockMemberWithString(String rs, HashMap<String, MajorSpendingClassification> hm, LocalDate start, LocalDate end) {
+    public Long generateMockMemberWithString(String rs, HashMap<String, MajorSpendingClassification> hm, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end) {
         Member member = Member.builder()
                 .email(rs)
                 .oauth("oauth")
@@ -197,12 +197,13 @@ public class TestService { //
         memberRepository.save(member);
         Member member1 = memberRepository.findByNickname(rs);
 
-        generateMockDataWithMember(member1,hm,start,end);
+
+        generateMockDataWithMember(member1,hm,mscList,start,end);
 
         return member1.getId();
     }
 
-    private void generateMockDataWithMember(Member member, HashMap<String, MajorSpendingClassification> hm, LocalDate start, LocalDate end) {
+    private void generateMockDataWithMember(Member member, HashMap<String, MajorSpendingClassification> hm, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end) {
         String[] minor = {"식비","술/유흥","카페","생활","온라인/쇼핑","패션/쇼핑",
                 "뷰티/미용","교통","자동차","주거/통신","의료/건강","금융","문화/여가","여행/숙박",
                 "교육/학습","자녀/육아","반려동물","경조/선물"};
@@ -223,7 +224,7 @@ public class TestService { //
         generateMockSpendingsWith(member);
         generateMockIncomesWith(member);
 
-        updateDataService.determineIncomeGroup(member,start,end);
+        updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,end,mscList);
         updateDataService.determineSpendingGroup(member,start,end);
     }
 

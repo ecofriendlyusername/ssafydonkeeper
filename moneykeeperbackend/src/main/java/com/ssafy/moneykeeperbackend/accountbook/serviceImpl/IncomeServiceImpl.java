@@ -70,7 +70,7 @@ public class IncomeServiceImpl implements IncomeService {
 		Income resultIncome = incomeRepository.saveAndFlush(income);
 
 		processRecordService.processNewIncome(resultIncome,member);
-		
+
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
 			.amount(resultIncome.getAmount())

@@ -20,8 +20,11 @@ public class IncomeGroup {
     @NonNull
     private int base;
 
-    @OneToMany(mappedBy = "spendingGroup", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "incomeGroup", fetch = FetchType.LAZY)
     private List<Member> member;
+
+    @OneToMany(mappedBy = "incomeGroup", fetch = FetchType.LAZY)
+    private List<GroupSpending> groupSpending;
 
     @Builder
     public IncomeGroup(int below, int base) {

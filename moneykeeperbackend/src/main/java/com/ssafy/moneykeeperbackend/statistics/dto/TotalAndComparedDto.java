@@ -6,6 +6,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TotalAndComparedDto {
+
+    private String category;
     private int total;
 
     private int groupAvg;
