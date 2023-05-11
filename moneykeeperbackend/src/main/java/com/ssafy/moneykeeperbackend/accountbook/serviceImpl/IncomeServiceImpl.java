@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class IncomeServiceImpl implements IncomeService {
 
 		// TODO: 가영님 주석 풀기 필요
 		// processRecordService.processNewIncome(resultIncome,member);
-		
+
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
 			.amount(resultIncome.getAmount())
@@ -140,9 +141,10 @@ public class IncomeServiceImpl implements IncomeService {
 		LocalDate startDate = LocalDate.of(year, month, 1);
 		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member, startDate, endDate);
+		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member,
+			startDate, endDate);
 		return incomes.stream()
-				.map(income -> IncomeResponse.builder()
+			.map(income -> IncomeResponse.builder()
 				.incomeId(income.getId())
 				.incomeClassificationName(income.getIncomeClassification().getName())
 				.amount(income.getAmount())

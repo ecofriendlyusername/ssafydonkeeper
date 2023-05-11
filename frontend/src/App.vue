@@ -37,6 +37,12 @@
     
     <br>
     <div @click="AssetGet">AssetGet</div>
+    <br>
+    <div @click="updateasset">updateasset</div>
+    <br>
+    <div @click="deletassest">deletassest</div>
+    <br>
+    <div @click="addassest">addassest</div>
 
     <br>
     <div @click="budgetadd">budgetadd</div>
@@ -221,6 +227,8 @@ export default {
         })
       
     },
+
+
     AssetGet() {
       axios({
         method: 'get',
@@ -229,6 +237,46 @@ export default {
       })
         .then((res) => {
           console.log("AssetGet")
+          console.log(res.data)
+        })
+      
+    },
+    updateasset() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/asset/67`,
+        data: {
+          "name" : "엄마",
+        }
+      })
+        .then((res) => {
+          console.log("updateasset")
+          console.log(res.data)
+        })
+      
+
+    },
+    deletassest() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/asset/67`,
+      })
+        .then((res) => {
+          console.log("deletassest")
+          console.log(res.data)
+        })
+
+    },
+    addassest() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/asset`,
+        data: {
+          "name" : "엄마 용돈",
+        }
+      })
+        .then((res) => {
+          console.log("addassest")
           console.log(res.data)
         })
       
