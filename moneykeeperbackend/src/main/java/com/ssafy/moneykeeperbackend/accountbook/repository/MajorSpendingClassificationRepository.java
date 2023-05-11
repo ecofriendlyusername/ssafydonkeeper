@@ -1,6 +1,7 @@
 package com.ssafy.moneykeeperbackend.accountbook.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,5 +13,5 @@ public interface MajorSpendingClassificationRepository extends JpaRepository<Maj
 
 	List<MajorSpendingClassification> findAll();
 
-	MajorSpendingClassification findByName(String sclass);
+	Optional<MajorSpendingClassification> findById(Long id);
 }

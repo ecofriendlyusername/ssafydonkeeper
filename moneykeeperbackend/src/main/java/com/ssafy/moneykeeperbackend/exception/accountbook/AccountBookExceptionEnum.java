@@ -22,7 +22,9 @@ public enum AccountBookExceptionEnum {
 
 	SPENDING_ID_NULL(HttpStatus.NOT_FOUND, "B0003", "해당 아이디의 소비 내역이 없습니다. 확인해주세요."),
 
-	INCOME_ID_NULL(HttpStatus.NOT_FOUND, "B0004", "해당 아이디의 수입 내역이 없습니다. 확인해주세요.");
+	INCOME_ID_NULL(HttpStatus.NOT_FOUND, "B0004", "해당 아이디의 수입 내역이 없습니다. 확인해주세요."),
+
+	MAJOR_SPENDING_CLASSIFICATION_ID_NULL(HttpStatus.NOT_FOUND, "B0005", "해당 아이디의 소비 대분류가 없습니다. 확인해주세요.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;
