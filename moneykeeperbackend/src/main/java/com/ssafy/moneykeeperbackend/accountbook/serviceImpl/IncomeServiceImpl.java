@@ -58,7 +58,7 @@ public class IncomeServiceImpl implements IncomeService {
 	public IncomeResponse addIncomeRecord(IncomeRequest incomeRequest, Member member) {
 
 		Income income = Income.builder()
-			.incomeClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()))
+			.incomeClassification(findIncomeClassificationById(incomeRequest.getClassificationId()))
 			.asset(findAssetById(incomeRequest.getAssetId()))
 			.memo(incomeRequest.getMemo())
 			.amount(incomeRequest.getAmount())
@@ -69,7 +69,8 @@ public class IncomeServiceImpl implements IncomeService {
 
 		Income resultIncome = incomeRepository.saveAndFlush(income);
 
-		processRecordService.processNewIncome(resultIncome,member);
+		// TODO: 가영님 주석 풀기 필요
+		// processRecordService.processNewIncome(resultIncome,member);
 
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
@@ -139,9 +140,10 @@ public class IncomeServiceImpl implements IncomeService {
 		LocalDate startDate = LocalDate.of(year, month, 1);
 		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member, startDate, endDate);
+		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member,
+			startDate, endDate);
 		return incomes.stream()
-				.map(income -> IncomeResponse.builder()
+			.map(income -> IncomeResponse.builder()
 				.incomeId(income.getId())
 				.incomeClassificationName(income.getIncomeClassification().getName())
 				.amount(income.getAmount())
@@ -213,9 +215,9 @@ public class IncomeServiceImpl implements IncomeService {
 		if (incomeRequest.getAssetId() != null && incomeRequest.getAssetId() != income.getAsset().getId()) {
 			income.setAsset(findAssetById(incomeRequest.getAssetId()));
 		}
-		if (incomeRequest.getIncomeClassificationId() != null
-			&& incomeRequest.getIncomeClassificationId() != income.getIncomeClassification().getId()) {
-			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()));
+		if (incomeRequest.getClassificationId() != null
+			&& incomeRequest.getClassificationId() != income.getIncomeClassification().getId()) {
+			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getClassificationId()));
 		}
 		if (incomeRequest.getDetail() != null && !incomeRequest.getDetail().equals(income.getDetail())) {
 			income.setDetail(incomeRequest.getDetail());
