@@ -5,9 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class IdNameDTO {
+public class IdNameClassificationDTO {
 
 	private Long id;
 
 	private String name;
+
+	private String majorSpendingClassificationName;
 }

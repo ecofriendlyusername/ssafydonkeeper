@@ -21,6 +21,12 @@
     <div @click="SpendingClassificationGet">SpendingClassificationGet</div>
     
     <br>
+    <div @click="updateSpendingClassification">updateSpendingClassification</div>
+    
+    <br>
+    <div @click="deletSpendingClassification">deletSpendingClassification</div>
+    
+    <br>
     <div @click="AssetGet">AssetGet</div>
 
     <br>
@@ -122,6 +128,32 @@ export default {
       })
         .then((res) => {
           console.log("spendingclassification")
+          console.log(res.data)
+        })
+      
+    },
+    deletSpendingClassification() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/spendingclassification/65`
+      })
+        .then((res) => {
+          console.log("delete")
+          console.log(res.data)
+        })
+    },
+
+    updateSpendingClassification() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/spendingclassification/65`,
+        data: {
+          "majorSpendingClassificationId" : 0,
+          "name" : "승현쓰"
+        }
+      })
+        .then((res) => {
+          console.log("updateSpendingClassification")
           console.log(res.data)
         })
       
