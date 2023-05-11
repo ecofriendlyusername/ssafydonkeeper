@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.accountbook.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,5 +42,9 @@ public class IncomeClassification extends BaseEntity {
 
 	@OneToMany(mappedBy = "incomeClassification")
 	List<Income> incomes;
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

@@ -13,6 +13,15 @@
 
     <br>
     <div @click="incomeClassificationGet">incomeClassificationGet</div>
+    
+    <br>
+    <div @click="addIncomeclassification">addIncomeclassification</div>
+
+    <br>
+    <div @click="updateIncomeClassification">updateIncomeClassification</div>
+    
+    <br>
+    <div @click="deletIncomeClassification">deletIncomeClassification</div>
 
     <br>
     <div @click="SpendingClassificationadd">SpendingClassificationadd</div>
@@ -105,6 +114,46 @@ export default {
   },
 
   methods: {
+    updateIncomeClassification() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/incomeclassification/66`,
+        data: {
+          "name" : "엄마",
+        }
+      })
+        .then((res) => {
+          console.log("updateIncomeClassification")
+          console.log(res.data)
+        })
+      
+
+    },
+    deletIncomeClassification() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/incomeclassification/66`,
+      })
+        .then((res) => {
+          console.log("deletIncomeClassification")
+          console.log(res.data)
+        })
+
+    },
+    addIncomeclassification() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/incomeclassification`,
+        data: {
+          "name" : "엄마 용돈",
+        }
+      })
+        .then((res) => {
+          console.log("addIncomeclassification")
+          console.log(res.data)
+        })
+      
+    },
     SpendingClassificationGet() {
       axios({
         method: 'get',
