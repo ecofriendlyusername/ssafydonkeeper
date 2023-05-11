@@ -68,6 +68,7 @@ public class StatService {
         }
 
 
+//        Collections.sort(li, (a,b) -> b.getAmount() - a.getAmount());
 
         return li;
 
@@ -407,6 +408,9 @@ public class StatService {
 
             li.add(msrcDto);
         }
+
+        Collections.sort(li, (a,b) -> b.getAmount() - a.getAmount());
+
         return li;
     }
 
