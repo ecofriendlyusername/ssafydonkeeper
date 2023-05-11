@@ -30,6 +30,10 @@ public class MajorSpendingClassification extends BaseEntity {
 
 	@OneToMany(mappedBy = "majorSpendingClassification")
 	List<SpendingClassification> spendingClassifications;
+
+	@OneToMany(mappedBy = "majorSpendingClassification", fetch = FetchType.LAZY)
+	private List<Budget> budgets;
+
 	@OneToMany(mappedBy = "majorSpendingClass", fetch = FetchType.LAZY)
 	private List<GroupSpending> groupSpending;
 }

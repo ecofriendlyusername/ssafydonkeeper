@@ -49,6 +49,9 @@
 
     <br>
     <div @click="budgetmonthget">budgetmonthget</div>
+    
+    <br>
+    <div @click="allBudget">allBudget</div>
 
     <br>
     <div @click="budgetpatch">budgetpatch</div>
@@ -120,6 +123,7 @@ export default {
   },
 
   methods: {
+
     updateIncomeClassification() {
       axios({
         method: 'patch',
@@ -289,7 +293,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 1000000,
+          "amount" : 3300,
+          "majorSpendingClassificationId":0
         },
       })
         .then((res) => {
@@ -300,7 +305,17 @@ export default {
     budgetmonthget() {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/account-book/budget/2023/5`,
+        url: `http://localhost:8080/api/account-book/budget/2023/5?majorSpendingClassificationId=1`,
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    allBudget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/budget/all/2023/5`,
       })
         .then((res) => {
           console.log("get")
@@ -314,7 +329,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 500000,
+          "amount" : 99999,
+          "majorSpendingClassificationId" : 0
         },
       })
         .then((res) => {

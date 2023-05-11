@@ -20,7 +20,7 @@ public interface SpendingRepository extends JpaRepository<Spending, Long> {
 
 	List<Spending> findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(Member member, LocalDate startDate, LocalDate endDate);
 
-	@Query("SELECT SUM(s.amount) FROM Spending s WHERE s.member = :member AND s.date BETWEEN :startDate AND :endDate")
+	@Query("SELECT COALESCE(SUM(s.amount), 0) FROM Spending s WHERE s.member = :member AND s.date BETWEEN :startDate AND :endDate")
 	int getTotalAmountByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
 
 	@Query("SELECT COALESCE(SUM(s.amount), 0) FROM Spending s WHERE s.date = :date AND s.member = :member")

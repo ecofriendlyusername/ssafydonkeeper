@@ -43,7 +43,15 @@ public class Budget {
 	@NotNull
 	private int amount;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "major_spending_classification_id")
+	private MajorSpendingClassification majorSpendingClassification;
+
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public void setMajorSpendingClassification(MajorSpendingClassification majorSpendingClassification) {
+		this.majorSpendingClassification = majorSpendingClassification;
 	}
 }
