@@ -106,6 +106,8 @@ public class TestController {
         testService.generateMockSpendingsWith(member,false);
         testService.generateMockIncomesWith(member);
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+        updateDataService.generateGroupSpending(end,mscList,igList);
         updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,end,mscList);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
