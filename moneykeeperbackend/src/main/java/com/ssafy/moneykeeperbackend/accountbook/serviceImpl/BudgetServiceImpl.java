@@ -1,5 +1,8 @@
 package com.ssafy.moneykeeperbackend.accountbook.serviceImpl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +45,12 @@ public class BudgetServiceImpl implements BudgetService {
 			.member(member)
 			.build());
 
-		if (budgetDTO.getMajorClassificationId() != null) {
+		if (budgetDTO.getMajorSpendingClassificationId() != null) {
 			budget.setMajorSpendingClassification(majorSpendingClassificationRepository.findById(
-				budgetDTO.getMajorClassificationId()).orElseThrow(() -> new AccountBookRuntimeException(
+				budgetDTO.getMajorSpendingClassificationId()).orElseThrow(() -> new AccountBookRuntimeException(
 				AccountBookExceptionEnum.MAJOR_SPENDING_CLASSIFICATION_ID_NULL)));
+
+			budgetRepository.save(budget);
 		}
 
 		BudgetDTO result = BudgetDTO.builder()
@@ -55,33 +60,78 @@ public class BudgetServiceImpl implements BudgetService {
 			.build();
 
 		if (budget.getMajorSpendingClassification() != null) {
-			result.setMajorClassificationId(budget.getMajorSpendingClassification().getId());
-			result.setMajorClassificationName(budget.getMajorSpendingClassification().getName());
+			result.setMajorSpendingClassificationId(budget.getMajorSpendingClassification().getId());
+			result.setMajorSpendingClassificationName(budget.getMajorSpendingClassification().getName());
 		}
 
 		return result;
 	}
 
 	/*
-	 * 월별 전체 예산 가져오기
+	 * 월별 소비 분류 별 예산 가져오기
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
 	@Override
-	public BudgetDTO getMonthBudget(Member member, int year, int month) {
-		Budget budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(member, year,
-			month).orElse(null);
+	public BudgetDTO getMonthBudget(Member member, int year, int month, Long majorSpendingClassificationId) {
 
-		return BudgetDTO.builder()
-			.year(year)
-			.month(month)
-			.amount(budget == null ? -1 : budget.getAmount())
-			.build();
+		if (majorSpendingClassificationId != null) {
+
+			MajorSpendingClassification majorSpendingClassification = majorSpendingClassificationRepository.findById(
+				majorSpendingClassificationId).orElseThrow(() -> new AccountBookRuntimeException(
+				AccountBookExceptionEnum.MAJOR_SPENDING_CLASSIFICATION_ID_NULL));
+
+			Budget budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationId(member, year,
+				month, majorSpendingClassificationId).orElse(null);
+
+			BudgetDTO budgetDTO = BudgetDTO.builder()
+				.year(year)
+				.month(month)
+				.amount(budget != null ? budget.getAmount() : 0)
+				.majorSpendingClassificationId(majorSpendingClassification.getId())
+				.majorSpendingClassificationName(majorSpendingClassification.getName())
+				.build();
+
+			return budgetDTO;
+
+		} else {
+			Budget budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(member,
+				year, month).orElse(null);
+
+			return BudgetDTO.builder()
+				.year(year)
+				.month(month)
+				.amount(budget == null ? -1 : budget.getAmount())
+				.build();
+		}
 	}
 
 	/*
-	 * 월별 전체 예산 수정
+	 * 월별 예산 전체 가져오기
+	 *
+	 * @date 2023.05.11
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public List<BudgetDTO> getMonthAllBudget(Member member, int year, int month) {
+		return budgetRepository.findByMemberAndYearAndMonth(member, year, month).stream().map(
+			budget -> BudgetDTO.builder()
+				.majorSpendingClassificationName(budget.getMajorSpendingClassification() != null ?
+					budget.getMajorSpendingClassification().getName() : null)
+				.majorSpendingClassificationId(
+					budget.getMajorSpendingClassification() != null ? budget.getMajorSpendingClassification().getId() :
+						null)
+				.month(budget.getMonth())
+				.year(budget.getYear())
+				.amount(budget.getAmount())
+				.build()
+		).collect(Collectors.toList());
+	}
+
+	/*
+	 * 예산 수정
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
@@ -89,11 +139,22 @@ public class BudgetServiceImpl implements BudgetService {
 	@Transactional
 	@Override
 	public BudgetDTO updateBudget(Member member, BudgetDTO budgetDTO) {
-		Budget budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(member,
-				budgetDTO.getYear(), budgetDTO.getMonth())
-			.orElse(null);
 
-		if (budget != null && budget.getAmount() != budgetDTO.getAmount()) {
+		Budget budget = null;
+
+		if (budgetDTO.getMajorSpendingClassificationId() != null) {
+			budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationId(member,
+				budgetDTO.getYear(), budgetDTO.getMonth(), budgetDTO.getMajorSpendingClassificationId()).orElse(null);
+		} else {
+			budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(member,
+				budgetDTO.getYear(), budgetDTO.getMonth()).orElse(null);
+		}
+
+		if (budget == null) {
+			throw new AccountBookRuntimeException(AccountBookExceptionEnum.BUDGET_NULL);
+		}
+
+		if (budget.getAmount() != budgetDTO.getAmount()) {
 			budget.setAmount(budgetDTO.getAmount());
 		}
 
@@ -103,46 +164,31 @@ public class BudgetServiceImpl implements BudgetService {
 			.year(resultBudget.getYear())
 			.month(resultBudget.getMonth())
 			.amount(resultBudget.getAmount())
+			.majorSpendingClassificationId(resultBudget.getMajorSpendingClassification().getId())
+			.majorSpendingClassificationName(resultBudget.getMajorSpendingClassification().getName())
 			.build();
 	}
 
 	/*
-	 * 월별 전체 예산 삭제
+	 * 예산 삭제
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
 	@Transactional
 	@Override
-	public void deleteBudget(Member member, int year, int month) {
-		budgetRepository.deleteByMemberAndYearAndMonth(member, year, month);
-	}
+	public void deleteBudget(Member member, int year, int month, Long majorSpendingClassificationId) {
 
-	/*
-	 * 월별 특정 소비 분류 예산 가져오기
-	 *
-	 * @date 2023.05.11
-	 * @author 정민지
-	 * */
-	@Transactional
-	@Override
-	public BudgetDTO addClassificationMonthBudget(BudgetDTO budgetDTO, Member member) {
-		Budget budget = budgetRepository.saveAndFlush(Budget.builder()
-			.year(budgetDTO.getYear())
-			.month(budgetDTO.getMonth())
-			.amount(budgetDTO.getAmount())
-			.member(member)
-			.majorSpendingClassification(majorSpendingClassificationRepository.findById(
-				budgetDTO.getMajorClassificationId()).orElseThrow(() -> new AccountBookRuntimeException(
-				AccountBookExceptionEnum.MAJOR_SPENDING_CLASSIFICATION_ID_NULL)))
-			.build());
+		if (majorSpendingClassificationId == null) {
+			budgetRepository.deleteByMemberAndYearAndMonth(member, year, month);
+		} else {
+			budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationId(member, year, month,
+					majorSpendingClassificationId)
+				.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.BUDGET_NULL));
 
-		return BudgetDTO.builder()
-			.year(budget.getYear())
-			.month(budget.getMonth())
-			.amount(budget.getAmount())
-			.majorClassificationId(budget.getMajorSpendingClassification().getId())
-			.majorClassificationName(budget.getMajorSpendingClassification().getName())
-			.build();
+			budgetRepository.deleteByMemberAndYearAndMonthAndMajorSpendingClassificationId(member, year, month,
+				majorSpendingClassificationId);
+		}
+
 	}
 }

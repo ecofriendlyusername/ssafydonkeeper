@@ -12,19 +12,6 @@
     <div @click="check">세션 체크</div>
 
     <br>
-    <div @click="cbudgetadd">cbudgetadd</div>
-
-    <br>
-    <div @click="cbudgetmonthget">cbudgetmonthget</div>
-
-    <br>
-    <div @click="cbudgetpatch">cbudgetpatch</div>
-
-    <br>
-    <div @click="cbudgetdelet">cbudgetdelet</div>
-
-
-    <br>
     <div @click="incomeClassificationGet">incomeClassificationGet</div>
     
     <br>
@@ -62,6 +49,9 @@
 
     <br>
     <div @click="budgetmonthget">budgetmonthget</div>
+    
+    <br>
+    <div @click="allBudget">allBudget</div>
 
     <br>
     <div @click="budgetpatch">budgetpatch</div>
@@ -133,61 +123,6 @@ export default {
   },
 
   methods: {
-
-    cbudgetadd() {
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/account-book/budget/classification`,
-        data: {
-          "year" : 2023,
-          "month" : 5,
-          "amount" : 1000000,
-        },
-      })
-        .then((res) => {
-          console.log("add")
-          console.log(res.data)
-        })
-    },
-    cbudgetmonthget() {
-      axios({
-        method: 'get',
-        url: `http://localhost:8080/api/account-book/budget/2023/5`,
-      })
-        .then((res) => {
-          console.log("get")
-          console.log(res.data)
-        })
-    },
-    cbudgetpatch() {
-      axios({
-        method: 'patch',
-        url: `http://localhost:8080/api/account-book/budget`,
-        data: {
-          "year" : 2023,
-          "month" : 5,
-          "amount" : 500000,
-        },
-      })
-        .then((res) => {
-          console.log("budgetpatch")
-          console.log(res.data)
-        })
-    },
-    cbudgetdelet() {
-      axios({
-        method: 'delete',
-        url: `http://localhost:8080/api/account-book/budget/2023/5`
-      })
-        .then((res) => {
-          console.log("delete")
-          console.log(res.data)
-        })
-    },
-
-
-
-
 
     updateIncomeClassification() {
       axios({
@@ -358,7 +293,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 1000000,
+          "amount" : 3300,
+          "majorSpendingClassificationId":0
         },
       })
         .then((res) => {
@@ -369,7 +305,17 @@ export default {
     budgetmonthget() {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/account-book/budget/2023/5`,
+        url: `http://localhost:8080/api/account-book/budget/2023/5?majorSpendingClassificationId=1`,
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    allBudget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/budget/all/2023/5`,
       })
         .then((res) => {
           console.log("get")
@@ -383,7 +329,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 500000,
+          "amount" : 99999,
+          "majorSpendingClassificationId" : 0
         },
       })
         .then((res) => {

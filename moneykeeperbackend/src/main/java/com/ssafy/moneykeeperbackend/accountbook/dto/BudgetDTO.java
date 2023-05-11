@@ -15,8 +15,8 @@ public class BudgetDTO {
 
 	private int amount;
 
-	private String majorClassificationName;
+	private String majorSpendingClassificationName;
 
-	private Long majorClassificationId;
+	private Long majorSpendingClassificationId;
 
 }

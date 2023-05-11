@@ -1,5 +1,7 @@
 package com.ssafy.moneykeeperbackend.accountbook.controller;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -46,20 +48,34 @@ public class BudgetController {
 	}
 
 	/*
-	 * 월별 전체 예산 가져오기
+	 * 월별 소비 분류 별 예산 가져오기
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
 	@GetMapping("/{year}/{month}")
 	public ResponseEntity<?> getMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
-		@PathVariable int year, @PathVariable int month) {
-		return new ResponseEntity<>(budgetService.getMonthBudget(member.getMember(), year, month),
+		@PathVariable int year, @PathVariable int month,
+		@RequestParam(required = false) Long majorSpendingClassificationId) {
+		return new ResponseEntity<>(budgetService.getMonthBudget(member.getMember(), year, month, majorSpendingClassificationId),
 			HttpStatus.OK);
 	}
 
 	/*
-	 * 월별 전체 예산 수정
+	 * 월별 예산 전체 가져오기
+	 *
+	 * @date 2023.05.09
+	 * @author 정민지
+	 * */
+	@GetMapping("/all/{year}/{month}")
+	public ResponseEntity<?> getMonthAllBudget(@AuthenticationPrincipal CustomUserDetails member,
+		@PathVariable int year, @PathVariable int month) {
+		return new ResponseEntity<>(budgetService.getMonthAllBudget(member.getMember(), year, month),
+			HttpStatus.OK);
+	}
+
+	/*
+	 * 예산 수정
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
@@ -71,28 +87,16 @@ public class BudgetController {
 	}
 
 	/*
-	 * 월별 전체 예산 삭제
+	 * 예산 삭제
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
 	@DeleteMapping("/{year}/{month}")
 	public ResponseEntity<?> deleteBudget(@AuthenticationPrincipal CustomUserDetails member, @PathVariable int year,
-		@PathVariable int month) {
-		budgetService.deleteBudget(member.getMember(), year, month);
+		@PathVariable int month, @RequestParam(required = false) Long majorSpendingClassificationId) {
+		budgetService.deleteBudget(member.getMember(), year, month, majorSpendingClassificationId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	/*
-	 * 월별 특정 소비 분류 예산 입력
-	 *
-	 * @date 2023.05.11
-	 * @author 정민지
-	 * */
-	@PostMapping("/classification")
-	public ResponseEntity<?> addClassificationMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
-		@RequestBody BudgetDTO budgetDTO) {
-		return new ResponseEntity<>(budgetService.addClassificationMonthBudget(budgetDTO, member.getMember()),
-			HttpStatus.OK);
-	}
 }
