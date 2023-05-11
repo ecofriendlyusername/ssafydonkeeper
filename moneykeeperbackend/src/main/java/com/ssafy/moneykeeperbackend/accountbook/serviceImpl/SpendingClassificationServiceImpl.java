@@ -6,8 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.IdNameClassificationDTO;
+import com.ssafy.moneykeeperbackend.accountbook.dto.IdNameDTO;
 import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingClassificationRequest;
+import com.ssafy.moneykeeperbackend.accountbook.dto.response.SpendingClassificationResponse;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
@@ -35,9 +36,9 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 	 * @author 정민지
 	 * */
 	@Override
-	public List<IdNameClassificationDTO> getAllSpendingClassification(Member member) {
+	public List<SpendingClassificationResponse> getAllSpendingClassification(Member member) {
 		return spendingClassificationRepository.findByMember(member).stream().map(
-				spendingClassification -> IdNameClassificationDTO.builder()
+				spendingClassification -> SpendingClassificationResponse.builder()
 					.id(spendingClassification.getId())
 					.name(spendingClassification.getName())
 					.majorSpendingClassificationName(spendingClassification.getMajorSpendingClassification().getName())
@@ -53,7 +54,7 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 	 * */
 	@Transactional
 	@Override
-	public IdNameClassificationDTO addSpendingClassification(Member member,
+	public SpendingClassificationResponse addSpendingClassification(Member member,
 		SpendingClassificationRequest spendingClassificationRequest) {
 		SpendingClassification spendingClassification = spendingClassificationRepository.saveAndFlush(
 			SpendingClassification.builder()
@@ -65,7 +66,7 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 				.name(spendingClassificationRequest.getName())
 				.build());
 
-		return IdNameClassificationDTO.builder()
+		return SpendingClassificationResponse.builder()
 			.id(spendingClassification.getId())
 			.name(spendingClassification.getName())
 			.majorSpendingClassificationName(spendingClassification.getMajorSpendingClassification().getName())
@@ -80,7 +81,7 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 	 * */
 	@Transactional
 	@Override
-	public IdNameClassificationDTO updateSpendingClassification(Member member,
+	public SpendingClassificationResponse updateSpendingClassification(Member member,
 		SpendingClassificationRequest spendingClassificationRequest, Long spendingclassificationId) {
 
 		SpendingClassification spendingClassification = spendingClassificationRepository.findById(
@@ -105,7 +106,7 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 		SpendingClassification resultSpendingClassification = spendingClassificationRepository.save(
 			spendingClassification);
 
-		return IdNameClassificationDTO.builder()
+		return SpendingClassificationResponse.builder()
 			.id(resultSpendingClassification.getId())
 			.name(resultSpendingClassification.getName())
 			.majorSpendingClassificationName(resultSpendingClassification.getMajorSpendingClassification().getName())

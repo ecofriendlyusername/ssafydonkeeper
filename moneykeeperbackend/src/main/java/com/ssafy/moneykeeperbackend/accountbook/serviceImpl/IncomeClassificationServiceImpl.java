@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.IdNameClassificationDTO;
+import com.ssafy.moneykeeperbackend.accountbook.dto.IdNameDTO;
 import com.ssafy.moneykeeperbackend.accountbook.repository.IncomeClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.service.IncomeClassificationService;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
@@ -27,9 +27,9 @@ public class IncomeClassificationServiceImpl implements IncomeClassificationServ
 	 * @author 정민지
 	 * */
 	@Override
-	public List<IdNameClassificationDTO> getAllIncomeClassification(Member member) {
+	public List<IdNameDTO> getAllIncomeClassification(Member member) {
 		return incomeClassificationRepository.findByMember(member).stream().map(
-				incomeClassification -> IdNameClassificationDTO.builder()
+				incomeClassification -> IdNameDTO.builder()
 					.id(incomeClassification.getId())
 					.name(incomeClassification.getName())
 					.build())

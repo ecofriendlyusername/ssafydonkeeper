@@ -1,12 +1,11 @@
-package com.ssafy.moneykeeperbackend.accountbook.dto;
+package com.ssafy.moneykeeperbackend.accountbook.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-public class IdNameClassificationDTO {
-
+@Getter
+public class SpendingClassificationResponse {
 	private Long id;
 
 	private String name;
