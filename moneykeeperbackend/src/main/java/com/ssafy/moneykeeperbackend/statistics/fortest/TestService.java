@@ -240,6 +240,10 @@ public class TestService { //
         generateMockSpendingsWith(member,isLight);
         generateMockIncomesWith(member);
 
+        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+
+        updateDataService.generateGroupSpending(end,mscList,igList);
+
         updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,end,mscList);
         // updateDataService.determineSpendingGroup(member,start,end);
     }
