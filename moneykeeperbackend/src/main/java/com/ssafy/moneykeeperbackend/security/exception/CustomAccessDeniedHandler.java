@@ -29,7 +29,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		response.setStatus(HttpStatus.FORBIDDEN.value());
 
 		Map<String, String> errorMap = new HashMap<>();
-		errorMap.put("message", AuthExceptionEnum.REQUIRED_RE_LOGIN.getErrorMessage());
+		// errorMap.put("message", AuthExceptionEnum.REQUIRED_RE_LOGIN.getErrorMessage());
+		errorMap.put("message", "안냥");
 		errorMap.put("status", String.valueOf(AuthExceptionEnum.REQUIRED_RE_LOGIN.getHttpStatus()));
 		errorMap.put("code", String.valueOf(AuthExceptionEnum.REQUIRED_RE_LOGIN.getHttpCode()));
 
