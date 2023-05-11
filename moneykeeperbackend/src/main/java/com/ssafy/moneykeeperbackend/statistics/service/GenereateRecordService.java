@@ -3,33 +3,45 @@ package com.ssafy.moneykeeperbackend.statistics.service;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthIncomeRecordRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordByClassRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordRepository;
+import com.ssafy.moneykeeperbackend.statistics.entity.*;
+import com.ssafy.moneykeeperbackend.statistics.repository.*;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class InitForNewMemberService {
+public class GenereateRecordService {
+
+    private final UpdateDataService updateDataService;
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
     private final MonthSpendingRecordRepository monthSpendingRecordRepository;
     private final MonthIncomeRecordRepository monthIncomeRecordRepository;
+
+    private final GroupSpendingRepository groupSpendingRepository;
+
+    private final IncomeGroupRepository incomeGroupRepository;
     private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
     @Transactional
     public void initForNewMember(Member member) {
-        try { // do this for now change later
-            LocalDate now = LocalDate.now();
 
-            LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+        LocalDate now = LocalDate.now();
+
+        LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+        LocalDate lastMonth = ymonth.minusMonths(1);
+        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+//        updateDataService.generateGroupSpending(lastMonth,mscList,igList);
+        generateRecordForMonth(member, ymonth);
+    }
+
+    public void generateRecordForMonth(Member member, LocalDate ymonth) {
+
+        try { // do this for now change later
 
             MonthSpendingRecord msr =
                     MonthSpendingRecord.builder()
@@ -62,6 +74,24 @@ public class InitForNewMemberService {
         } catch (Exception e) {
             // for now
             System.out.println("error in init for new member");
+        }
+    }
+
+    public void generateGroupSpending(LocalDate ymonth) {
+        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+
+        for (MajorSpendingClassification msc : mscList) {
+            for (IncomeGroup ig : igList) {
+                GroupSpending groupSpending = GroupSpending.builder()
+                        .incomeGroup(ig)
+                        .majorSpendingClass(msc)
+                        .total(0)
+                        .months(0)
+                        .ymonth(ymonth)
+                        .build();
+                groupSpendingRepository.saveAndFlush(groupSpending);
+            }
         }
     }
 }

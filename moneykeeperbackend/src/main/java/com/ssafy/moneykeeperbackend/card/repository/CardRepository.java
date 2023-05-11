@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
     List<Card> findByIsCreditAndAnnualFeeLessThanAndMinimumSpendingLessThan(int isCredit, int annualFee, int spendingAvgTotal);
+
+    Card findByName(String displayCard);
 }

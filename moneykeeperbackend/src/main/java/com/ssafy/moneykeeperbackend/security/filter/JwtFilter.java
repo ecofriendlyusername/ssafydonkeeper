@@ -97,7 +97,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		String requestURI = request.getRequestURI();
 
-		return requestURI.startsWith("/api/account-book") || requestURI.startsWith("/api/cards") || requestURI.startsWith("/api/statistics");
+		return requestURI.startsWith("/api/account-book") || requestURI.startsWith("/api/statistics") || requestURI.startsWith("/api/card");
 	}
 
 }
