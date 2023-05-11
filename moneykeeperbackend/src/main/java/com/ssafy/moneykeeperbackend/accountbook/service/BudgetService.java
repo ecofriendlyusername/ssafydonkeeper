@@ -12,4 +12,6 @@ public interface BudgetService {
 	BudgetDTO updateBudget(Member member, BudgetDTO budgetDTO);
 
 	void deleteBudget(Member member, int year, int month);
+
+	BudgetDTO addClassificationMonthBudget(BudgetDTO budgetDTO, Member member);
 }

@@ -46,7 +46,7 @@ public class BudgetController {
 	}
 
 	/*
-	 * 특정 달 예산 가져오기
+	 * 월별 전체 예산 가져오기
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
@@ -59,7 +59,7 @@ public class BudgetController {
 	}
 
 	/*
-	 * 특정 달 예산 수정
+	 * 월별 전체 예산 수정
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
@@ -71,7 +71,7 @@ public class BudgetController {
 	}
 
 	/*
-	 * 특정 달 예산 삭제
+	 * 월별 전체 예산 삭제
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
@@ -81,5 +81,18 @@ public class BudgetController {
 		@PathVariable int month) {
 		budgetService.deleteBudget(member.getMember(), year, month);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	/*
+	 * 월별 특정 소비 분류 예산 입력
+	 *
+	 * @date 2023.05.11
+	 * @author 정민지
+	 * */
+	@PostMapping("/classification")
+	public ResponseEntity<?> addClassificationMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestBody BudgetDTO budgetDTO) {
+		return new ResponseEntity<>(budgetService.addClassificationMonthBudget(budgetDTO, member.getMember()),
+			HttpStatus.OK);
 	}
 }

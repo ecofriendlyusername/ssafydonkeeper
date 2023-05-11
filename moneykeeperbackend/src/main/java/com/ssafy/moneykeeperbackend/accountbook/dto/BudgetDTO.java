@@ -2,9 +2,11 @@ package com.ssafy.moneykeeperbackend.accountbook.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 public class BudgetDTO {
 
 	private int year;
@@ -12,4 +14,9 @@ public class BudgetDTO {
 	private int month;
 
 	private int amount;
+
+	private String majorClassificationName;
+
+	private Long majorClassificationId;
+
 }

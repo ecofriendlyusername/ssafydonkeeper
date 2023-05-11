@@ -12,6 +12,19 @@
     <div @click="check">세션 체크</div>
 
     <br>
+    <div @click="cbudgetadd">cbudgetadd</div>
+
+    <br>
+    <div @click="cbudgetmonthget">cbudgetmonthget</div>
+
+    <br>
+    <div @click="cbudgetpatch">cbudgetpatch</div>
+
+    <br>
+    <div @click="cbudgetdelet">cbudgetdelet</div>
+
+
+    <br>
     <div @click="incomeClassificationGet">incomeClassificationGet</div>
     
     <br>
@@ -120,6 +133,62 @@ export default {
   },
 
   methods: {
+
+    cbudgetadd() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/budget/classification`,
+        data: {
+          "year" : 2023,
+          "month" : 5,
+          "amount" : 1000000,
+        },
+      })
+        .then((res) => {
+          console.log("add")
+          console.log(res.data)
+        })
+    },
+    cbudgetmonthget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/budget/2023/5`,
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    cbudgetpatch() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/budget`,
+        data: {
+          "year" : 2023,
+          "month" : 5,
+          "amount" : 500000,
+        },
+      })
+        .then((res) => {
+          console.log("budgetpatch")
+          console.log(res.data)
+        })
+    },
+    cbudgetdelet() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/budget/2023/5`
+      })
+        .then((res) => {
+          console.log("delete")
+          console.log(res.data)
+        })
+    },
+
+
+
+
+
     updateIncomeClassification() {
       axios({
         method: 'patch',
