@@ -31,7 +31,7 @@
       <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell" v-on:click="this.$router.push('/research/card/' + recom_card.id)" style="background-color:#E7E7E7; border-color:#E7E7E7 ;">
         <div style="display: flex; justify-content: space-between; background-color:white; padding: 10px; margin: 5px;">
           <div>
-            <img src="" alt=recom_card.path>
+            <!-- <img :src="recom_card.imgPath" alt=recom_card.imgPath> -->
           </div>
           <div>
             <div style="display:flex; font-weight: bold;">
@@ -72,26 +72,7 @@ export default {
         },
       ],
       spend_data:[],
-      recom_cards: [
-        {
-          id: '1',
-          img_path: 'path',
-          name: '삼성카드 어쩌고 저쩌고 카드',
-          company: '삼성카드'
-        },
-        {
-          id: '2',
-          img_path: 'path',
-          name: '우리카드 그시기 므시기 카드',
-          company: '우리카드'
-        },
-        {
-          id: '3',
-          img_path: 'path',
-          name: '국민카드 가나다라마바사카드',
-          company: '국민카드'
-        },
-      ]
+      recom_cards: []
     }
   },
   methods:{
@@ -101,31 +82,42 @@ export default {
         console.log(`/statistics/monthlyspendingbycat/${this.year}/${this.month}`);
         this.spend_data = res.data
       })
+      .then(() => {
+        this.pieChartAdd()
+      })
+
+      this.axios.get(process.env.VUE_APP_API_URL + `/card/cards`  )
+      .then(res => {
+        this.recom_cards = res.data
+        console.log(this.recom_cards)
+      })
+    },
+    pieChartAdd() {
+      new Chart(
+        document.getElementById('chart'),
+        {
+          type: 'pie',
+          options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
+          },
+          data: {
+            labels: this.research_data.map(row => row.classification),
+            datasets: [
+              {
+                data: this.research_data.map(row => row.percent)
+              }
+            ]
+          }
+        }
+      );
     },
   },
   mounted() {
     this.getData()
-    new Chart(
-      document.getElementById('chart'),
-      {
-        type: 'pie',
-        options: {
-          // plugins: {
-          //   legend: {
-          //     display: false
-          //   }
-          // }
-        },
-        data: {
-          labels: this.research_data.map(row => row.classification),
-          datasets: [
-            {
-              data: this.research_data.map(row => row.percent)
-            }
-          ]
-        }
-      }
-    );
   }
 
 }
