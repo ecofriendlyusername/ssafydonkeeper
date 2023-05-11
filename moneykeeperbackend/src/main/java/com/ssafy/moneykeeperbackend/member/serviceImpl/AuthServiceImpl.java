@@ -245,8 +245,8 @@ public class AuthServiceImpl implements AuthService {
 			);
 		}
 
-		initForNewMemberService.initForNewMember(member);
-
+		// TODO: 가영님 주석 풀기 필요
+		// initForNewMemberService.initForNewMember(member);
 	}
 
 }

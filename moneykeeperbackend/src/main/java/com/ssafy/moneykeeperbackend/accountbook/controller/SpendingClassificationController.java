@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,4 +52,19 @@ public class SpendingClassificationController {
 			spendingClassificationService.addSpendingClassification(member.getMember(), spendingClassificationRequest),
 			HttpStatus.OK);
 	}
+
+
+	// /*
+	//  * 소비 분류 생성
+	//  *
+	//  * @date 2023.05.09
+	//  * @author 정민지
+	//  * */
+	// @PatchMapping("/{spendingclassificationId}")
+	// public ResponseEntity<?> updateSpendingClassification(@AuthenticationPrincipal CustomUserDetails member,
+	// 	@RequestBody SpendingClassificationRequest spendingClassificationRequest) {
+	// 	return new ResponseEntity<>(
+	// 		spendingClassificationService.addSpendingClassification(member.getMember(), spendingClassificationRequest),
+	// 		HttpStatus.OK);
+	// }
 }
