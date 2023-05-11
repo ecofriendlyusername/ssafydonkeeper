@@ -202,6 +202,7 @@ public class UpdateDataService {
     }
 
     public void generateGroupSpending(LocalDate lastMonth, List<MajorSpendingClassification> mscList, List<IncomeGroup> igList) {
+        if (groupSpendingRepository.existsByIncomeGroupAndMajorSpendingClassAndYmonth(igList.get(0),mscList.get(0),lastMonth)) return;
         for (MajorSpendingClassification msc : mscList) {
             for (IncomeGroup ig : igList) {
                 GroupSpending gs = GroupSpending.builder()
