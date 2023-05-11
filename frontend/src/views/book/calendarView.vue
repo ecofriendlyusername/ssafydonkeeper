@@ -150,13 +150,16 @@ export default {
       const day = new Date(this.year, this.month - 1, 1);
       this.year = day.getFullYear()
       this.month = day.getMonth()
-      this.renderCalendar();
+      await this.getData()
+      await this.renderCalendar();
+      await this.addData();
     },
     async goNext() {
       const day = new Date(this.year, this.month + 1, 1);
       this.year = day.getFullYear()
       this.month = day.getMonth()
-      this.renderCalendar();
+      await this.getData()
+      await this.renderCalendar();
       await this.addData();
     }
   },

@@ -126,7 +126,5 @@ public class PutCardService {
                 .build();
 
         cardRepository.save(cardObject);
-
-        System.out.println();
     }
 }
