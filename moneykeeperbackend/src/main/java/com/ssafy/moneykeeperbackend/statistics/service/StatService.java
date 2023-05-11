@@ -220,13 +220,15 @@ public class StatService {
 
         int groupTotal = 0;
 
+        int userTotal = 0;
+
         for (MajorSpendingClassification msc : mscList) {
             GroupSpending gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
 
             if (gs == null) {
 //                genereateRecordService.generateGroupSpending(ymonth);
                 System.out.println(msc.getName() + " " + ymonth);
-                  System.out.println(incomeGroup.getId() + " " + msc.getName() + " " + ymonth);
+                System.out.println(incomeGroup.getId() + " " + msc.getName() + " " + ymonth);
 //                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
                 throw new NoSuchElementException();
             }
@@ -241,7 +243,7 @@ public class StatService {
 
             int total = 0;
 
-            months = msrcList.size();
+            months = gs.getMonths();
 
             if (months == 0) {
                 throw new NoSuchElementException();
@@ -250,8 +252,9 @@ public class StatService {
             for (MonthSpendingRecordByClass msrc : msrcList) {
                 total += msrc.getAmount();
             }
+            userTotal += total;
 
-            groupTotal += total;
+            groupTotal += gs.getTotal();
 
             SpendingDataDto sddUser = SpendingDataDto.builder()
                     .amount( (int) ((double)total/(double)months)  )
@@ -269,10 +272,10 @@ public class StatService {
                 .below(incomeGroup.getBelow())
                 .user(user)
                 .group(group)
-                .total(msr.getAmount())
+                .total((int)((double)userTotal/(double)months))
                 .groupAvg((int)((double)groupTotal/(double)months)).build();
 // msr.getGroupAvg()
-        // System.out.println("?");
+// System.out.println("?");
         return cwud;
     }
 
