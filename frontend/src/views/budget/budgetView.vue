@@ -50,6 +50,7 @@ export default {
     return {
       year: new Date().getFullYear(),
       month: new Date().getMonth()+1,
+      data: 0,
       req: {
         total_budget: 2000000,
         spend_budget: 1000000,
@@ -78,7 +79,13 @@ export default {
     getData(){
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/budget/${this.year}/${this.month}`)
       .then(res => {
+        this.data = res.data;
         console.log(res.data);
+      }).then(() => {
+        if (this.data.amount == 1) {
+          // this.axios.get(process.env.VUE_APP_API_URL + `/`)
+          this.$router.push('/budget/set')
+        }
       })
     },
     priceToString(price) {
