@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 
 @RestController
@@ -73,17 +70,19 @@ public class TestController {
         LocalDate start = end.minusMonths(2);
 
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-        Long testMemberId = testService.generateMockMemberWithString("test", mscList,start,end,false);
+        // Long testMemberId = testService.generateMockMemberWithString("test", mscList,start,end,false);
 
+        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+        
         for (int i = 0; i < 30; i++) {
             Random random = new Random();
             int rn = random.nextInt(1000000000)+1;
-            testService.generateMockMemberWithString(String.valueOf(rn),mscList,start,end,true);
+            testService.generateMockMemberWithString(String.valueOf(rn)+i,mscList,start,end,true);
         }
 
         updateDataService.updateSpendingCompData();
 
-        return new ResponseEntity<Long>(testMemberId, HttpStatus.OK);
+        return new ResponseEntity<Integer>(0, HttpStatus.OK);
     }
 
     @GetMapping("/dummy")

@@ -14,4 +14,6 @@ public interface GroupSpendingRepository extends JpaRepository<GroupSpending, Lo
     GroupSpending findByIncomeGroupAndMajorSpendingClass(IncomeGroup incomeGroup, MajorSpendingClassification msc);
 
     GroupSpending findByIncomeGroupAndMajorSpendingClassAndYmonth(IncomeGroup incomeGroup, MajorSpendingClassification msc, LocalDate thisMonth);
+
+    boolean existsByIncomeGroupAndMajorSpendingClassAndYmonth(IncomeGroup ig, MajorSpendingClassification msc, LocalDate lastMonth);
 }
