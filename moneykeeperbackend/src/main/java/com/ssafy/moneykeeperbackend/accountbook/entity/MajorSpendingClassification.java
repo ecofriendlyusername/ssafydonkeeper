@@ -2,14 +2,10 @@ package com.ssafy.moneykeeperbackend.accountbook.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
+import com.ssafy.moneykeeperbackend.statistics.entity.GroupSpending;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -34,4 +30,6 @@ public class MajorSpendingClassification extends BaseEntity {
 
 	@OneToMany(mappedBy = "majorSpendingClassification")
 	List<SpendingClassification> spendingClassifications;
+	@OneToMany(mappedBy = "majorSpendingClass", fetch = FetchType.LAZY)
+	private List<GroupSpending> groupSpending;
 }

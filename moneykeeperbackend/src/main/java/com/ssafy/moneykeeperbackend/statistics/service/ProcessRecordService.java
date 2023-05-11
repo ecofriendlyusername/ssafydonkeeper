@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -83,21 +84,20 @@ public class ProcessRecordService {
         LocalDate date = income.getDate();
         LocalDate ymonth = LocalDate.of(date.getYear(),date.getMonth(),1);
 
-        Optional<MonthIncomeRecord> mirOptional = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
-
-        if (mirOptional.isEmpty()) {
-            statService.buildMonthIncomeRecordForAUser(member,ymonth);
-        }
-
         Optional<MonthIncomeRecord> optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (optionalMir.isEmpty()) {
-            // throw new FailedToGenerateRecordException();
-            System.out.println("x");
-            // for now
+            statService.buildMonthIncomeRecordForAUser(member,ymonth);
         }
 
-        MonthIncomeRecord mir = mirOptional.get();
+        optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
+
+        if (optionalMir.isEmpty()) {
+            System.out.println("ymonth : .. " + ymonth);
+            throw new NoSuchElementException();
+        }
+
+        MonthIncomeRecord mir = optionalMir.get();
 
         mir.setAmount(mir.getAmount()+income.getAmount());
     }
