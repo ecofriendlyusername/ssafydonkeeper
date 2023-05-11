@@ -24,8 +24,9 @@ export default {
   },
   methods: {
     getData(){
-      this.axios.get()
+      this.axios.get(process.env.VUE_APP_API_URL + ``)
     },
+
     add(){
       if (this.income) {
         this.spendadd()
@@ -88,7 +89,7 @@ export default {
     },
   },
   mounted() {
-    this.getData()
+    // this.getData()
   },
 
 }
