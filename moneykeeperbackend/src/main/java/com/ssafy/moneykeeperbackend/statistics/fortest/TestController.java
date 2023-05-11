@@ -44,6 +44,26 @@ public class TestController {
     @GetMapping("")
     @ApiOperation(value = "test", notes = "test")
     public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
+//        LocalDate now = LocalDate.now();
+//
+//        LocalDate thisMonth = LocalDate.of(now.getYear(),now.getMonth(),1);
+//        LocalDate lastMonth = thisMonth.minusMonths(1);
+//
+//        LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
+//        LocalDate start = end.minusMonths(2);
+
+//        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
+          testService.initCommonForTest();
+//        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+//        List<IncomeGroup> igList = incomeGroupRepository.findAll();
+//
+//        updateDataService.generateGroupSpending(end,mscList,igList);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+    @GetMapping("/dummyalot")
+    @ApiOperation(value = "test", notes = "test")
+    public ResponseEntity<?> dummyData() {
         LocalDate now = LocalDate.now();
 
         LocalDate thisMonth = LocalDate.of(now.getYear(),now.getMonth(),1);
@@ -52,19 +72,13 @@ public class TestController {
         LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
         LocalDate start = end.minusMonths(2);
 
-        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
-
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-        List<IncomeGroup> igList = incomeGroupRepository.findAll();
-
-        updateDataService.generateGroupSpending(end,mscList,igList);
-
-        Long testMemberId = testService.generateMockMemberWithString("test", hm,mscList,start,end,false);
+        Long testMemberId = testService.generateMockMemberWithString("test", mscList,start,end,false);
 
         for (int i = 0; i < 30; i++) {
             Random random = new Random();
             int rn = random.nextInt(1000000000)+1;
-            testService.generateMockMemberWithString(String.valueOf(rn),hm,mscList,start,end,true);
+            testService.generateMockMemberWithString(String.valueOf(rn),mscList,start,end,true);
         }
 
         updateDataService.updateSpendingCompData();

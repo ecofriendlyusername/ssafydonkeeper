@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -173,6 +174,13 @@ public class UpdateDataService {
             List<MonthSpendingRecordByClass> msrcList = monthSpendingRecordByClassRepository.findByMemberAndMajorSpendingClassAndYmonthBetween(member,msc,start,end);
 
             int len = msrcList.size();
+
+            if (gs == null) {
+//                List<IncomeGroup> igList = incomeGroupRepository.findAll();
+//                updateDataService.generateGroupSpending(end,mscList,igList);
+//                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,end);
+                throw new NoSuchElementException();
+            }
 
             gs.setMonths(len);
 

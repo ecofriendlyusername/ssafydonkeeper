@@ -192,10 +192,11 @@ public class StatService {
         IncomeGroup incomeGroup = member.getIncomeGroup();
 
         if (incomeGroup == null) {
+            System.out.println("XXX");
             LocalDate start = ymonth.minusMonths(2);
             List<IncomeGroup> igList = incomeGroupRepository.findAll();
             List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-            // updateDataService.generateGroupSpending(ymonth,mscList,igList);
+            updateDataService.generateGroupSpending(ymonth,mscList,igList);
             // updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
             updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
         }

@@ -45,8 +45,8 @@ export default {
         method: 'post',
         url: process.env.VUE_APP_API_URL + `/account-book/income`,
         data: {
-          "assetId" : 1079,
-          "incomeClassificationId" : 6901,
+          "assetId" : document.querySelector("#assetId").value,
+          "incomeClassificationId" : document.querySelector("#incomeClassificationId").value,
           "date" : document.querySelector("#date").value,
           "amount" : document.querySelector("#amount").value, 
           "detail": document.querySelector("#detail").value,
@@ -72,8 +72,8 @@ export default {
         method: 'post',
         url: process.env.VUE_APP_API_URL + `/account-book/spending`,
         data: {
-          "assetId" : 1079,
-          "spendingClassificationId" : 1083,
+          "assetId" : document.querySelector("#assetId").value,
+          "spendingClassificationId" : document.querySelector("#incomeClassificationId").value,
           "date" : document.querySelector("#date").value,
           "amount" : document.querySelector("#amount").value, 
           "detail": document.querySelector("#detail").value,

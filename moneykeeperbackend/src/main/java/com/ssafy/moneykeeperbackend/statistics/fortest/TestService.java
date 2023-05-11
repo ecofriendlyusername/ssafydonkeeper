@@ -104,12 +104,9 @@ public class TestService { //
             incomeGroupRepository.save(incomeGroup);
         }
     }
-    public HashMap<String,MajorSpendingClassification> initCommonForTest() {
+    public void initCommonForTest() {
         buildSpendingGroupForTest();
         buildIncomeGroupForTest();
-
-        HashMap<String,MajorSpendingClassification> hm = new HashMap<>();
-
         String[] major = {"식비","술/유흥","카페","생활","온라인/쇼핑","패션/쇼핑",
                 "뷰티/미용","교통","자동차","주거/통신","의료/건강","금융","문화/여가","여행/숙박",
         "교육/학습","자녀/육아","반려동물","경조/선물"};
@@ -120,17 +117,31 @@ public class TestService { //
                             .name(s)
                             .build();
             majorSpendingClassificationRepository.save(msc);
-
-            hm.put(s,msc);
         }
-
-        String[] assets = {"하나은행","신한은행","카카오뱅크"};
-
-        for (String asset : assets) {
-            buildAsset(asset);
-        }
-
-        return hm;
+//
+//        HashMap<String,MajorSpendingClassification> hm = new HashMap<>();
+//
+//        String[] major = {"식비","술/유흥","카페","생활","온라인/쇼핑","패션/쇼핑",
+//                "뷰티/미용","교통","자동차","주거/통신","의료/건강","금융","문화/여가","여행/숙박",
+//        "교육/학습","자녀/육아","반려동물","경조/선물"};
+//
+//        for (String s : major) {
+//            MajorSpendingClassification msc =
+//                    MajorSpendingClassification.builder()
+//                            .name(s)
+//                            .build();
+//            majorSpendingClassificationRepository.save(msc);
+//
+//            hm.put(s,msc);
+//        }
+//
+//        String[] assets = {"하나은행","신한은행","카카오뱅크"};
+//
+//        for (String asset : assets) {
+//            buildAsset(asset);
+//        }
+//
+//        return hm;
     }
 
     public void generateMockSpendingsWith(Member member, boolean isLight) {
@@ -191,7 +202,7 @@ public class TestService { //
         }
     }
 
-    public Long generateMockMemberWithString(String rs, HashMap<String, MajorSpendingClassification> hm, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end, boolean isLight) {
+    public Long generateMockMemberWithString(String rs, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end, boolean isLight) {
         Member member = Member.builder()
                 .email(rs)
                 .oauth("oauth")
@@ -204,27 +215,26 @@ public class TestService { //
         Member member1 = memberRepository.findByNickname(rs);
 
 
-        generateMockDataWithMember(member1,hm,mscList,start,end,isLight);
+        generateMockDataWithMember(member1,mscList,start,end,isLight);
 
         return member1.getId();
     }
 
-    private void generateMockDataWithMember(Member member, HashMap<String, MajorSpendingClassification> hm, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end, boolean isLight) {
-        String[] minor = {"식비","술/유흥","카페","생활","온라인/쇼핑","패션/쇼핑",
-                "뷰티/미용","교통","자동차","주거/통신","의료/건강","금융","문화/여가","여행/숙박",
-                "교육/학습","자녀/육아","반려동물","경조/선물"};
+    private void generateMockDataWithMember(Member member, List<MajorSpendingClassification> mscList, LocalDate start, LocalDate end, boolean isLight) {
+//        String[] minor = {"식비","술/유흥","카페","생활","온라인/쇼핑","패션/쇼핑",
+//                "뷰티/미용","교통","자동차","주거/통신","의료/건강","금융","문화/여가","여행/숙박",
+//                "교육/학습","자녀/육아","반려동물","경조/선물"};
 
-        for (String s : minor) {
-            MajorSpendingClassification msc = hm.get(s);
+        for (MajorSpendingClassification msc : mscList) {
             SpendingClassification sc = SpendingClassification.builder()
                     .member(member)
-                    .name(s)
+                    .name(msc.getName())
                     .majorSpendingClassification(msc)
                     .build();
             spendingClassificationRepository.save(sc);
         }
 
-        generateMonthSpendingRecord(member,hm);
+        generateMonthSpendingRecord(member,mscList);
         generateMonthIncomeRecord(member);
 
         generateMockSpendingsWith(member,isLight);
@@ -246,7 +256,7 @@ public class TestService { //
         }
     }
 
-    private void generateMonthSpendingRecord(Member member, HashMap<String,MajorSpendingClassification> hm) {
+    private void generateMonthSpendingRecord(Member member, List<MajorSpendingClassification> hm) {
         for (int i = 2; i <= 5; i++) {
             MonthSpendingRecord msr =
                     MonthSpendingRecord.builder()
@@ -257,7 +267,7 @@ public class TestService { //
             monthSpendingRecordRepository.save(msr);
         }
 
-        for (MajorSpendingClassification msc : hm.values()) {
+        for (MajorSpendingClassification msc : hm) {
             for (int i = 2; i <= 5; i++) {
                 LocalDate ymonth = LocalDate.of(2023,i,1);
                 MonthSpendingRecordByClass msrc =
