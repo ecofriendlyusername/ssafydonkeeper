@@ -63,7 +63,7 @@ public class SpendingServiceImpl implements SpendingService {
 		spending = spendingRepository.saveAndFlush(spending);
 
 		// TODO: 가영님 주석 풀기 필요
-		// processRecordService.processNewSpending(spending,member);
+		processRecordService.processNewSpending(spending,member);
 
 		return SpendingResponse.builder()
 			.spendingId(spending.getId())
