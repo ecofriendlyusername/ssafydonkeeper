@@ -28,6 +28,8 @@ import java.util.*;
 public class TestController {
     private final UpdateDataService updateDataService;
 
+    private final IndividualTestService individualTestService;
+
     private final PutCardService putCardService;
     private final TestService testService;
 
@@ -73,7 +75,7 @@ public class TestController {
         // Long testMemberId = testService.generateMockMemberWithString("test", mscList,start,end,false);
 
         List<IncomeGroup> igList = incomeGroupRepository.findAll();
-        
+
         for (int i = 0; i < 30; i++) {
             Random random = new Random();
             int rn = random.nextInt(1000000000)+1;
@@ -102,8 +104,8 @@ public class TestController {
 
         Member member = memberOptional.get();
 
-        testService.generateMockSpendingsWith(member,false);
-        testService.generateMockIncomesWith(member);
+        individualTestService.generateMockSpendingsWith(member,false);
+        individualTestService.generateMockIncomesWith(member);
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
         List<IncomeGroup> igList = incomeGroupRepository.findAll();
         updateDataService.generateGroupSpending(end,mscList,igList);
