@@ -100,22 +100,36 @@ export default {
     getData(){
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/total/amount/${this.year}/${this.month + 1}`)
       .then(res=>{
-        console.log(res.data.details)
+        console.log(res.data)
+        this.incom = res.data.total.totalIncomeAmount
+        this.spend = res.data.total.totalSpendingAmount
+        this.datas = res.data.details
+      })
+      .then(() => {
+        this.renderCalendar()
+      })
+      .then(()=>{
+        this.addData()
       })
     },
     addData() {
       const dayday = document.querySelectorAll('.current');
-      this.datas.forEach(data => {
-        let p = document.createElement("p");
-        p.setAttribute('class', data.category)
-        p.innerText = data.money;
-        dayday[data.day - 1].appendChild(p);
-
-        if (data.category == 'incom') {
-          this.incom += data.money
-        } else {
-          this.spend += data.money
+      dayday.forEach((day, idx) => {
+        console.log(this.datas[idx])
+        let p1 = document.createElement("p");
+        p1.setAttribute('class', 'incom')
+        p1.innerText = this.datas[idx].incomeAmount
+        if(this.datas[idx].incomeAmount != 0) {          
+          day.appendChild(p1);
         }
+
+        let p2 = document.createElement("p");
+        p2.setAttribute('class', 'spend')
+        p2.innerText = this.datas[idx].spendingAmount
+        if(this.datas[idx].spendingAmount != 0) {
+          day.appendChild(p2);
+        }
+
       })
     },
     renderCalendar() {
@@ -163,10 +177,10 @@ export default {
       await this.addData();
     }
   },
-  async mounted() {
-    await this.getData()
-    await this.renderCalendar();
-    await this.addData();
+  mounted() {
+    this.getData()
+    // await this.renderCalendar();
+    // await this.addData();
   }
 };
 </script>
