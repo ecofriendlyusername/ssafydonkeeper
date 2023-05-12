@@ -111,8 +111,8 @@ export default {
       // 수입인지 지출인지 체크
       IS: true,
 
-      total_incom: 200000,
-      total_spend: 100000,
+      total_incom: 0,
+      total_spend: 0,
       incomeData: [],
       spendData: []
         
@@ -129,11 +129,17 @@ export default {
         console.log(res.data)
         this.spendData=res.data
       })
+      .then(() => {
+        this.total_spend = this.spendData.reduce((acc, total) =>(acc + total.amount), 0)
+      })
 
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/income/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
         this.incomeData = res.data
+      })
+      .then(() => {
+        this.total_incom = this.incomeData.reduce((acc, total) =>(acc + total.amount), 0)
       })
     },
     before() {
