@@ -11,7 +11,7 @@ public class IncomeRequest {
 
 	private Long assetId;
 
-	private Long incomeClassificationId;
+	private Long classificationId;
 
 	private int amount;
 

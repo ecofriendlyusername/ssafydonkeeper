@@ -2,8 +2,12 @@ package com.ssafy.moneykeeperbackend.security.config;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -85,6 +89,10 @@ public class SecurityConfig {
 
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+			.authenticationEntryPoint((request, response, authException) -> {
+				// 여기에 인증 실패에 대한 로직을 작성
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "안녕 에러 확인중");
+			})
 
 			.and()
 			.apply(new JwtSecurityConfig(tokenProvider))

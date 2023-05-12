@@ -3,16 +3,16 @@ package com.ssafy.moneykeeperbackend.statistics.entity;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"member_member_id", "ymonth"})
+})
 public class MonthIncomeRecord {
     @Id
     @GeneratedValue

@@ -38,7 +38,7 @@ public class IncomeController {
 
 
 	/*
-	 * 소비 내역 입력
+	 * 수입 내역 입력
 	 *
 	 * @date 2023.05.04
 	 * @author 정민지
@@ -78,6 +78,19 @@ public class IncomeController {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("date"), Sort.Order.asc("createdAt")));
 		return new ResponseEntity<>(
 			incomeService.getMonthIncome(member.getMember(), year, month),
+			HttpStatus.OK);
+	}
+
+	/*
+	 * 특정 달 수입 금액 가져오기
+	 *
+	 * @date 2023.05.04
+	 * @author 정민지
+	 * */
+	@GetMapping("/amount/{year}/{month}")
+	public ResponseEntity<?> getMonthIncomeAmount(@AuthenticationPrincipal CustomUserDetails member,
+		@PathVariable int year, @PathVariable int month) {
+		return new ResponseEntity<>(incomeService.getMonthIncomeAmount(member.getMember(), year, month),
 			HttpStatus.OK);
 	}
 

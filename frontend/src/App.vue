@@ -7,14 +7,51 @@
   </div>
     <div class="test" v-if="loginCheck">
 
+      
+
     <div @click="check">세션 체크</div>
 
+    <br>
+    <div @click="incomeClassificationGet">incomeClassificationGet</div>
+    
+    <br>
+    <div @click="addIncomeclassification">addIncomeclassification</div>
+
+    <br>
+    <div @click="updateIncomeClassification">updateIncomeClassification</div>
+    
+    <br>
+    <div @click="deletIncomeClassification">deletIncomeClassification</div>
+
+    <br>
+    <div @click="SpendingClassificationadd">SpendingClassificationadd</div>
+
+    <br>
+    <div @click="SpendingClassificationGet">SpendingClassificationGet</div>
+    
+    <br>
+    <div @click="updateSpendingClassification">updateSpendingClassification</div>
+    
+    <br>
+    <div @click="deletSpendingClassification">deletSpendingClassification</div>
+    
+    <br>
+    <div @click="AssetGet">AssetGet</div>
+    <br>
+    <div @click="updateasset">updateasset</div>
+    <br>
+    <div @click="deletassest">deletassest</div>
+    <br>
+    <div @click="addassest">addassest</div>
 
     <br>
     <div @click="budgetadd">budgetadd</div>
 
     <br>
     <div @click="budgetmonthget">budgetmonthget</div>
+    
+    <br>
+    <div @click="allBudget">allBudget</div>
 
     <br>
     <div @click="budgetpatch">budgetpatch</div>
@@ -87,6 +124,168 @@ export default {
 
   methods: {
 
+    updateIncomeClassification() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/incomeclassification/66`,
+        data: {
+          "name" : "엄마",
+        }
+      })
+        .then((res) => {
+          console.log("updateIncomeClassification")
+          console.log(res.data)
+        })
+      
+
+    },
+    deletIncomeClassification() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/incomeclassification/66`,
+      })
+        .then((res) => {
+          console.log("deletIncomeClassification")
+          console.log(res.data)
+        })
+
+    },
+    addIncomeclassification() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/incomeclassification`,
+        data: {
+          "name" : "엄마 용돈",
+        }
+      })
+        .then((res) => {
+          console.log("addIncomeclassification")
+          console.log(res.data)
+        })
+      
+    },
+    SpendingClassificationGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/spendingclassification`,
+        
+      })
+        .then((res) => {
+          console.log("spendingclassification")
+          console.log(res.data)
+        })
+      
+    },
+    SpendingClassificationadd() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/spendingclassification`,
+        data: {
+          "majorSpendingClassificationId" : 0,
+          "name" : "승현이랑 외식"
+        }
+      })
+        .then((res) => {
+          console.log("spendingclassification")
+          console.log(res.data)
+        })
+      
+    },
+    deletSpendingClassification() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/spendingclassification/65`
+      })
+        .then((res) => {
+          console.log("delete")
+          console.log(res.data)
+        })
+    },
+
+    updateSpendingClassification() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/spendingclassification/65`,
+        data: {
+          "majorSpendingClassificationId" : 0,
+          "name" : "승현쓰"
+        }
+      })
+        .then((res) => {
+          console.log("updateSpendingClassification")
+          console.log(res.data)
+        })
+      
+    },
+
+
+    incomeClassificationGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/incomeclassification`,
+        
+      })
+        .then((res) => {
+          console.log("incomeClassificationGet")
+          console.log(res.data)
+        })
+      
+    },
+
+
+    AssetGet() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/asset`,
+        
+      })
+        .then((res) => {
+          console.log("AssetGet")
+          console.log(res.data)
+        })
+      
+    },
+    updateasset() {
+      axios({
+        method: 'patch',
+        url: `http://localhost:8080/api/account-book/asset/67`,
+        data: {
+          "name" : "엄마",
+        }
+      })
+        .then((res) => {
+          console.log("updateasset")
+          console.log(res.data)
+        })
+      
+
+    },
+    deletassest() {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/account-book/asset/67`,
+      })
+        .then((res) => {
+          console.log("deletassest")
+          console.log(res.data)
+        })
+
+    },
+    addassest() {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/account-book/asset`,
+        data: {
+          "name" : "엄마 용돈",
+        }
+      })
+        .then((res) => {
+          console.log("addassest")
+          console.log(res.data)
+        })
+      
+    },
+
     budgetadd() {
       axios({
         method: 'post',
@@ -94,7 +293,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 1000000,
+          "amount" : 3300,
+          "majorSpendingClassificationId":0
         },
       })
         .then((res) => {
@@ -105,7 +305,17 @@ export default {
     budgetmonthget() {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/account-book/budget/2023/5`,
+        url: `http://localhost:8080/api/account-book/budget/2023/5?majorSpendingClassificationId=1`,
+      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
+    },
+    allBudget() {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/account-book/budget/all/2023/5`,
       })
         .then((res) => {
           console.log("get")
@@ -119,7 +329,8 @@ export default {
         data: {
           "year" : 2023,
           "month" : 5,
-          "amount" : 500000,
+          "amount" : 99999,
+          "majorSpendingClassificationId" : 0
         },
       })
         .then((res) => {

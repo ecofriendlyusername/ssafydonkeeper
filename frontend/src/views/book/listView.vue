@@ -29,164 +29,93 @@
 
     <div style="height:10px; width:100%; background-color:#F0F2F5; margin-top:15px; margin-bottom:10px;"></div>
 
-    <div v-if="IS">
+    <!-- 지출내역 칸 -->
+    <div v-show="IS">
       <div
         style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
-        <div>소비내역</div>
-        <div>+ 추가</div>
+        <div>지출내역</div>
+        <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
-      <div v-for="(dumy, idx) in spend_dumies" :key="idx"
-        v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.id, classification:'spending' } })"
-        style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
-        <div>
-          <div style="font-weight:bold">
-            {{ dumy.classification }}
+      <div v-if="spendData.length != 0">
+        <div v-for="(dumy, idx) in spendData" :key="idx"
+          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'spending' } })"
+          style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+          <div>
+            <div style="font-weight:bold">
+              {{ dumy.spendingClassificationName }}
+            </div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">
+              {{ dumy.date }}
+            </div>
           </div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{ dumy.month }}.{{ dumy.day }}
+          <div>
+            <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
           </div>
         </div>
-        <div>
-          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
-        </div>
+      
+      </div>
+      <div v-else>
+        <p>
+          데이터가 없어요
+        </p>
       </div>
     </div>
-    <div v-else>
+
+    <!-- 수입내역 칸 -->
+    <div v-show="!IS">
       <div
         style="display:flex; justify-content:space-between; font-weight: bold; margin-bottom: 20px; padding: 0px 10px;">
         <div>수입내역</div>
-        <div>+ 추가</div>
+        <div v-on:click="$router.push('/book/add')">+ 추가</div>
       </div>
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
-      <div v-for="(dumy, idx) in incom_dumies" :key="idx"
-        v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.id, classification:'income' } })"
-        style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
-        <div>
-          <div style="font-weight:bold">
-            {{ dumy.classification }}
+      
+      <div v-if="incomeData.length != 0">
+        <div v-for="(dumy, idx) in incomeData" :key="idx"
+          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'income' } })"
+          style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
+          <div>
+            <div style="font-weight:bold">
+              {{ dumy.incomeClassificationName }}
+            </div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">
+              {{ dumy.date }}
+            </div>
           </div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">
-            {{ dumy.month }}.{{ dumy.day }}
+          <div>
+            <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
+            <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
           </div>
         </div>
-        <div>
-          <div style="font-weight:bold">₩ {{ dumy.amount }}</div>
-          <div style="font-size:75%; color: gray; margin-top: 2px;">{{ dumy.detail }}</div>
-        </div>
+      </div>
+      <div v-else>
+        <p>
+          데이터가 없어요
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 export default {
 
   data() {
     return {
       year: new Date().getFullYear(),
-      month: new Date().getMonth(),
+      month: new Date().getMonth()+1,
       page_number: 1,
       page_size: 10,
-
+      // 수입인지 지출인지 체크
       IS: true,
 
-      total_incom: 200000,
-      total_spend: 100000,
-      incom_dumies: [
-        {
-          'id': 1,
-          "classification": "월급",
-          "year": 2023,
-          "month": 4,
-          "day": 12,
-          "amount": 164000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 2,
-          "classification": "돈주움",
-          "year": 2023,
-          "month": 4,
-          "day": 19,
-          "amount": 27000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 3,
-          "classification": "복권",
-          "year": 2023,
-          "month": 4,
-          "day": 28,
-          "amount": 29700,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-      ],
-      spend_dumies: [
-        {
-          'id': 1,
-          "classification": "외식",
-          "year": 2023,
-          "month": 4,
-          "day": 12,
-          "amount": 164000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 2,
-          "classification": "영화",
-          "year": 2023,
-          "month": 4,
-          "day": 19,
-          "amount": 27000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 3,
-          "classification": "배달",
-          "year": 2023,
-          "month": 4,
-          "day": 28,
-          "amount": 29700,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 4,
-          "classification": "영화",
-          "year": 2023,
-          "month": 4,
-          "day": 22,
-          "amount": 32000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        },
-        {
-          'id': 5,
-          "classification": "영화",
-          "year": 2023,
-          "month": 4,
-          "day": 27,
-          "amount": 19000,
-          "detail": "some detail",
-          "memo": "some memo",
-          "memberId": 4
-        }
-      ]
+      total_incom: 0,
+      total_spend: 0,
+      incomeData: [],
+      spendData: []
+        
     }
   },
   mounted() {
@@ -195,9 +124,22 @@ export default {
   methods: {
     getData() {
       console.log(this.year, this.month, this.page_number)
-      axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spending/${this.year}/${this.month}`)
       .then(res => {
         console.log(res.data)
+        this.spendData=res.data
+      })
+      .then(() => {
+        this.total_spend = this.spendData.reduce((acc, total) =>(acc + total.amount), 0)
+      })
+
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/income/${this.year}/${this.month}`)
+      .then(res => {
+        console.log(res.data)
+        this.incomeData = res.data
+      })
+      .then(() => {
+        this.total_incom = this.incomeData.reduce((acc, total) =>(acc + total.amount), 0)
       })
     },
     before() {

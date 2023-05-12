@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class IncomeServiceImpl implements IncomeService {
 
+	private final ProcessRecordService processRecordService;
+
 	private final IncomeClassificationRepository incomeClassificationRepository;
 
 	private final AssetRepository assetRepository;
@@ -55,7 +59,7 @@ public class IncomeServiceImpl implements IncomeService {
 	public IncomeResponse addIncomeRecord(IncomeRequest incomeRequest, Member member) {
 
 		Income income = Income.builder()
-			.incomeClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()))
+			.incomeClassification(findIncomeClassificationById(incomeRequest.getClassificationId()))
 			.asset(findAssetById(incomeRequest.getAssetId()))
 			.memo(incomeRequest.getMemo())
 			.amount(incomeRequest.getAmount())
@@ -65,6 +69,9 @@ public class IncomeServiceImpl implements IncomeService {
 			.build();
 
 		Income resultIncome = incomeRepository.saveAndFlush(income);
+
+		// TODO: 가영님 주석 풀기 필요
+		processRecordService.processNewIncome(resultIncome,member);
 
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
@@ -134,9 +141,10 @@ public class IncomeServiceImpl implements IncomeService {
 		LocalDate startDate = LocalDate.of(year, month, 1);
 		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member, startDate, endDate);
+		List<Income> incomes = incomeRepository.findAllByMemberAndDateBetweenOrderByDateDescCreatedAtDesc(member,
+			startDate, endDate);
 		return incomes.stream()
-				.map(income -> IncomeResponse.builder()
+			.map(income -> IncomeResponse.builder()
 				.incomeId(income.getId())
 				.incomeClassificationName(income.getIncomeClassification().getName())
 				.amount(income.getAmount())
@@ -208,9 +216,9 @@ public class IncomeServiceImpl implements IncomeService {
 		if (incomeRequest.getAssetId() != null && incomeRequest.getAssetId() != income.getAsset().getId()) {
 			income.setAsset(findAssetById(incomeRequest.getAssetId()));
 		}
-		if (incomeRequest.getIncomeClassificationId() != null
-			&& incomeRequest.getIncomeClassificationId() != income.getIncomeClassification().getId()) {
-			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getIncomeClassificationId()));
+		if (incomeRequest.getClassificationId() != null
+			&& incomeRequest.getClassificationId() != income.getIncomeClassification().getId()) {
+			income.setSpendingClassification(findIncomeClassificationById(incomeRequest.getClassificationId()));
 		}
 		if (incomeRequest.getDetail() != null && !incomeRequest.getDetail().equals(income.getDetail())) {
 			income.setDetail(incomeRequest.getDetail());

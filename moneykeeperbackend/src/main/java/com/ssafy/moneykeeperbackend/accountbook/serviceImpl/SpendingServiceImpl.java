@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SpendingServiceImpl implements SpendingService {
 
+	private final ProcessRecordService processRecordService;
+
 	private final SpendingRepository spendingRepository;
 
 	private final SpendingClassificationRepository spendingClassificationRepository;
@@ -49,7 +52,7 @@ public class SpendingServiceImpl implements SpendingService {
 
 		Spending spending = Spending.builder()
 			.member(member)
-			.spendingClassification(findSpendingClassificationById(spendingRequest.getSpendingClassificationId()))
+			.spendingClassification(findSpendingClassificationById(spendingRequest.getClassificationId()))
 			.date(LocalDate.parse(spendingRequest.getDate(), DateTimeFormatter.ISO_DATE))
 			.asset(findAssetById(spendingRequest.getAssetId()))
 			.amount(spendingRequest.getAmount())
@@ -58,6 +61,9 @@ public class SpendingServiceImpl implements SpendingService {
 			.build();
 
 		spending = spendingRepository.saveAndFlush(spending);
+
+		// TODO: 가영님 주석 풀기 필요
+		processRecordService.processNewSpending(spending,member);
 
 		return SpendingResponse.builder()
 			.spendingId(spending.getId())
@@ -68,7 +74,6 @@ public class SpendingServiceImpl implements SpendingService {
 			.detail(spending.getDetail())
 			.memo(spending.getMemo())
 			.build();
-
 	}
 
 	/*
@@ -197,8 +202,8 @@ public class SpendingServiceImpl implements SpendingService {
 		if (spendingRequest.getAssetId() != null && spendingRequest.getAssetId() != spending.getAsset().getId()) {
 			spending.setAsset(findAssetById(spendingRequest.getAssetId()));
 		}
-		if (spendingRequest.getSpendingClassificationId() != null && spendingRequest.getSpendingClassificationId() != spending.getSpendingClassification().getId()) {
-			spending.setSpendingClassification(findSpendingClassificationById(spendingRequest.getSpendingClassificationId()));
+		if (spendingRequest.getClassificationId() != null && spendingRequest.getClassificationId() != spending.getSpendingClassification().getId()) {
+			spending.setSpendingClassification(findSpendingClassificationById(spendingRequest.getClassificationId()));
 		}
 		if (spendingRequest.getDetail() != null && !spendingRequest.getDetail().equals(spending.getDetail())) {
 			spending.setDetail(spendingRequest.getDetail());
