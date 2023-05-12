@@ -71,7 +71,7 @@ public class IncomeServiceImpl implements IncomeService {
 		Income resultIncome = incomeRepository.saveAndFlush(income);
 
 		// TODO: 가영님 주석 풀기 필요
-		// processRecordService.processNewIncome(resultIncome,member);
+		processRecordService.processNewIncome(resultIncome,member);
 
 		return IncomeResponse.builder()
 			.incomeId(resultIncome.getId())
