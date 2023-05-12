@@ -1,21 +1,12 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.SpendingRequest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
-import com.ssafy.moneykeeperbackend.statistics.dto.CompareWithRecentXDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.MonthSpendingRecordDto;
-import com.ssafy.moneykeeperbackend.statistics.dto.TotalAndComparedDto;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthIncomeRecord;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
-import com.ssafy.moneykeeperbackend.statistics.entity.SpendingGroup;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthIncomeRecordRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordByClassRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.SpendingGroupRepository;
+import com.ssafy.moneykeeperbackend.statistics.dto.*;
+import com.ssafy.moneykeeperbackend.statistics.entity.*;
+import com.ssafy.moneykeeperbackend.statistics.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,33 +18,37 @@ import java.util.*;
 @RequiredArgsConstructor
 public class StatService {
     private final com.ssafy.moneykeeperbackend.statistics.repository.MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
+
+    private final GenereateRecordService genereateRecordService;
     private final SpendingGroupRepository spendingGroupRepository;
+
+    private final IncomeGroupRepository incomeGroupRepository;
+
+    private final GroupSpendingRepository groupSpendingRepository;
+
     private final MonthSpendingRecordByClassRepository MonthSpendingRecordByClassRepository;
 
     private final MonthSpendingRecordRepository monthSpendingRecordRepository;
     private final MemberRepository memberRepository;
+
+    private final UpdateDataService updateDataService;
+
     private final MonthIncomeRecordRepository monthIncomeRecordRepository;
 
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
-    public List<CompareWithRecentXDto> compareWithRecentXMonths(int months, Long memberId) {
+    public List<CompareWithRecentXDto> compareWithRecentXMonths(int months, Member member) {
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
         LocalDate firstMonth = curMonth.minusMonths(months);
         LocalDate lastMonth = curMonth.minusMonths(1);
 
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (!optionalMember.isPresent()) {
-            // .. ?
-        }
-        Member member = optionalMember.get();
         List<CompareWithRecentXDto> li = new ArrayList<>();
         //        List<MonthSpendingRecordByClass> curMonthSpendingRecordList = monthSpendingRecordByClassRepository.findByMemberAndYmonth(member,curMonth);
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
 
         for (MajorSpendingClassification msc : mscList) {
-            System.out.println("msc.name : " + msc.getName() + ", memberId : " + member.getId() +", curMonth : " + curMonth);
+            // System.out.println("msc.name : " + msc.getName() + ", memberId : " + member.getId() +", curMonth : " + curMonth);
             MonthSpendingRecordByClass cur = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member,curMonth,msc);
             List<MonthSpendingRecordByClass> lastX = monthSpendingRecordByClassRepository.findByMemberAndMajorSpendingClassAndYmonthBetween(member,msc,firstMonth,lastMonth);
 
@@ -73,6 +68,7 @@ public class StatService {
         }
 
 
+//        Collections.sort(li, (a,b) -> b.getAmount() - a.getAmount());
 
         return li;
 
@@ -174,37 +170,114 @@ public class StatService {
         memberRepository.save(member);
     }
 
-    public TotalAndComparedDto compareWithUsers(int year, int month, long memberId) {
+    public CompareWithUserDto compareWithUsers(int year, int month, Member member) {
         LocalDate ymonth = LocalDate.of(year,month,1);
-
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (!optionalMember.isPresent()) {
-            System.out.println("no member with memberId : " + memberId);
-            return null;
-            // do something
-        }
-
-        Member member = optionalMember.get();
 
         Optional<MonthSpendingRecord> optionalMonthSpendingRecord = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (!optionalMonthSpendingRecord.isPresent()) {
-            System.out.println("no spending record for member " + memberId + " , with ymonth " + ymonth);
-            return null;
+            System.out.println("no spending record for member " + member.getId() + " , with ymonth " + ymonth);
+
+            genereateRecordService.generateRecordForMonth(member, ymonth);
+
+            // throw new NoSuchElementException();
             // for now
         }
+
+        optionalMonthSpendingRecord = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         MonthSpendingRecord msr = optionalMonthSpendingRecord.get();
 
         System.out.println(msr.getYmonth() + " " + msr.getAmount() + " " + msr.getGroupAvg());
 
-        TotalAndComparedDto tcd = TotalAndComparedDto.builder()
-                .total(msr.getAmount())
-                .groupAvg(msr.getGroupAvg())
-                .build();
+        IncomeGroup incomeGroup = member.getIncomeGroup();
 
-        return tcd;
+        if (incomeGroup == null) {
+            System.out.println("XXX");
+            LocalDate start = ymonth.minusMonths(2);
+            List<IncomeGroup> igList = incomeGroupRepository.findAll();
+            List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+            updateDataService.generateGroupSpending(ymonth,mscList,igList);
+            // updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
+            updateDataService.determineIncomeGroupAndUpdateGroupSpending(member,start,ymonth,mscList);
+        }
+
+        incomeGroup = member.getIncomeGroup();
+        //determineIncomeGroupAndUpdateGroupSpending(Member member, LocalDate lastMonth, LocalDate start, LocalDate end, List<MajorSpendingClassification> mscList)
+
+        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+
+        // System.out.println("##");
+        List<SpendingDataDto> group = new ArrayList<>();
+        List<SpendingDataDto> user = new ArrayList<>();
+
+        // System.out.println("targetMonth : " + targetMonth);
+
+        // LocalDate end = targetMonth.minusMonths(1);
+        LocalDate start = ymonth.minusMonths(2);
+
+        // System.out.println("end : " + end + ", start : " + start);
+        int months = 1;
+
+        int groupTotal = 0;
+
+        int userTotal = 0;
+
+        for (MajorSpendingClassification msc : mscList) {
+            GroupSpending gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
+
+            if (gs == null) {
+//                genereateRecordService.generateGroupSpending(ymonth);
+                System.out.println(msc.getName() + " " + ymonth);
+                System.out.println(incomeGroup.getId() + " " + msc.getName() + " " + ymonth);
+//                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
+                throw new NoSuchElementException();
+            }
+            SpendingDataDto sddGroup = SpendingDataDto.builder()
+                    .amount( (int) ((double)gs.getTotal()/(double)gs.getMonths())  )
+                    .category(msc.getName())
+                    .build();
+
+            group.add(sddGroup);
+
+            List<MonthSpendingRecordByClass> msrcList = monthSpendingRecordByClassRepository.findByMemberAndMajorSpendingClassAndYmonthBetween(member,msc,start,ymonth);
+
+            int total = 0;
+
+            months = gs.getMonths();
+
+            if (months == 0) {
+                throw new NoSuchElementException();
+            }
+
+            for (MonthSpendingRecordByClass msrc : msrcList) {
+                total += msrc.getAmount();
+            }
+            userTotal += total;
+
+            groupTotal += gs.getTotal();
+
+            SpendingDataDto sddUser = SpendingDataDto.builder()
+                    .amount( (int) ((double)total/(double)months)  )
+                    .category(msc.getName())
+                    .build();
+
+            user.add(sddUser);
+        }
+
+        Collections.sort(group, (a,b) -> b.getAmount() - a.getAmount());
+        Collections.sort(user, (a,b) -> b.getAmount() - a.getAmount());
+
+        CompareWithUserDto cwud = CompareWithUserDto.builder()
+                .base(incomeGroup.getBase())
+                .below(incomeGroup.getBelow())
+                .user(user)
+                .group(group)
+                .total((int)((double)userTotal/(double)months))
+                .groupAvg((int)((double)groupTotal/(double)months)).build();
+// msr.getGroupAvg()
+// System.out.println("?");
+        return cwud;
     }
 
     public void uponMemberJoin(Member member) {
@@ -215,15 +288,19 @@ public class StatService {
         buildMonthSpendingRecordByClassesForAUser(member,ymonth);
     }
 
-    public void buildMonthSpendingRecordForAUser(Member member, LocalDate ymonth) {
+    public MonthSpendingRecord buildMonthSpendingRecordForAUser(Member member, LocalDate ymonth) {
         MonthSpendingRecord msr = MonthSpendingRecord.builder()
                 .member(member)
                 .amount(0)
                 .ymonth(ymonth)
                 .groupAvg(-1)
                 .build();
-        monthSpendingRecordRepository.save(msr);
+        return monthSpendingRecordRepository.save(msr);
     }
+
+//    public void buildGroupSpendingAvg() {
+//
+//    }
 
     public void buildMonthIncomeRecordForAUser(Member member, LocalDate ymonth) {
         MonthIncomeRecord mir = MonthIncomeRecord.builder()
@@ -248,18 +325,12 @@ public class StatService {
         }
     }
 
-    public MonthSpendingRecordDto getMonthSpending(int year, int month, Long memberId) {
+    public MonthSpendingRecordDto getMonthSpending(int year, int month, Member member) {
         LocalDate ymonth = LocalDate.of(year,month,1);
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (!optionalMember.isPresent()) {
-            // ...
-            System.out.println("member iwth memberId : " + memberId + " doesn't exist");
-            return null;
-        }
-        Optional<MonthSpendingRecord> optionalMSR = monthSpendingRecordRepository.findByMemberAndYmonth(optionalMember.get(),ymonth);
+        Optional<MonthSpendingRecord> optionalMSR = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (!optionalMSR.isPresent()) {
-            System.out.println("Month Spending Record for member : " + memberId + " doesn't exist");
+            System.out.println("Month Spending Record for member : " + member.getId() + " doesn't exist");
             return null;
         }
 
@@ -303,7 +374,7 @@ public class StatService {
 
     public int getThreeMonthIncomeAvg(Member member, LocalDate firstMonth, LocalDate lastMonth) {
         List<MonthIncomeRecord> mirList = monthIncomeRecordRepository.findByMemberAndYmonthBetween(member,firstMonth,lastMonth);
-        System.out.println(member.getId() + " " + firstMonth + " " + lastMonth);
+        // System.out.println(member.getId() + " " + firstMonth + " " + lastMonth);
 
         int listSize = mirList.size();
 
@@ -316,5 +387,45 @@ public class StatService {
         }
 
         return total / listSize;
+    }
+
+    public List<MSRCDto> thisMonthSpendingByCategory(int year, int month, Member member) {
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate curMonth = LocalDate.of(localDate.getYear(),localDate.getMonth(),1);
+
+        List<MSRCDto> li = new ArrayList<>();
+        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
+
+        for (MajorSpendingClassification msc : mscList) {
+            MonthSpendingRecordByClass cur = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member, curMonth, msc);
+
+
+            MSRCDto msrcDto = MSRCDto.builder()
+                    .amount(cur.getAmount())
+                    .category(msc.getName())
+                    .build();
+
+            li.add(msrcDto);
+        }
+
+        Collections.sort(li, (a,b) -> b.getAmount() - a.getAmount());
+
+        return li;
+    }
+
+    public int getMonthIncome(int year, int month, Member member) {
+        LocalDate ymonth = LocalDate.of(year,month,1);
+
+        Optional<MonthIncomeRecord> optionalMIR = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
+
+        if (!optionalMIR.isPresent()) {
+            System.out.println("Month Spending Record for member : " + member.getId() + " doesn't exist");
+            return -1;
+        }
+
+        MonthIncomeRecord mir = optionalMIR.get();
+
+        return mir.getAmount();
     }
 }

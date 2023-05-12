@@ -3,15 +3,13 @@ package com.ssafy.moneykeeperbackend.member.entity;
 import javax.persistence.*;
 
 import com.ssafy.moneykeeperbackend.accountbook.entity.Asset;
+import com.ssafy.moneykeeperbackend.accountbook.entity.Budget;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Income;
 import com.ssafy.moneykeeperbackend.accountbook.entity.IncomeClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
-import com.ssafy.moneykeeperbackend.statistics.entity.IncomeGroup;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecord;
-import com.ssafy.moneykeeperbackend.statistics.entity.MonthSpendingRecordByClass;
-import com.ssafy.moneykeeperbackend.statistics.entity.SpendingGroup;
+import com.ssafy.moneykeeperbackend.statistics.entity.*;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -66,6 +64,9 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Asset> assets;
 
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Budget> budgets;
+
 	@ManyToOne
 	private IncomeGroup incomeGroup;
 	@ManyToOne
@@ -76,6 +77,9 @@ public class Member extends BaseEntity {
 
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	List<MonthSpendingRecord> monthSpendingRecords;
+
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	List<MonthIncomeRecord> monthIncomeRecords;
 
 	public void setSpendingGroup(SpendingGroup spendingGroup) { this.spendingGroup = spendingGroup; }
 	public void setIncomeGroup(IncomeGroup incomeGroup) { this.incomeGroup = incomeGroup; }

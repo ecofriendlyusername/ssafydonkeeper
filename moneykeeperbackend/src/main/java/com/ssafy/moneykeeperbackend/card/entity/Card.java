@@ -16,7 +16,7 @@ public class Card {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -38,60 +38,6 @@ public class Card {
     private int isCredit;
 
     private String benefitImportant;
-
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int food;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int bar;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int cafe;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int life;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int onlineshopping;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int fashionshopping;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int beauty;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int transportation;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int car;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int bills;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int healthcare;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int finance;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int entertainment;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int travel;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int education;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int children;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int pets;
-//
-//    @Column(columnDefinition = "TINYINT DEFAULT 0")
-//    private int people;
 
     @Builder
     public Card(int isCredit, String name, String company, int annualFee, int minimumSpending, String benefitDetail, String benefitImportant, String imgPath) {

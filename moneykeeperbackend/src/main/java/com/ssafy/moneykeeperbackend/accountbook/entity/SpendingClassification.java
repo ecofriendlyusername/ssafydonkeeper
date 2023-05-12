@@ -52,4 +52,12 @@ public class SpendingClassification extends BaseEntity {
 	@OneToMany(mappedBy = "spendingClassification")
 	List<Spending> spendings;
 
+	public void setMajorSpendingClassification(MajorSpendingClassification majorSpendingClassification) {
+		this.majorSpendingClassification = majorSpendingClassification;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

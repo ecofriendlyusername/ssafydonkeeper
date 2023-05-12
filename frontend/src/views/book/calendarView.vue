@@ -73,8 +73,6 @@
           <img src="@/assets/add.png" id="addBtn">
         </p>
       </div>
-
-      <button v-on:click="addData()">dataSet(임시버튼)</button>
     </div>
   </div>
 </template>
@@ -84,82 +82,65 @@ export default {
   data() {
     return {
       today: new Date(),
-      thisMonth: new Date(),
+      year:new Date().getFullYear(),
+      month:new Date().getMonth(),
       days: [],
       // 임시데이터
       incom: 0,
       spend: 0,
-      datas: [
-        {
-          'category': 'incom',
-          'day': 6,
-          'money': 100000,
-        },
-        {
-          'category': 'spend',
-          'day': 6,
-          'money': 10000,
-        },
-        {
-          'category': 'incom',
-          'day': 2,
-          'money': 2000,
-        },
-        {
-          'category': 'spend',
-          'day': 3,
-          'money': 10000,
-        },
-        {
-          'category': 'spend',
-          'day': 5,
-          'money': 10000,
-        },
-      ]
+      datas: [],
     };
   },
   computed: {
     yearMonth() {
-      return `${this.thisMonth.getFullYear()}.${this.thisMonth.getMonth() + 1}`;
+      return `${this.year}.${this.month + 1}`;
     }
   },
   methods: {
-    // 데이터 추가하는 함수, mount 걸어야 함, async로 renderCalendar다음에 시작되도록 해야 함
+    getData(){
+      this.axios.get(process.env.VUE_APP_API_URL + `/account-book/total/amount/${this.year}/${this.month + 1}`)
+      .then(res=>{
+        console.log(res.data)
+        this.incom = res.data.total.totalIncomeAmount
+        this.spend = res.data.total.totalSpendingAmount
+        this.datas = res.data.details
+      })
+      .then(() => {
+        this.renderCalendar()
+      })
+      .then(()=>{
+        this.addData()
+      })
+    },
     addData() {
       const dayday = document.querySelectorAll('.current');
-      this.datas.forEach(data => {
-        let p = document.createElement("p");
-        p.setAttribute('class', data.category)
-        p.innerText = data.money;
-        dayday[data.day - 1].appendChild(p);
-
-        if (data.category == 'incom') {
-          this.incom += data.money
-        } else {
-          this.spend += data.money
+      dayday.forEach((day, idx) => {
+        console.log(this.datas[idx])
+        let p1 = document.createElement("p");
+        p1.setAttribute('class', 'incom')
+        p1.innerText = this.datas[idx].incomeAmount
+        if(this.datas[idx].incomeAmount != 0) {          
+          day.appendChild(p1);
         }
+
+        let p2 = document.createElement("p");
+        p2.setAttribute('class', 'spend')
+        p2.innerText = this.datas[idx].spendingAmount
+        if(this.datas[idx].spendingAmount != 0) {
+          day.appendChild(p2);
+        }
+
       })
-      /*
-      대충 axios.get(url)
-      .then(res => {
-        res.data.'리스트이름'.forEach(data=>{
-          데이터집어넣기
-        })
-      })
-      */
     },
     renderCalendar() {
-      let currentYear = this.thisMonth.getFullYear();
-      let currentMonth = this.thisMonth.getMonth();
-
-      let startDay = new Date(currentYear, currentMonth, 0);
+      let startDay = new Date(this.year, this.month, 0);
       let prevDate = startDay.getDate();
       let prevDay = startDay.getDay();
-
-      let endDay = new Date(currentYear, currentMonth + 1, 0);
+      console.log(startDay);
+      let endDay = new Date(this.year, this.month + 1, 0);
       let nextDate = endDay.getDate();
       let nextDay = endDay.getDay();
-
+      console.log(endDay);
       let days = [];
 
       for (let i = prevDate - prevDay + 1; i <= prevDate; i++) {
@@ -172,29 +153,34 @@ export default {
         days.push({ date: i, class: "day next disable" });
       }
 
-      if (this.today.getMonth() === currentMonth && this.today.getFullYear() === currentYear) {
+      if (this.today.getMonth() === this.month && this.today.getFullYear() === this.year) {
         let todayDate = this.today.getDate();
         days[prevDay + todayDate - 1].class += " today";
       }
 
       this.days = days;
     },
-    goPrev() {
-      let currentYear = this.thisMonth.getFullYear();
-      let currentMonth = this.thisMonth.getMonth();
-      this.thisMonth = new Date(currentYear, currentMonth - 1, 1);
-      this.renderCalendar();
+    async goPrev() {
+      const day = new Date(this.year, this.month - 1, 1);
+      this.year = day.getFullYear()
+      this.month = day.getMonth()
+      await this.getData()
+      await this.renderCalendar();
+      await this.addData();
     },
-    goNext() {
-      let currentYear = this.thisMonth.getFullYear();
-      let currentMonth = this.thisMonth.getMonth();
-      this.thisMonth = new Date(currentYear, currentMonth + 1, 1);
-      this.renderCalendar();
+    async goNext() {
+      const day = new Date(this.year, this.month + 1, 1);
+      this.year = day.getFullYear()
+      this.month = day.getMonth()
+      await this.getData()
+      await this.renderCalendar();
+      await this.addData();
     }
   },
-  async mounted() {
-    this.renderCalendar();
-    // this.addData();
+  mounted() {
+    this.getData()
+    // await this.renderCalendar();
+    // await this.addData();
   }
 };
 </script>
