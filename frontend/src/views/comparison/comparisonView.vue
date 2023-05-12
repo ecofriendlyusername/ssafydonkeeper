@@ -2,7 +2,7 @@
   <div>
     <h1>내 자산 비교</h1>
     <div style="display:flex; padding: 0px 10px; color: #5E29F6; font-weight: bold; font-size: 20px;">
-      월 {{ Math.round(data.base / 10000)}}~{{ Math.round(data.below / 10000)}}만원 그룹<span style="color:black;">은</span>
+      월 {{ Math.round(data.base / 10000) }}~{{ Math.round(data.below / 10000) }}만원 그룹<span style="color:black;">은</span>
     </div>
     <div style="display:flex; padding: 0px 10px; margin-bottom: 20px; font-weight: bold; font-size: 20px;">
       보통 이만큼 써요
@@ -17,7 +17,7 @@
 
     <div style="background-color:#E5E5E5;">
       <p style="display:flex; padding:10px; font-weight:bold; font-size:20px;">여기에 가장 많은 소비를 해요</p>
-      
+
       <div class="pieChart">
         <div style="width:50%">
           나
@@ -27,11 +27,8 @@
           그룹
           <canvas id="yourPieChart"></canvas>
         </div>
+      </div>
     </div>
-    </div>
-
-    
-    
   </div>
 </template>
 
@@ -43,44 +40,42 @@ export default {
     return {
       year: new Date().getFullYear(),
       month: new Date().getMonth(),
-      data:{
-        
-      },
+      data: {},
     }
   },
   methods: {
-    getData(){
+    getData() {
       this.axios.get(process.env.VUE_APP_API_URL + `/statistics/compareusers/${this.year}/${this.month}`)
-      .then(res => {
-        console.log(res.data);
-        this.data = res.data;
-      })
-      .then(() => {
-        this.barChartSet()
-      })
-      .then(()=>{
-        this.pieChartAdd()
-      })
-      .catch(err=>{console.log(err);})
+        .then(res => {
+          console.log(res.data);
+          this.data = res.data;
+        })
+        .then(() => {
+          this.barChartSet()
+        })
+        .then(() => {
+          this.pieChartAdd()
+        })
+        .catch(err => { console.log(err); })
     },
-    barChartSet(){
+    barChartSet() {
       if (this.data.total > this.data.groupAvg) {
         const your = document.querySelector('.yourBar');
-        if (this.data.total < this.data.groupAvg/2) {
+        if (this.data.total > this.data.groupAvg / 2) {
           your.style.width = '50%';
         } else {
           your.style.width = '80%';
         }
       } else {
         const my = document.querySelector('.myBar');
-        if (this.data.groupAvg < this.data.total/2) {
+        if (this.data.groupAvg > this.data.total / 2) {
           my.style.width = '50%';
         } else {
           my.style.width = '80%';
         }
       }
     },
-    pieChartAdd(){
+    pieChartAdd() {
       new Chart(
         document.getElementById('myPieChart'),
         {
@@ -144,6 +139,7 @@ export default {
   padding: 20px;
   background-color: #E5E5E5;
 }
+
 .myBar {
   height: 20px;
   background-color: #5E29F6;
