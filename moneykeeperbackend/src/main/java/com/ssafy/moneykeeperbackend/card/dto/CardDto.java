@@ -7,6 +7,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CardDto {
 
+    Long id;
+
     String company;
 
     String name;
@@ -21,7 +23,8 @@ public class CardDto {
 
 
     @Builder
-    public CardDto(String company, String name, int annualFee, int minimumSpending, String benefits, String imgPath) {
+    public CardDto(Long id, String company, String name, int annualFee, int minimumSpending, String benefits, String imgPath) {
+        this.id = id;
         this.company = company;
         this.name = name;
         this.annualFee = annualFee;

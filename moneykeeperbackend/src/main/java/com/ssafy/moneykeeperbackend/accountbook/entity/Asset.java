@@ -49,4 +49,7 @@ public class Asset extends BaseEntity {
 	@OneToMany(mappedBy = "asset")
 	List<Income> incomes;
 
+	public void setName(String name) {
+		this.name = name;
+	}
 }

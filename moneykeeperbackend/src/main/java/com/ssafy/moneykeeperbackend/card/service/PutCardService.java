@@ -40,10 +40,6 @@ public class PutCardService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        for (String keyword : bfs) System.out.print(keyword + " ");
-
-        System.out.println("done");
     }
 
     public void saveCard(String card) throws Exception {
@@ -130,7 +126,5 @@ public class PutCardService {
                 .build();
 
         cardRepository.save(cardObject);
-
-        System.out.println();
     }
 }
