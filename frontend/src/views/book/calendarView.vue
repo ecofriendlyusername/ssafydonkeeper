@@ -27,15 +27,6 @@
               {{ spend }}
             </div>
           </div>
-
-          <div>
-            <div id="subTitle">
-              잔액
-            </div>
-            <div style="color:black">
-              {{ incom - spend }}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -115,7 +106,6 @@ export default {
     addData() {
       const dayday = document.querySelectorAll('.current');
       dayday.forEach((day, idx) => {
-        console.log(this.datas[idx])
         let p1 = document.createElement("p");
         p1.setAttribute('class', 'incom')
         p1.innerText = this.datas[idx].incomeAmount
@@ -160,21 +150,19 @@ export default {
 
       this.days = days;
     },
-    async goPrev() {
+    goPrev() {
       const day = new Date(this.year, this.month - 1, 1);
       this.year = day.getFullYear()
       this.month = day.getMonth()
-      await this.getData()
-      await this.renderCalendar();
-      await this.addData();
+      this.getData()
+
     },
-    async goNext() {
+    goNext() {
       const day = new Date(this.year, this.month + 1, 1);
       this.year = day.getFullYear()
       this.month = day.getMonth()
-      await this.getData()
-      await this.renderCalendar();
-      await this.addData();
+      this.getData()
+
     }
   },
   mounted() {
