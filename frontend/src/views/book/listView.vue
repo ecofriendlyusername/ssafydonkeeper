@@ -39,7 +39,7 @@
       <div style="height:2px; width:100%; background-color:#F0F2F5; margin-top:-10px; margin-bottom: 8px;"></div>
       <div v-if="spendData.length != 0">
         <div v-for="(dumy, idx) in spendData" :key="idx"
-          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.incomeId, classification:'spending' } })"
+          v-on:click="this.$router.push({ name: 'bookDetail', query: { id: dumy.spendingId, classification:'spending' } })"
           style="display:flex; justify-content:space-between; align-items: center; border-radius: 8px; background-color: #F0F2F5; margin: 10px 5px; padding: 10px 15px;">
           <div>
             <div style="font-weight:bold">
