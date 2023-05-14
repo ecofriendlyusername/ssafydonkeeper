@@ -112,14 +112,12 @@ export default {
         if(this.datas[idx].incomeAmount != 0) {          
           day.appendChild(p1);
         }
-
         let p2 = document.createElement("p");
         p2.setAttribute('class', 'spend')
         p2.innerText = this.datas[idx].spendingAmount
         if(this.datas[idx].spendingAmount != 0) {
           day.appendChild(p2);
         }
-
       })
     },
     renderCalendar() {
