@@ -75,7 +75,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeDetailDto.setStartDate(challenge.getStartDate());
         challengeDetailDto.setEndDate(challenge.getEndDate());
         challengeDetailDto.setParticipant(participantValue);
-        challengeDetailDto.setParticipantCount(challengeRepository.countByChallengeId(id));
+        challengeDetailDto.setParticipantCount(challengeRepository.countById(id));
         return challengeDetailDto;
     }
 

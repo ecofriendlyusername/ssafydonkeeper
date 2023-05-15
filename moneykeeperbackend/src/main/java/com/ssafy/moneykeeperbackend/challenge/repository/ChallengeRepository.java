@@ -11,5 +11,5 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     List<Challenge> findAllByInProgressAndIsFinished(boolean inProgress, boolean isFinished);
     Challenge findById(long id);
 
-    int countByChallengeId(long id);
+    int countById(long id);
 }
