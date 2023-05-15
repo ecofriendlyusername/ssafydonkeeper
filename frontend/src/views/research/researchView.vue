@@ -38,55 +38,28 @@
       <h2>소비 맞춤 카드 추천</h2>
 
       <div style="background-color:#E7E7E7; padding: 1px; margin-top: -10px;">
+
+
         <div v-for="recom_card in recom_cards.filter((_, idx) => idx < 3)" :key="recom_card.id" class="cell"
-        v-on:click="this.$router.push('/research/card/' + recom_card.id)"
-        style="background-color:#E7E7E7; border-color:#E7E7E7;">
-        <div style="display: flex; background-color:white; padding: 10px; margin: 5px;">
-          <div>
-            <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
-          </div>
-
-          <div style="margin-left:20px;">
-            <div style="display:cen; justify-content:end; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 230px; ">
-              {{ recom_card.name }}
+          v-on:click="this.$router.push('/research/card/' + recom_card.id)"
+          style="background-color:#E7E7E7; border-color:#E7E7E7 ;">
+          <div style="display: flex; height: 100px; background-color:white; padding: 10px; margin: 5px;">
+            <div class="cardImg">
+              <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
             </div>
-            <div style="display:flex;">
-              {{ recom_card.company }}
-            </div>
-          </div>
-
-          <!-- <div>
-            <div
-              style="display:flex; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;">
-              {{ recom_card.name }}
-            </div>
-            <div style="display:flex">
-              {{ recom_card.company }}
-            </div>
-          </div> -->
-        </div>
-      </div>
-
-      </div>
-<!-- #E7E7E7 -->
-      <!-- <div v-for="recom_card in recom_cards.filter((_, idx) => idx < 3)" :key="recom_card.id" class="cell"
-        v-on:click="this.$router.push('/research/card/' + recom_card.id)"
-        style="background-color:rebeccapurple; border-color:#E7E7E7;">
-        <div style="display: flex; justify-content: space-between; background-color:white; padding: 10px; margin: 5px;">
-          <div>
-            <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
-          </div>
-          <div>
-            <div
-              style="display:flex; font-weight: bold; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;">
-              {{ recom_card.name }}
-            </div>
-            <div style="display:flex">
-              {{ recom_card.company }}
+            <div style="margin-left:15px;">
+              <div
+                style="display:flex; font-weight: bold; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 225px;">
+                {{ recom_card.name }}
+              </div>
+              <div style="display:flex">
+                {{ recom_card.company }}
+              </div>
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
+
 
       <div style="display:flex; justify-content:end; padding:10px;" v-on:click="this.$router.push('/research/cardList')">
         더보기 > </div>
@@ -110,7 +83,7 @@ export default {
   methods: {
     onImageLoad(event) {
       if (event.target.width < event.target.height) {
-        event.target.setAttribute("class", "trun cardImg");
+        event.target.setAttribute("class", "trun");
       }
     },
     getData() {
@@ -187,5 +160,7 @@ export default {
 
 .trun {
   transform: rotate(90deg);
+  height: 150px;
+  margin-top: -25px;
 }
 </style>
