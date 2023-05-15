@@ -266,6 +266,7 @@ public class StatService {
 
             MSRCDto msrcDto = MSRCDto.builder()
                     .amount(cur.getAmount())
+                    .categoryId(msc.getId())
                     .category(msc.getName())
                     .build();
 

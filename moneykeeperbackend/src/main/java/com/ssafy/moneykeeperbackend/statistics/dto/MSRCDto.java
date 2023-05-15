@@ -8,9 +8,12 @@ import lombok.*;
 public class MSRCDto {
     private String category;
     private int amount;
+
+    private Long categoryId;
     @Builder
-    public MSRCDto(String category, int amount) {
+    public MSRCDto(String category, int amount, Long categoryId) {
         this.category = category;
+        this.categoryId = categoryId;
         this.amount = amount;
     }
 }
