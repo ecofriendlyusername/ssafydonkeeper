@@ -19,11 +19,7 @@ import java.util.*;
 public class CardService {
     private final CardRepository cardRepository;
 
-    private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
-
     private final StatService statService;
-
-    private final MemberRepository memberRepository;
 
     public List<CardSimpleDto> getCards(Member member) {
         LocalDate now = LocalDate.now();
@@ -55,17 +51,7 @@ public class CardService {
             return getDisplayCard();
         }
 
-        for (Card card : cardList) {
-            System.out.println(card.getName() + " " + card.getBenefitDetail() + " " + card.getBenefitImportant());
-        }
-
         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> (a[0]==b[0] ? (a[1]==b[1] ? b[2] - a[2] : b[1] - a[1]) : b[0] - a[0]));
-
-        System.out.println("spendingAvgTotal : " + spendingAvgTotal);
-        System.out.println("incomeAvg : " + incomeAvg);
-        System.out.println("annualFee : " + annualFee);
-        System.out.println("isCredit : " + isCredit);
-        System.out.println("size : " + cardList.size());
 
         for (int i = 0; i < cardList.size(); i++) {
             Card card = cardList.get(i);

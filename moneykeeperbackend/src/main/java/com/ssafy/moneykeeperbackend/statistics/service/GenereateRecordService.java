@@ -8,7 +8,6 @@ import com.ssafy.moneykeeperbackend.statistics.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,15 +15,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GenereateRecordService {
-
-    private final UpdateDataService updateDataService;
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
     private final MonthSpendingRecordRepository monthSpendingRecordRepository;
     private final MonthIncomeRecordRepository monthIncomeRecordRepository;
-
-    private final GroupSpendingRepository groupSpendingRepository;
-
-    private final IncomeGroupRepository incomeGroupRepository;
     private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
     @Transactional
     public void initForNewMember(Member member) {
@@ -32,10 +25,6 @@ public class GenereateRecordService {
         LocalDate now = LocalDate.now();
 
         LocalDate ymonth = LocalDate.of(now.getYear(),now.getMonth(),1);
-        LocalDate lastMonth = ymonth.minusMonths(1);
-        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-        List<IncomeGroup> igList = incomeGroupRepository.findAll();
-//        updateDataService.generateGroupSpending(lastMonth,mscList,igList);
         generateRecordForMonth(member, ymonth);
     }
 
@@ -72,26 +61,7 @@ public class GenereateRecordService {
                             .build();
             monthIncomeRecordRepository.save(monthIncomeRecord);
         } catch (Exception e) {
-            // for now
-            System.out.println("error in init for new member");
-        }
-    }
-
-    public void generateGroupSpending(LocalDate ymonth) {
-        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-        List<IncomeGroup> igList = incomeGroupRepository.findAll();
-
-        for (MajorSpendingClassification msc : mscList) {
-            for (IncomeGroup ig : igList) {
-                GroupSpending groupSpending = GroupSpending.builder()
-                        .incomeGroup(ig)
-                        .majorSpendingClass(msc)
-                        .total(0)
-                        .months(0)
-                        .ymonth(ymonth)
-                        .build();
-                groupSpendingRepository.saveAndFlush(groupSpending);
-            }
+            System.out.println("generate record for month");
         }
     }
 }
