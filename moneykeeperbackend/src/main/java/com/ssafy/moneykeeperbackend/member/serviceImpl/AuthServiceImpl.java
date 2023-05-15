@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import com.ssafy.moneykeeperbackend.member.dto.common.MemberDto;
 import com.ssafy.moneykeeperbackend.statistics.service.GenereateRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,6 @@ import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassifi
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
-import com.ssafy.moneykeeperbackend.member.dto.MemberDto;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.entity.Role;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
