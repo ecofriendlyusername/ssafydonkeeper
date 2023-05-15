@@ -113,7 +113,6 @@ public class BudgetServiceImpl implements BudgetService {
 	 * @date 2023.05.11
 	 * @author 정민지
 	 * */
-	@Transactional
 	@Override
 	public BudgetDTO getMonthAllBudget(Member member, int year, int month) {
 		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(
