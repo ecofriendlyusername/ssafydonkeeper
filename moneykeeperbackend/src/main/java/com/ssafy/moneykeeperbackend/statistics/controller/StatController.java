@@ -33,11 +33,7 @@ public class StatController {
         return new ResponseEntity<MonthSpendingRecordDto>(msr,HttpStatus.OK);
     }
 
-    @GetMapping("/income/{year}/{month}")
-    public ResponseEntity<?> getMonthIncome(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
-        int income = statService.getMonthIncome(year,month,member.getMember());
-        return new ResponseEntity<Integer>(income,HttpStatus.OK);
-    }
+
 
     @GetMapping("/compareusers/{year}/{month}")
     public ResponseEntity<?> compareWithUsers(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
