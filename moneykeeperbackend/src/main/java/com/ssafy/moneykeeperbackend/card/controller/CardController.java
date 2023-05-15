@@ -19,42 +19,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/card")
 public class CardController {
-    private final PutCardService putCardService;
-
-    private final MemberRepository memberRepository;
-
     private final CardService cardService;
     @GetMapping("/cards")
     public ResponseEntity<?> recommendCard(@AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        List<CardSimpleDto> cardDtoList = cardService.getCards(mem);
+        List<CardSimpleDto> cardDtoList = cardService.getCards(member.getMember());
         return new ResponseEntity<>(cardDtoList, HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCard(@AuthenticationPrincipal CustomUserDetails member, @RequestParam Long id) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
+    public ResponseEntity<?> getCard(@RequestParam Long id) {
         CardDto card = cardService.getCard(id);
         return new ResponseEntity<>(card, HttpStatus.OK);
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test() throws Exception {
-        return new ResponseEntity<>("tested", HttpStatus.OK);
-    }
-
-    @PostMapping("/test")
-    public ResponseEntity<?> testPost() throws Exception {
-        return new ResponseEntity<>("tested", HttpStatus.OK);
     }
 }

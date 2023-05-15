@@ -1,7 +1,7 @@
 package com.ssafy.moneykeeperbackend.statistics.service;
 
 import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
-import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
+import com.ssafy.moneykeeperbackend.exception.statistics.FailedToGenerateRecordException;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.statistics.entity.*;
@@ -9,8 +9,6 @@ import com.ssafy.moneykeeperbackend.statistics.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,14 +30,11 @@ public class UpdateDataService {
     private final IncomeGroupRepository incomeGroupRepository;
 
     private final SpendingGroupRepository spendingGroupRepository;
-
-    private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
     public void determineSpendingGroup(Member member, LocalDate start, LocalDate end) { // for test purpose
         List<MonthSpendingRecord> msrList = monthSpendingRecordRepository.findByMemberAndYmonthBetween(member,start,end);
 
         if (msrList.isEmpty()) {
-            System.out.println("No month spending records in the past 3 months to determine spending group");
-            return;
+            throw new FailedToGenerateRecordException();
         }
 
         double total = 0;
@@ -67,9 +62,6 @@ public class UpdateDataService {
     }
 
     public void updateSpendingCompData() {
-        Instant instant = Instant.now();
-        // System.out.println(instant);
-
         List<IncomeGroup> allIncomeGroups = incomeGroupRepository.findAll();
 
         for (IncomeGroup incomeGroup : allIncomeGroups) {
@@ -80,7 +72,6 @@ public class UpdateDataService {
     public void updateByIncomeGroup(IncomeGroup incomeGroup) {
         List<Member> membersInIG = memberRepository.findByIncomeGroup(incomeGroup);
         if (membersInIG.size() == 0) return;
-        // System.out.println("updateByIncomeGroup.. " + incomeGroup.getBelow());
         LocalDate now = LocalDate.now();
         LocalDate thisMonth = LocalDate.of(now.getYear(),now.getMonth(),1);
         LocalDate lastMonth = thisMonth.minusMonths(1);
@@ -92,18 +83,10 @@ public class UpdateDataService {
         for (Member member : membersInIG) {
             Optional<MonthSpendingRecord> optionalMSR = monthSpendingRecordRepository.findByMemberAndYmonth(member,lastMonth);
             if (!optionalMSR.isPresent()) {
-                System.out.println("Month Spending Record doesn't exist for member : " + member.getId() + " with " + lastMonth);
-                membersInIGSize--;
-                continue;
+                throw new FailedToGenerateRecordException();
             }
             groupTotal += optionalMSR.get().getAmount();
         }
-
-        if (membersInIGSize == 0) {
-            System.out.println(membersInIGSize + " " + membersInIG.size());
-        }
-
-        System.out.println("groupTotal : " + groupTotal + ", membersInIGSize : " + membersInIGSize);
 
         int groupAvg = groupTotal / membersInIGSize;
 
@@ -111,16 +94,13 @@ public class UpdateDataService {
             Optional<MonthSpendingRecord> optionalLastMonth = monthSpendingRecordRepository.findByMemberAndYmonth(member,lastMonth);
 
             if (!optionalLastMonth.isPresent()) {
-                System.out.println("last month record doesn't exist for member " + member.getId());
-                continue;
+                throw new FailedToGenerateRecordException();
             }
 
             MonthSpendingRecord msrLastMonth = optionalLastMonth.get();
 
             msrLastMonth.setGroupAvg(groupAvg);
             monthSpendingRecordRepository.save(msrLastMonth);
-
-            System.out.println("groupAvg : " + groupAvg + ", incomeGroup id : " + incomeGroup.getId() + ", month : " + msrLastMonth.getYmonth());
         }
     }
 
@@ -128,9 +108,7 @@ public class UpdateDataService {
         List<MonthIncomeRecord> monthIncomeRecordList = monthIncomeRecordRepository.findByMemberAndYmonthBetween(member,start,end);
 
         if (monthIncomeRecordList.size() == 0) {
-            System.out.println("no month income record available now for : " + member.getId());
-            // ...
-            return;
+            throw new FailedToGenerateRecordException();
         }
 
         double totalIncome = 0;
@@ -144,9 +122,7 @@ public class UpdateDataService {
         List<IncomeGroup> incomeGroups = incomeGroupRepository.findAllByOrderByBelowAsc();
 
         if (incomeGroups.size() == 0) {
-            System.out.println("no income group for now");
-            // ...
-            return;
+            throw new FailedToGenerateRecordException();
         }
 
         boolean incomeGroupSet = false;
@@ -176,9 +152,6 @@ public class UpdateDataService {
             int len = msrcList.size();
 
             if (gs == null) {
-//                List<IncomeGroup> igList = incomeGroupRepository.findAll();
-//                updateDataService.generateGroupSpending(end,mscList,igList);
-//                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,end);
                 throw new NoSuchElementException();
             }
 
@@ -217,20 +190,4 @@ public class UpdateDataService {
             }
         }
     }
-
-//    public void updateGroupSpendingAvg() {
-//        List<GroupSpending> gsList = groupSpendingRepository.findAll();
-//
-//        LocalDate now = LocalDate.now();
-//
-//        LocalDate end = now.minusMonths(1);
-//        end = LocalDate.of(end.getYear(),end.getMonth(),1);
-//        LocalDate start = end.minusMonths(2);
-//
-//        for (GroupSpending gs : gsList) {
-//            MajorSpendingClassification msc = gs.getMajorSpendingClass();
-//
-//
-//        }
-//    }
 }

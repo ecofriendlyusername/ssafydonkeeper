@@ -17,13 +17,10 @@ import java.util.HashSet;
 @Service
 @RequiredArgsConstructor
 public class PutCardService {
-    HashSet<String> bfs = new HashSet<>();
     private final CardRepository cardRepository;
-
-    boolean[] skip = new boolean[60000];
     @Value("${file.image.path}")
     private String absolutePath;
-    public void saveCards() throws Exception {
+    public void saveCards() {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(
