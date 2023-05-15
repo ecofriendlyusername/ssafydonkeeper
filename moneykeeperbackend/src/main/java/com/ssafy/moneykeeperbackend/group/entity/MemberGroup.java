@@ -1,6 +1,4 @@
-package com.ssafy.moneykeeperbackend.accountbook.entity;
-
-import java.time.LocalDate;
+package com.ssafy.moneykeeperbackend.group.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +10,6 @@ import javax.persistence.ManyToOne;
 
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,39 +17,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Budget extends BaseEntity {
+public class MemberGroup extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "budget_id")
+	@Column(name = "member_group_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@NotNull
-	private int year;
-
-	@NotNull
-	private int month;
-
-	@NotNull
-	private int amount;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "major_spending_classification_id")
-	private MajorSpendingClassification majorSpendingClassification;
+	@JoinColumn(name = "group_id")
+	private Group group;
 
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-
-	public void setMajorSpendingClassification(MajorSpendingClassification majorSpendingClassification) {
-		this.majorSpendingClassification = majorSpendingClassification;
-	}
 }
