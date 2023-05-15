@@ -35,29 +35,15 @@ public class BudgetController {
 	private final BudgetService budgetService;
 
 	/*
-	 * 예산 입력
+	 * 예산 입력 또는 수정
 	 *
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
-	@PostMapping()
-	public ResponseEntity<?> addMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
+	@PatchMapping()
+	public ResponseEntity<?> upsertMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
 		@RequestBody BudgetDTO budgetDTO) {
-		return new ResponseEntity<>(budgetService.addMonthBudget(budgetDTO, member.getMember()),
-			HttpStatus.OK);
-	}
-
-	/*
-	 * 월별 소비 분류 별 예산 가져오기
-	 *
-	 * @date 2023.05.09
-	 * @author 정민지
-	 * */
-	@GetMapping("/{year}/{month}")
-	public ResponseEntity<?> getMonthBudget(@AuthenticationPrincipal CustomUserDetails member,
-		@PathVariable int year, @PathVariable int month,
-		@RequestParam(required = false) Long majorSpendingClassificationId) {
-		return new ResponseEntity<>(budgetService.getMonthBudget(member.getMember(), year, month, majorSpendingClassificationId),
+		return new ResponseEntity<>(budgetService.upsertMonthBudget(budgetDTO, member.getMember()),
 			HttpStatus.OK);
 	}
 
@@ -72,18 +58,6 @@ public class BudgetController {
 		@PathVariable int year, @PathVariable int month) {
 		return new ResponseEntity<>(budgetService.getMonthAllBudget(member.getMember(), year, month),
 			HttpStatus.OK);
-	}
-
-	/*
-	 * 예산 수정
-	 *
-	 * @date 2023.05.09
-	 * @author 정민지
-	 * */
-	@PatchMapping()
-	public ResponseEntity<?> updateBudget(@AuthenticationPrincipal CustomUserDetails member,
-		@RequestBody BudgetDTO budgetDTO) {
-		return new ResponseEntity<>(budgetService.updateBudget(member.getMember(), budgetDTO), HttpStatus.OK);
 	}
 
 	/*

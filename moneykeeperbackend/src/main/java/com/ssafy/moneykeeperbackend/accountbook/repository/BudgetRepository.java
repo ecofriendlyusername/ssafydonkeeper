@@ -19,6 +19,8 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
 	List<Budget> findByMemberAndYearAndMonth(Member member, int year, int month);
 
+	List<Budget> findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNotNull(Member member, int year, int month);
+
 	@Modifying
 	void deleteByMemberAndYearAndMonth(Member member, int year, int month);
 
