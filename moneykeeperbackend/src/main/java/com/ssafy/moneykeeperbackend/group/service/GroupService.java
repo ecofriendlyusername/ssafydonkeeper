@@ -9,4 +9,8 @@ public interface GroupService {
 	GroupResponse addGroup(GroupRequest groupRequest, Member member);
 
 	GroupResponse getGroupInfo(Long groupId, int year, int month);
+
+	void deleteMemberGroup(Long groupId, Member member);
+
+	void deleteGroup(Long groupId, Member member);
 }

@@ -89,6 +89,7 @@ public class GroupServiceImpl implements GroupService {
 			groupMemberResponses.add(GroupMemberResponse.builder()
 				.member_id(memberGroup.getMember().getId())
 				.nickname(memberGroup.getMember().getNickname())
+				.groupRole(memberGroup.getMember().getRole().toString())
 				.thisMonthTotalAmount(0)
 				.build());
 		}
@@ -116,6 +117,7 @@ public class GroupServiceImpl implements GroupService {
 	 * @date 2023.05.15
 	 * @author 정민지
 	 * */
+	@Override
 	public GroupResponse getGroupInfo(Long groupId, int year, int month) {
 		Group group = groupRepository.findById(groupId)
 			.orElseThrow(() -> new GroupRuntimeException(GroupExceptionEnum.GROUP_ID_NULL));
@@ -132,11 +134,13 @@ public class GroupServiceImpl implements GroupService {
 				.member_id(member.getId())
 				.email(member.getEmail())
 				.nickname(member.getNickname())
+				.groupRole(memberGroup.getMember().getRole().toString())
 				.thisMonthTotalAmount(spendingService.getMonthSpendingAmount(memberGroup.getMember(), year, month))
 				.build());
 		}
 
-		Collections.sort(groupMemberResponses, Comparator.comparingInt(GroupMemberResponse::getThisMonthTotalAmount).reversed());
+		Collections.sort(groupMemberResponses,
+			Comparator.comparingInt(GroupMemberResponse::getThisMonthTotalAmount).reversed());
 
 		List<GroupMemberResponse> top3Members = groupMemberResponses.stream()
 			.limit(3)
@@ -148,5 +152,38 @@ public class GroupServiceImpl implements GroupService {
 			.top3Members(top3Members)
 			.allMembers(groupMemberResponses)
 			.build();
+	}
+
+	/*
+	 * 그룹 탈퇴
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public void deleteMemberGroup(Long groupId, Member member) {
+		memberGroupRepository.deleteByMemberAndGroup(member, groupRepository.findById(groupId)
+			.orElseThrow(() -> new GroupRuntimeException(GroupExceptionEnum.GROUP_ID_NULL)));
+	}
+
+	/*
+	 * 그룹 삭제
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public void deleteGroup(Long groupId, Member member) {
+		MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroup(member, groupRepository.findById(groupId)
+				.orElseThrow(() -> new GroupRuntimeException(GroupExceptionEnum.GROUP_ID_NULL)))
+			.orElseThrow(() -> new GroupRuntimeException(GroupExceptionEnum.GROUP_ID_AND_MEMBER_RELATION_NULL));
+
+		if (memberGroup.getGroupRole() == GroupRole.GROUP_LEADER) {
+			groupRepository.deleteById(groupId);
+		} else {
+			throw new GroupRuntimeException(GroupExceptionEnum.MEMBER_IS_NOT_GROUP_LEADER);
+		}
 	}
 }
