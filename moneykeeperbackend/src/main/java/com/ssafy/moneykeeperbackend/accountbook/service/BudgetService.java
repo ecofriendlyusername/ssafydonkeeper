@@ -11,5 +11,5 @@ public interface BudgetService {
 
 	BudgetDTO getMonthAllBudget(Member member, int year, int month);
 
-	void deleteBudget(Member member, int year, int month, Long majorSpendingClassificationId);
+	void deleteBudget(Member member, int year, int month, Long SpendingClassificationId);
 }

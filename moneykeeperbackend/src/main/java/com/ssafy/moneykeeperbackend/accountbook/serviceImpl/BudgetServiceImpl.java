@@ -2,17 +2,16 @@ package com.ssafy.moneykeeperbackend.accountbook.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.moneykeeperbackend.accountbook.dto.BudgetDTO;
-import com.ssafy.moneykeeperbackend.accountbook.dto.MajorSpendingClassificationAmountDTO;
+import com.ssafy.moneykeeperbackend.accountbook.dto.SpendingClassificationAmountDTO;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Budget;
-import com.ssafy.moneykeeperbackend.accountbook.entity.MajorSpendingClassification;
 import com.ssafy.moneykeeperbackend.accountbook.repository.BudgetRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
+import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.accountbook.service.BudgetService;
 import com.ssafy.moneykeeperbackend.exception.accountbook.AccountBookExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.accountbook.AccountBookRuntimeException;
@@ -28,7 +27,7 @@ public class BudgetServiceImpl implements BudgetService {
 
 	private final BudgetRepository budgetRepository;
 
-	private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
+	private final SpendingClassificationRepository spendingClassificationRepository;
 
 	/*
 	 * 예산 입력 또는 수정
@@ -39,10 +38,10 @@ public class BudgetServiceImpl implements BudgetService {
 	@Transactional
 	@Override
 	public BudgetDTO upsertMonthBudget(BudgetDTO budgetDTO, Member member) {
-		List<MajorSpendingClassificationAmountDTO> majorSpendingClassificationAmountDTOS = budgetDTO.getDatas();
+		List<SpendingClassificationAmountDTO> spendingClassificationAmountDTOS = budgetDTO.getDatas();
 
 		// 전체 예산이 있으면 수정, 없으면 등록
-		Budget budget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(member,
+		Budget budget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(member,
 			budgetDTO.getYear(), budgetDTO.getMonth()).orElse(null);
 
 		if (budget == null) {
@@ -58,29 +57,29 @@ public class BudgetServiceImpl implements BudgetService {
 		}
 
 		// 소비 분류 별 예산이 있으면 수정, 없으면 등록
-		for (MajorSpendingClassificationAmountDTO majorSpendingClassificationAmountDTO : majorSpendingClassificationAmountDTOS) {
-			Budget classificationBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationId(
+		for (SpendingClassificationAmountDTO spendingClassificationAmountDTO : spendingClassificationAmountDTOS) {
+			Budget classificationBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationId(
 				member, budgetDTO.getYear(), budgetDTO.getMonth(),
-				majorSpendingClassificationAmountDTO.getClassificationId()).orElse(null);
+				spendingClassificationAmountDTO.getClassificationId()).orElse(null);
 
 			if (classificationBudget == null) {
 				budgetRepository.saveAndFlush(Budget.builder()
 					.year(budgetDTO.getYear())
 					.month(budgetDTO.getMonth())
 					.member(member)
-					.amount(majorSpendingClassificationAmountDTO.getAmount())
-					.majorSpendingClassification(majorSpendingClassificationRepository.findById(
-							majorSpendingClassificationAmountDTO.getClassificationId())
+					.amount(spendingClassificationAmountDTO.getAmount())
+					.spendingClassification(spendingClassificationRepository.findById(
+							spendingClassificationAmountDTO.getClassificationId())
 						.orElseThrow(() -> new AccountBookRuntimeException(
-							AccountBookExceptionEnum.MAJOR_SPENDING_CLASSIFICATION_ID_NULL)))
+							AccountBookExceptionEnum.SPENDING_CLASSIFICATION_ID_NULL)))
 					.build());
 			} else {
-				classificationBudget.setAmount(majorSpendingClassificationAmountDTO.getAmount());
+				classificationBudget.setAmount(spendingClassificationAmountDTO.getAmount());
 				budgetRepository.saveAndFlush(classificationBudget);
 			}
 		}
 
-		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(
+		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(
 			member,
 			budgetDTO.getYear(), budgetDTO.getMonth()).orElse(null);
 
@@ -90,20 +89,20 @@ public class BudgetServiceImpl implements BudgetService {
 			.total_amount(resultTotalBudget != null ? resultTotalBudget.getAmount() : 0)
 			.build();
 
-		List<Budget> resultClassificationBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNotNull(
+		List<Budget> resultClassificationBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNotNull(
 			member, budgetDTO.getYear(), budgetDTO.getMonth());
 
-		List<MajorSpendingClassificationAmountDTO> resultMajorSpendingClassificationAmountDTOs = new ArrayList<>();
+		List<SpendingClassificationAmountDTO> resultSpendingClassificationAmountDTOS = new ArrayList<>();
 		for (Budget forBudget : resultClassificationBudget) {
-			resultMajorSpendingClassificationAmountDTOs.add(
-				MajorSpendingClassificationAmountDTO.builder()
-					.classificationId(forBudget.getMajorSpendingClassification().getId())
+			resultSpendingClassificationAmountDTOS.add(
+				SpendingClassificationAmountDTO.builder()
+					.classificationId(forBudget.getSpendingClassification().getId())
 					.amount(forBudget.getAmount())
 					.build()
 			);
 		}
 
-		resultBudgetDTO.setDatas(resultMajorSpendingClassificationAmountDTOs);
+		resultBudgetDTO.setDatas(resultSpendingClassificationAmountDTOS);
 		return resultBudgetDTO;
 	}
 
@@ -115,7 +114,7 @@ public class BudgetServiceImpl implements BudgetService {
 	 * */
 	@Override
 	public BudgetDTO getMonthAllBudget(Member member, int year, int month) {
-		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(
+		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(
 			member, year, month).orElse(null);
 
 		BudgetDTO resultBudgetDTO = BudgetDTO.builder()
@@ -124,20 +123,20 @@ public class BudgetServiceImpl implements BudgetService {
 			.total_amount(resultTotalBudget != null ? resultTotalBudget.getAmount() : 0)
 			.build();
 
-		List<Budget> resultClassificationBudget = budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNotNull(
+		List<Budget> resultClassificationBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNotNull(
 			member, year, month);
 
-		List<MajorSpendingClassificationAmountDTO> resultMajorSpendingClassificationAmountDTOs = new ArrayList<>();
+		List<SpendingClassificationAmountDTO> resultSpendingClassificationAmountDTOS = new ArrayList<>();
 		for (Budget forBudget : resultClassificationBudget) {
-			resultMajorSpendingClassificationAmountDTOs.add(
-				MajorSpendingClassificationAmountDTO.builder()
-					.classificationId(forBudget.getMajorSpendingClassification().getId())
+			resultSpendingClassificationAmountDTOS.add(
+				SpendingClassificationAmountDTO.builder()
+					.classificationId(forBudget.getSpendingClassification().getId())
 					.amount(forBudget.getAmount())
 					.build()
 			);
 		}
 
-		resultBudgetDTO.setDatas(resultMajorSpendingClassificationAmountDTOs);
+		resultBudgetDTO.setDatas(resultSpendingClassificationAmountDTOS);
 		return resultBudgetDTO;
 	}
 
@@ -149,17 +148,17 @@ public class BudgetServiceImpl implements BudgetService {
 	 * */
 	@Transactional
 	@Override
-	public void deleteBudget(Member member, int year, int month, Long majorSpendingClassificationId) {
+	public void deleteBudget(Member member, int year, int month, Long spendingClassificationId) {
 
-		if (majorSpendingClassificationId == null) {
+		if (spendingClassificationId == null) {
 			budgetRepository.deleteByMemberAndYearAndMonth(member, year, month);
 		} else {
-			budgetRepository.findByMemberAndYearAndMonthAndMajorSpendingClassificationId(member, year, month,
-					majorSpendingClassificationId)
+			budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationId(member, year, month,
+					spendingClassificationId)
 				.orElseThrow(() -> new AccountBookRuntimeException(AccountBookExceptionEnum.BUDGET_NULL));
 
-			budgetRepository.deleteByMemberAndYearAndMonthAndMajorSpendingClassificationId(member, year, month,
-				majorSpendingClassificationId);
+			budgetRepository.deleteByMemberAndYearAndMonthAndSpendingClassificationId(member, year, month,
+				spendingClassificationId);
 		}
 
 	}

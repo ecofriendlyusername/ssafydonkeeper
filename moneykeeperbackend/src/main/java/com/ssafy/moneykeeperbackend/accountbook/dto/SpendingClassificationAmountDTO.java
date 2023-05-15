@@ -7,7 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MajorSpendingClassificationAmountDTO {
+public class SpendingClassificationAmountDTO {
 
 	private Long classificationId;
 

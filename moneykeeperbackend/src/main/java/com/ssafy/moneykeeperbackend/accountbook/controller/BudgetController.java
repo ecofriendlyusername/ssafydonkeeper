@@ -61,8 +61,8 @@ public class BudgetController {
 	 * */
 	@DeleteMapping("/{year}/{month}")
 	public ResponseEntity<?> deleteBudget(@AuthenticationPrincipal CustomUserDetails member, @PathVariable int year,
-		@PathVariable int month, @RequestParam(required = false) Long majorSpendingClassificationId) {
-		budgetService.deleteBudget(member.getMember(), year, month, majorSpendingClassificationId);
+		@PathVariable int month, @RequestParam(required = false) Long spendingClassificationId) {
+		budgetService.deleteBudget(member.getMember(), year, month, spendingClassificationId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

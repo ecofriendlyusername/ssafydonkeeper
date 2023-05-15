@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class Budget extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "budget_id")
 	private Long id;
 
@@ -45,14 +46,14 @@ public class Budget extends BaseEntity {
 	private int amount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "major_spending_classification_id")
-	private MajorSpendingClassification majorSpendingClassification;
+	@JoinColumn(name = "spending_classification_id")
+	private SpendingClassification spendingClassification;
 
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
-	public void setMajorSpendingClassification(MajorSpendingClassification majorSpendingClassification) {
-		this.majorSpendingClassification = majorSpendingClassification;
+	public void setSpendingClassification(SpendingClassification spendingClassification) {
+		this.spendingClassification = spendingClassification;
 	}
 }
