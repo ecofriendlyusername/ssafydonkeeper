@@ -119,6 +119,7 @@ public class SpendingClassificationServiceImpl implements SpendingClassification
 	 * @date 2023.05.11
 	 * @author 정민지
 	 * */
+	@Transactional
 	@Override
 	public void deleteSpendingClassification(Long spendingclassificationId) {
 		spendingClassificationRepository.deleteById(spendingclassificationId);
