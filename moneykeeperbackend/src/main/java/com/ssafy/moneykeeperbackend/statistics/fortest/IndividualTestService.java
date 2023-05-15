@@ -3,10 +3,7 @@ package com.ssafy.moneykeeperbackend.statistics.fortest;
 import com.ssafy.moneykeeperbackend.accountbook.entity.*;
 import com.ssafy.moneykeeperbackend.accountbook.repository.*;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
-import com.ssafy.moneykeeperbackend.statistics.repository.*;
 import com.ssafy.moneykeeperbackend.statistics.service.ProcessRecordService;
-import com.ssafy.moneykeeperbackend.statistics.service.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,29 +13,15 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @RequiredArgsConstructor
 public class IndividualTestService {
-
-    private final UpdateDataService updateDataService;
-
     private final IncomeClassificationRepository incomeClassificationRepository;
     private final SpendingRepository spendingRepository;
     private final IncomeRepository incomeRepository;
-    private final MemberRepository memberRepository;
     private final AssetRepository assetRepository;
-    private final MonthSpendingRecordRepository monthSpendingRecordRepository;
     private final SpendingClassificationRepository spendingClassificationRepository;
-    private final MonthSpendingRecordByClassRepository monthSpendingRecordByClassRepository;
 
     private final ProcessRecordService processSpendingService;
 
-    private final MonthIncomeRecordRepository monthIncomeRecordRepository;
-
-    private final SpendingGroupRepository spendingGroupRepository;
-    private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
-    private final IncomeGroupRepository incomeGroupRepository;
     public void generateMockSpendingsWith(Member member, boolean isLight) {
-//        String[] months = {"2023-01-","2023-02-","2023-03-","2023-04-","2023-05"};
-//        String[] days = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"};
-
         int dataCount = isLight ? 5 : 20;
 
         int minSpending = isLight ? 32000 : 8000;

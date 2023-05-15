@@ -45,8 +45,7 @@ public class ProcessRecordService {
         Optional<SpendingClassification> optionalSC = spendingClassificationRepository.findById(spending.getSpendingClassification().getId());
 
         if (!optionalSC.isPresent()) {
-            System.out.println("spending classification with id " + spending.getSpendingClassification().getId() + " doesn't exist");
-            return;
+            throw new FailedToGenerateRecordException();
         }
 
         SpendingClassification sc = optionalSC.get();
@@ -54,8 +53,7 @@ public class ProcessRecordService {
         MajorSpendingClassification msc = sc.getMajorSpendingClassification();
 
         if (msc == null) {
-            System.out.println("major spending classification doesn't exist for spending classification with id " + spending.getSpendingClassification().getId());
-            return;
+            throw new FailedToGenerateRecordException();
         }
 
         Optional<MonthSpendingRecord> msrOptional = monthSpendingRecordRepository.findByMemberAndYmonth(member,ymonth);
@@ -71,9 +69,7 @@ public class ProcessRecordService {
         msrc = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member,ymonth,msc);
 
         if (msrc == null) {
-            // throw new FailedToGenerateRecordException();
-            System.out.println("X");
-            // for now
+            throw new FailedToGenerateRecordException();
         }
 
         msr.setAmount(msr.getAmount()+spending.getAmount());
@@ -93,7 +89,6 @@ public class ProcessRecordService {
         optionalMir = monthIncomeRecordRepository.findByMemberAndYmonth(member,ymonth);
 
         if (optionalMir.isEmpty()) {
-            System.out.println("ymonth : .. " + ymonth);
             throw new NoSuchElementException();
         }
 

@@ -19,74 +19,39 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/statistics")
 public class StatController {
-
-    private final MemberRepository memberRepository;
     private final StatService statService;
     @GetMapping("/comparemonths/{months}")
     @ApiOperation(value = "test", notes = "test")
     public ResponseEntity<?> compareWithRecentXMonths(@PathVariable int months, @AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        List<CompareWithRecentXDto> li = statService.compareWithRecentXMonths(months,mem);
+        List<CompareWithRecentXDto> li = statService.compareWithRecentXMonths(months,member.getMember());
         return new ResponseEntity<List<CompareWithRecentXDto>>(li, HttpStatus.OK);
     }
 
     @GetMapping("/spending/{year}/{month}")
     public ResponseEntity<?> getMonthSpending(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        MonthSpendingRecordDto msr = statService.getMonthSpending(year,month,mem);
+        MonthSpendingRecordDto msr = statService.getMonthSpending(year,month,member.getMember());
         return new ResponseEntity<MonthSpendingRecordDto>(msr,HttpStatus.OK);
     }
 
     @GetMapping("/income/{year}/{month}")
     public ResponseEntity<?> getMonthIncome(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        int income = statService.getMonthIncome(year,month,mem);
+        int income = statService.getMonthIncome(year,month,member.getMember());
         return new ResponseEntity<Integer>(income,HttpStatus.OK);
     }
 
     @GetMapping("/compareusers/{year}/{month}")
     public ResponseEntity<?> compareWithUsers(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        CompareWithUserDto compareWithUserDto = statService.compareWithUsers(year,month,mem);
+        CompareWithUserDto compareWithUserDto = statService.compareWithUsers(year,month,member.getMember());
         if (compareWithUserDto == null) {
-            // for now
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
-        // System.out.println(compareWithUserDto.getTotal());
         return new ResponseEntity<CompareWithUserDto>(compareWithUserDto, HttpStatus.OK);
     }
 
     @GetMapping("/monthlyspendingbycat/{year}/{month}")
     public ResponseEntity<?> thisMonthSpendingByCategory(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal CustomUserDetails member) {
-        Member mem;
-        if (member == null) {
-            mem = memberRepository.findByNickname("test"); // for test only
-        } else {
-            mem = member.getMember();
-        }
-        List<MSRCDto> msrcDtoList = statService.thisMonthSpendingByCategory(year,month,mem);
+        List<MSRCDto> msrcDtoList = statService.thisMonthSpendingByCategory(year,month,member.getMember());
         if (msrcDtoList == null) {
-            // for now
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<List<MSRCDto>>(msrcDtoList, HttpStatus.OK);
