@@ -41,6 +41,18 @@ public class GroupController {
 	}
 
 	/*
+	 * 로그인한 멤버가 가입된 그룹 전체 조회
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@GetMapping()
+	public ResponseEntity<?> getAllMembersGroup(@AuthenticationPrincipal CustomUserDetails member) {
+		return new ResponseEntity<>(groupService.getAllMembersGroup(member.getMember()),
+			HttpStatus.OK);
+	}
+
+	/*
 	 * 그룹 생성
 	 *
 	 * @date 2023.05.15

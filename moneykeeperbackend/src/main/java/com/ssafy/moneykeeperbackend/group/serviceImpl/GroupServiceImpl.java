@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.moneykeeperbackend.accountbook.dto.IdNameDTO;
 import com.ssafy.moneykeeperbackend.accountbook.service.SpendingService;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
@@ -185,5 +186,20 @@ public class GroupServiceImpl implements GroupService {
 		} else {
 			throw new GroupRuntimeException(GroupExceptionEnum.MEMBER_IS_NOT_GROUP_LEADER);
 		}
+	}
+
+	/*
+	 * 로그인한 멤버가 가입된 그룹 전체 조회
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@Override
+	public List<IdNameDTO> getAllMembersGroup(Member member) {
+		return memberGroupRepository.findByMember(member).stream().map(memberGroup -> IdNameDTO.builder()
+			.id(memberGroup.getGroup().getId())
+			.name(memberGroup.getGroup().getName())
+			.build())
+			.collect(Collectors.toList());
 	}
 }
