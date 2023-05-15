@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.moneykeeperbackend.accountbook.dto.BudgetDTO;
 import com.ssafy.moneykeeperbackend.accountbook.dto.SpendingClassificationAmountDTO;
+import com.ssafy.moneykeeperbackend.accountbook.dto.SpendingClassificationNameAmountDTO;
+import com.ssafy.moneykeeperbackend.accountbook.dto.response.BudgetResponse;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Budget;
 import com.ssafy.moneykeeperbackend.accountbook.repository.BudgetRepository;
 import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassificationRepository;
@@ -113,11 +115,11 @@ public class BudgetServiceImpl implements BudgetService {
 	 * @author 정민지
 	 * */
 	@Override
-	public BudgetDTO getMonthAllBudget(Member member, int year, int month) {
+	public BudgetResponse getMonthAllBudget(Member member, int year, int month) {
 		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(
 			member, year, month).orElse(null);
 
-		BudgetDTO resultBudgetDTO = BudgetDTO.builder()
+		BudgetResponse resultBudgetDTO = BudgetResponse.builder()
 			.year(year)
 			.month(month)
 			.total_amount(resultTotalBudget != null ? resultTotalBudget.getAmount() : 0)
@@ -126,11 +128,12 @@ public class BudgetServiceImpl implements BudgetService {
 		List<Budget> resultClassificationBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNotNull(
 			member, year, month);
 
-		List<SpendingClassificationAmountDTO> resultSpendingClassificationAmountDTOS = new ArrayList<>();
+		List<SpendingClassificationNameAmountDTO> resultSpendingClassificationAmountDTOS = new ArrayList<>();
 		for (Budget forBudget : resultClassificationBudget) {
 			resultSpendingClassificationAmountDTOS.add(
-				SpendingClassificationAmountDTO.builder()
+				SpendingClassificationNameAmountDTO.builder()
 					.classificationId(forBudget.getSpendingClassification().getId())
+					.name(forBudget.getSpendingClassification().getName())
 					.amount(forBudget.getAmount())
 					.build()
 			);
