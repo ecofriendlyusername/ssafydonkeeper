@@ -3,6 +3,7 @@ package com.ssafy.moneykeeperbackend.group.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,18 @@ public class GroupController {
 	}
 
 	/*
+	 * 로그인한 멤버가 가입된 그룹 전체 조회
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@GetMapping()
+	public ResponseEntity<?> getAllMembersGroup(@AuthenticationPrincipal CustomUserDetails member) {
+		return new ResponseEntity<>(groupService.getAllMembersGroup(member.getMember()),
+			HttpStatus.OK);
+	}
+
+	/*
 	 * 그룹 생성
 	 *
 	 * @date 2023.05.15
@@ -50,6 +63,32 @@ public class GroupController {
 		@RequestBody GroupRequest groupRequest) {
 		return new ResponseEntity<>(groupService.addGroup(groupRequest, member.getMember()),
 			HttpStatus.OK);
+	}
+
+	/*
+	 * 그룹 탈퇴
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@DeleteMapping("/secession")
+	public ResponseEntity<?> deleteMemberGroup(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestParam Long groupId) {
+		groupService.deleteMemberGroup(groupId, member.getMember());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/*
+	 * 그룹 삭제
+	 *
+	 * @date 2023.05.15
+	 * @author 정민지
+	 * */
+	@DeleteMapping()
+	public ResponseEntity<?> deleteGroup(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestParam Long groupId) {
+		groupService.deleteGroup(groupId, member.getMember());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
