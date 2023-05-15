@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.exception;
 
+import com.ssafy.moneykeeperbackend.exception.statistics.FailedToGenerateRecordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -37,6 +38,18 @@ public class ExceptionAdvice {
 			runError.getErrorEnum().getHttpStatus().value(),
 			runError.getErrorEnum().getHttpCode(),
 			runError.getMessage()), runError.getErrorEnum().getHttpStatus());
+	}
+
+	@ExceptionHandler({FailedToGenerateRecordException.class})
+	public ResponseEntity<ExceptionResponseEntity> failedToGenerateRecordExceptionHandler(
+			final FailedToGenerateRecordException runError) {
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		logger.error("failedToGenerateExceptionHandler: ", runError);
+
+		return new ResponseEntity<>(new ExceptionResponseEntity(
+				500,
+				"failed to generate exception",
+				runError.getMessage()), null);
 	}
 
 }
