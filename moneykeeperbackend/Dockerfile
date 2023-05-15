@@ -10,6 +10,6 @@ RUN ./gradlew bootJAR
 FROM adoptopenjdk/openjdk11
 COPY --from=builder build/libs/*.jar app.jar
 COPY src/main/resources/application.yml /config/application.yml
-COPY src/main/resources/application.yml /config/application.yml
+COPY src/main/resources/app/card_pure.txt /config/card_pure.txt
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
