@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class MajorSpendingClassification extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "major_spending_classification_id")
 	private Long id;
 
@@ -30,9 +30,6 @@ public class MajorSpendingClassification extends BaseEntity {
 
 	@OneToMany(mappedBy = "majorSpendingClassification")
 	List<SpendingClassification> spendingClassifications;
-
-	@OneToMany(mappedBy = "majorSpendingClassification", fetch = FetchType.LAZY)
-	private List<Budget> budgets;
 
 	@OneToMany(mappedBy = "majorSpendingClass", fetch = FetchType.LAZY)
 	private List<GroupSpending> groupSpending;

@@ -1,10 +1,5 @@
 package com.ssafy.moneykeeperbackend.accountbook.controller;
 
-import java.util.Optional;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,14 +7,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.moneykeeperbackend.accountbook.dto.BudgetDTO;
-import com.ssafy.moneykeeperbackend.accountbook.dto.request.IncomeRequest;
 import com.ssafy.moneykeeperbackend.accountbook.service.BudgetService;
 import com.ssafy.moneykeeperbackend.security.userDetail.CustomUserDetails;
 
@@ -68,8 +61,8 @@ public class BudgetController {
 	 * */
 	@DeleteMapping("/{year}/{month}")
 	public ResponseEntity<?> deleteBudget(@AuthenticationPrincipal CustomUserDetails member, @PathVariable int year,
-		@PathVariable int month, @RequestParam(required = false) Long majorSpendingClassificationId) {
-		budgetService.deleteBudget(member.getMember(), year, month, majorSpendingClassificationId);
+		@PathVariable int month, @RequestParam(required = false) Long spendingClassificationId) {
+		budgetService.deleteBudget(member.getMember(), year, month, spendingClassificationId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

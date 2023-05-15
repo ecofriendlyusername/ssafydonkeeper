@@ -15,7 +15,8 @@ public enum AuthExceptionEnum {
 	KAKAO_SHOULD_HAVE_EMAIL(HttpStatus.UNAUTHORIZED, "A0001", "카카오 이메일 제공에 동의해주셔야 서비스 이용이 가능합니다."),
 	REQUIRED_RE_LOGIN(HttpStatus.UNAUTHORIZED, "A0002", "재로그인이 필요합니다."),
 
-	REQUIRED_LOGIN_CHECK(HttpStatus.UNAUTHORIZED, "A0003", "로그인된 멤버가 없습니다. 확인 부탁드립니다.");
+	REQUIRED_LOGIN_CHECK(HttpStatus.UNAUTHORIZED, "A0003", "로그인된 멤버가 없습니다. 확인 부탁드립니다."),
+	MEMBER_ID_NULL(HttpStatus.UNAUTHORIZED, "A0004", "해당 아이디의 멤버가 존재하지 않습니다.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;
