@@ -1,5 +1,7 @@
 package com.ssafy.moneykeeperbackend.accountbook.dto;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,10 +15,8 @@ public class BudgetDTO {
 
 	private int month;
 
-	private int amount;
+	private int total_amount;
 
-	private String majorSpendingClassificationName;
-
-	private Long majorSpendingClassificationId;
+	private List<MajorSpendingClassificationAmountDTO> datas;
 
 }

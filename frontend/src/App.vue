@@ -45,12 +45,6 @@
     <div @click="addassest">addassest</div>
 
     <br>
-    <div @click="budgetadd">budgetadd</div>
-
-    <br>
-    <div @click="budgetmonthget">budgetmonthget</div>
-    
-    <br>
     <div @click="allBudget">allBudget</div>
 
     <br>
@@ -286,32 +280,6 @@ export default {
       
     },
 
-    budgetadd() {
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/account-book/budget`,
-        data: {
-          "year" : 2023,
-          "month" : 5,
-          "amount" : 3300,
-          "majorSpendingClassificationId":0
-        },
-      })
-        .then((res) => {
-          console.log("add")
-          console.log(res.data)
-        })
-    },
-    budgetmonthget() {
-      axios({
-        method: 'get',
-        url: `http://localhost:8080/api/account-book/budget/2023/5?majorSpendingClassificationId=1`,
-      })
-        .then((res) => {
-          console.log("get")
-          console.log(res.data)
-        })
-    },
     allBudget() {
       axios({
         method: 'get',
@@ -326,12 +294,21 @@ export default {
       axios({
         method: 'patch',
         url: `http://localhost:8080/api/account-book/budget`,
-        data: {
-          "year" : 2023,
-          "month" : 5,
-          "amount" : 99999,
-          "majorSpendingClassificationId" : 0
-        },
+        data:{
+            "year": 2023,
+            "month": 5,
+            "total_amount": 1000000,
+            "datas": [
+              {
+                "classificationId": 1, 
+                "amount": 2, 
+              },
+              {
+                "classificationId": 2,
+                "amount": 4,
+              },
+            ] 
+          }
       })
         .then((res) => {
           console.log("budgetpatch")
