@@ -108,8 +108,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<ChallengeListDto> getChallengeInProgressList(boolean inProgress, boolean isFinished, Member member) {
-        List<ChallengeListDto> challenges = challengeMemberRepository.findChallengeNameAndMemberIdByMemberIdAndInProgressAndIsFinished( member.getId(), inProgress, isFinished);
-        return challenges;
+        LocalDate today = LocalDate.now();
+
+        List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndMemberIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
+
+
+        return challengeList;
     }
 
     @Override

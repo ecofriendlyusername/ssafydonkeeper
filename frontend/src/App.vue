@@ -88,6 +88,28 @@
 
     <br>
     <div @click="incomedelet">incomedelet</div>
+
+    <br>
+    <div @click="postChallenge">postChallenge</div> 
+
+    <br>
+    <div @click="getChallengeList">getChallengeList</div> 
+    
+    <br>
+    <div @click="getChallengeDetail">getChallengeDetail</div> 
+
+    <br>
+    <div @click="joinChallenge">joinChallenge</div> 
+    <!-- <br>
+    <div @click="같음A">같음A</div> -->
+<!-- 
+    <br>
+    <div @click="joinCancleChallenge">joinCancleChallenge</div> 
+ -->
+    
+    <!-- <br>
+    <div @click="getChallengeInProgressList">getChallengeInProgressList</div>  -->
+
     </div>
   
   <router-view />
@@ -117,6 +139,96 @@ export default {
   },
 
   methods: {
+
+    postChallenge() {
+      //잘됨
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/challenge`,
+        data: {
+          "name" : "하루에 천원쓰기 챌린지",
+          "startDate" : "2023-05-10",
+          "endDate" : "2023-05-17",
+          "content" : "일주일간 하루에 천원만 사용하는 챌린지입니다.",
+        }
+      })
+        .then((res) => {
+          console.log("postChallenge")
+          console.log(res.data)
+        })
+      
+
+    },
+
+    getChallengeList() {
+      //시작전 챌린지 리스트 잘됨.
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/list`,
+      })
+        .then((res) => {
+          console.log("getChallengeList")
+          console.log(res.data)
+        })
+      
+
+    },
+
+    getChallengeDetail() {
+            //시작전 챌린지 디테일
+            //이거는 안될수도 있음 무시하고 하셈 아까는 됨.
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/1194`,
+      })
+        .then((res) => {
+          console.log("getChallengeDetail")
+          console.log(res.data)
+        })
+
+    },
+    
+    joinChallenge() {
+      //챌린지 참여 잘됨.
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/join/1193`,
+      })
+        .then((res) => {
+          console.log("joinChallenge")
+          console.log(res.data)
+        })
+
+    },
+
+    // joinCancleChallenge() {
+    //   //챌린지 취소
+      
+    //   axios({
+    //     method: 'delete',
+    //     url: `http://localhost:8080/api/challenge/cancel/1194`,
+    //   })
+    //     .then((res) => {
+    //       console.log("joinCancleChallenge")
+    //       console.log(res.data)
+    //     })
+
+    // },
+
+    
+    // getChallengeInProgressList() {
+    //   //챌린지 참여
+    //   axios({
+    //     method: 'get',
+    //     url: `http://localhost:8080/api/challenge/progress`,
+    //   })
+    //     .then((res) => {
+    //       console.log("getChallengeInProgressList")
+    //       console.log(res.data)
+    //     })
+
+    // },
+
 
     updateIncomeClassification() {
       axios({
@@ -523,6 +635,7 @@ export default {
           console.log(res.data)
         })
     },
+
   },
 
   
