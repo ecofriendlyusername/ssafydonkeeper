@@ -5,7 +5,7 @@
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
   </div>
-    <div class="test" v-if="loginCheck">
+    <div class="test" v-if="!loginCheck">
 
       
 
@@ -524,6 +524,9 @@ export default {
         })
     },
   },
+  mounted () {
+    console.log(process.env.VUE_APP_URL);
+  }
 
   
 }

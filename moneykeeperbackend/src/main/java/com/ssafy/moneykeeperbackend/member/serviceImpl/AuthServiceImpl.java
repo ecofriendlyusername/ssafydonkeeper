@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import com.ssafy.moneykeeperbackend.member.dto.common.MemberDto;
 import com.ssafy.moneykeeperbackend.statistics.service.GenereateRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,6 @@ import com.ssafy.moneykeeperbackend.accountbook.repository.MajorSpendingClassifi
 import com.ssafy.moneykeeperbackend.accountbook.repository.SpendingClassificationRepository;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthExceptionEnum;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
-import com.ssafy.moneykeeperbackend.member.dto.common.MemberDto;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.entity.Role;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
@@ -173,6 +173,10 @@ public class AuthServiceImpl implements AuthService {
 			if (hasEmail) {
 				email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 			} else {
+				throw new AuthRuntimeException(AuthExceptionEnum.KAKAO_SHOULD_HAVE_EMAIL);
+			}
+
+			if (email.equals("")) {
 				throw new AuthRuntimeException(AuthExceptionEnum.KAKAO_SHOULD_HAVE_EMAIL);
 			}
 			br.close();

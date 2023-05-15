@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface MonthSpendingRecordByClassRepository extends JpaRepository<MonthSpendingRecordByClass, Long> {
     List<MonthSpendingRecordByClass> findByMemberAndYmonthBetween(Member member, LocalDate firstMonth, LocalDate lastMonth);
-    List<MonthSpendingRecordByClass> findByMemberAndYmonth(Member member, LocalDate curMonth);
 
     MonthSpendingRecordByClass findByMemberAndYmonthAndMajorSpendingClass(Member member, LocalDate curMonth, MajorSpendingClassification msc);
 

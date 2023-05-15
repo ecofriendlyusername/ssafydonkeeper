@@ -29,18 +29,14 @@ public class ScheduledJob {
     private final IncomeGroupRepository incomeGroupRepository;
 
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
-    @Scheduled(cron = "0 0 0 1 * *") // fix later
+    @Scheduled(cron = "0 0 0 1 * *")
     public void update() {
-        Instant instant = Instant.now();
-        System.out.println(instant);
-
         List<Member> memberList = memberRepository.findAll();
 
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
         List<IncomeGroup> igList = incomeGroupRepository.findAll();
 
         if (memberList.isEmpty()) {
-            System.out.println("updateIncomeGroup.. no members");
             return;
         }
 
@@ -63,7 +59,6 @@ public class ScheduledJob {
             updateDataService.determineSpendingGroup(member,start,end);
         }
 
-        // updateDataService.updateGroupSpendingAvg();
         updateDataService.updateSpendingCompData();
     }
 }

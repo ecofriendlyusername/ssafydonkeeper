@@ -39,24 +39,10 @@ public class TestController {
 
     private final MajorSpendingClassificationRepository majorSpendingClassificationRepository;
 
-    private final SpendingService spendingService;
     @GetMapping("")
     @ApiOperation(value = "test", notes = "test")
-    public ResponseEntity<?> initForTest() { // 나중에 바꿀 것
-//        LocalDate now = LocalDate.now();
-//
-//        LocalDate thisMonth = LocalDate.of(now.getYear(),now.getMonth(),1);
-//        LocalDate lastMonth = thisMonth.minusMonths(1);
-//
-//        LocalDate end = LocalDate.of(lastMonth.getYear(),lastMonth.getMonth(),1);
-//        LocalDate start = end.minusMonths(2);
-
-//        HashMap<String, MajorSpendingClassification> hm = testService.initCommonForTest();
-          testService.initCommonForTest();
-//        List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-//        List<IncomeGroup> igList = incomeGroupRepository.findAll();
-//
-//        updateDataService.generateGroupSpending(end,mscList,igList);
+    public ResponseEntity<?> initForTest() {
+        testService.initCommonForTest();
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
@@ -72,9 +58,6 @@ public class TestController {
         LocalDate start = end.minusMonths(2);
 
         List<MajorSpendingClassification> mscList = majorSpendingClassificationRepository.findAll();
-        // Long testMemberId = testService.generateMockMemberWithString("test", mscList,start,end,false);
-
-        List<IncomeGroup> igList = incomeGroupRepository.findAll();
 
         for (int i = 0; i < 30; i++) {
             Random random = new Random();
@@ -117,7 +100,7 @@ public class TestController {
 
 
     @GetMapping("/savecards")
-    public ResponseEntity<?> saveCards() throws Exception {
+    public ResponseEntity<?> saveCards() {
         putCardService.saveCards();
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
