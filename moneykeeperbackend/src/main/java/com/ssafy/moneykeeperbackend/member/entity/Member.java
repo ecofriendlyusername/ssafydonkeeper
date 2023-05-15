@@ -9,6 +9,7 @@ import com.ssafy.moneykeeperbackend.accountbook.entity.IncomeClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
+import com.ssafy.moneykeeperbackend.group.entity.MemberGroup;
 import com.ssafy.moneykeeperbackend.statistics.entity.*;
 import com.sun.istack.NotNull;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public class Member extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
 	private Long id;
 
@@ -66,6 +67,9 @@ public class Member extends BaseEntity {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Budget> budgets;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<MemberGroup> memberGroups;
 
 	@ManyToOne
 	private IncomeGroup incomeGroup;

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,7 +35,7 @@ import lombok.NoArgsConstructor;
 public class SpendingClassification extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "spending_classification_id")
 	private Long id;
 
@@ -48,6 +49,9 @@ public class SpendingClassification extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "major_spending_classification_id")
 	private MajorSpendingClassification majorSpendingClassification;
+
+	@OneToMany(mappedBy = "spendingClassification", fetch = FetchType.LAZY)
+	private List<Budget> budgets;
 
 	@OneToMany(mappedBy = "spendingClassification")
 	List<Spending> spendings;

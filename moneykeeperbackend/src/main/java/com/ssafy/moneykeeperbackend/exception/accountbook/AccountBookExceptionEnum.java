@@ -31,7 +31,7 @@ public enum AccountBookExceptionEnum {
 	private final String httpCode;
 	private final String errorMessage;
 
-	public static Map<String, Object> convertMap(AuthExceptionEnum ex) {
+	public static Map<String, Object> convertMap(AccountBookExceptionEnum ex) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", ex.getHttpStatus().value());
 		map.put("code", ex.getHttpCode());

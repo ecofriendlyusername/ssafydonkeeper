@@ -31,6 +31,7 @@ public class AssetServiceImpl implements AssetService {
 	 * @date 2023.05.09
 	 * @author 정민지
 	 * */
+	@Override
 	public List<IdNameDTO> getAllAsset(Member member) {
 		return assetRepository.findByMember(member).stream().map(asset -> IdNameDTO.builder()
 				.id(asset.getId())

@@ -11,20 +11,20 @@ import com.ssafy.moneykeeperbackend.member.entity.Member;
 
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
-	Optional<Budget> findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNull(Member member, int year,
+	Optional<Budget> findByMemberAndYearAndMonthAndSpendingClassificationIsNull(Member member, int year,
 		int month);
 
-	Optional<Budget> findByMemberAndYearAndMonthAndMajorSpendingClassificationId(Member member, int year, int month,
-		Long majorSpendingClassificationId);
+	Optional<Budget> findByMemberAndYearAndMonthAndSpendingClassificationId(Member member, int year, int month,
+		Long spendingClassificationId);
 
 	List<Budget> findByMemberAndYearAndMonth(Member member, int year, int month);
 
-	List<Budget> findByMemberAndYearAndMonthAndMajorSpendingClassificationIsNotNull(Member member, int year, int month);
+	List<Budget> findByMemberAndYearAndMonthAndSpendingClassificationIsNotNull(Member member, int year, int month);
 
 	@Modifying
 	void deleteByMemberAndYearAndMonth(Member member, int year, int month);
 
 	@Modifying
-	void deleteByMemberAndYearAndMonthAndMajorSpendingClassificationId(Member member, int year, int month,
-		Long majorClassificationId);
+	void deleteByMemberAndYearAndMonthAndSpendingClassificationId(Member member, int year, int month,
+		Long spendingClassificationId);
 }
