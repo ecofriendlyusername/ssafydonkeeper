@@ -5,13 +5,13 @@
     <div v-for="recom_card in recom_cards" :key="recom_card.id" class="cell"
       v-on:click="this.$router.push('/research/card/' + recom_card.id)"
       style="background-color:#E7E7E7; border-color:#E7E7E7 ;">
-      <div style="display: flex; justify-content: space-between; background-color:white; padding: 10px; margin: 5px;">
-        <div>
+      <div style="display: flex; height: 100px; background-color:white; padding: 10px; margin: 5px;">
+        <div class="cardImg">
           <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
         </div>
-        <div>
+        <div style="margin-left:15px;">
           <div
-            style="display:flex; font-weight: bold; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;">
+            style="display:flex; font-weight: bold; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 225px;">
             {{ recom_card.name }}
           </div>
           <div style="display:flex">
@@ -59,6 +59,7 @@ export default {
 
 .trun {
   transform: rotate(90deg);
-  height: 150px
+  height: 150px;
+  margin-top: -25px;
 }
 </style>

@@ -17,6 +17,6 @@ public class BudgetDTO {
 
 	private int total_amount;
 
-	private List<MajorSpendingClassificationAmountDTO> datas;
+	private List<SpendingClassificationAmountDTO> datas;
 
 }

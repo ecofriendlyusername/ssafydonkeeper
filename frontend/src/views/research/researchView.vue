@@ -17,22 +17,61 @@
     </div>
 
     <div>
-      <h2>카테고리별 사용 내역</h2>
+      <div style="margin-top: 10px; height:5px; width:100%; background-color:black"></div>
+      <h2 style="margin-top:0px;">카테고리별 사용 내역</h2>
+      <hr style="margin-top: -15px; height: 3px; color:#F0F2F5; width: 90%; border: none; background-color:#F0F2F5;">
 
       <div v-for="(data, idx) in spend_data.filter((el) => el.amount > 0)" :key=idx>
-        <div>
-          {{ data.category }} : {{ data.amount }}
+        <div style="display:flex; justify-content:space-between;">
+          <div style="margin-left:30px;">
+            {{ data.category }}
+          </div>
+          <div style="font-size:20px; margin-right:30px;">
+            {{ data.amount }}원
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 10px; height:5px; width:100%; background-color:black"></div>
+    </div>
+
+    <div style="margin-top:-10px;">
+      <h2>소비 맞춤 카드 추천</h2>
+
+      <div style="background-color:#E7E7E7; padding: 1px; margin-top: -10px;">
+        <div v-for="recom_card in recom_cards.filter((_, idx) => idx < 3)" :key="recom_card.id" class="cell"
+        v-on:click="this.$router.push('/research/card/' + recom_card.id)"
+        style="background-color:#E7E7E7; border-color:#E7E7E7;">
+        <div style="display: flex; background-color:white; padding: 10px; margin: 5px;">
+          <div>
+            <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
+          </div>
+
+          <div style="margin-left:20px;">
+            <div style="display:cen; justify-content:end; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 230px; ">
+              {{ recom_card.name }}
+            </div>
+            <div style="display:flex;">
+              {{ recom_card.company }}
+            </div>
+          </div>
+
+          <!-- <div>
+            <div
+              style="display:flex; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;">
+              {{ recom_card.name }}
+            </div>
+            <div style="display:flex">
+              {{ recom_card.company }}
+            </div>
+          </div> -->
         </div>
       </div>
 
-    </div>
-
-    <div style="margin-top:55px;">
-      <h1>소비 맞춤 카드 추천</h1>
-
-      <div v-for="recom_card in recom_cards.filter((_, idx) => idx < 3)" :key="recom_card.id" class="cell"
+      </div>
+<!-- #E7E7E7 -->
+      <!-- <div v-for="recom_card in recom_cards.filter((_, idx) => idx < 3)" :key="recom_card.id" class="cell"
         v-on:click="this.$router.push('/research/card/' + recom_card.id)"
-        style="background-color:#E7E7E7; border-color:#E7E7E7 ;">
+        style="background-color:rebeccapurple; border-color:#E7E7E7;">
         <div style="display: flex; justify-content: space-between; background-color:white; padding: 10px; margin: 5px;">
           <div>
             <img :src="recom_card.imgPath" :alt=recom_card.imgPath @load="onImageLoad" class="cardImg">
@@ -47,7 +86,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div style="display:flex; justify-content:end; padding:10px;" v-on:click="this.$router.push('/research/cardList')">
         더보기 > </div>

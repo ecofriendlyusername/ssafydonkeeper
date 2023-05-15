@@ -1,56 +1,46 @@
-package com.ssafy.moneykeeperbackend.accountbook.entity;
-
-import java.util.List;
+package com.ssafy.moneykeeperbackend.group.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.sun.istack.NotNull;
+import com.ssafy.moneykeeperbackend.member.entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asset extends BaseEntity {
+public class MemberGroup extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "asset_id")
+	@Column(name = "member_group_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@NotNull
-	private String name;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "group_id")
+	private Group group;
 
-	@NotNull
-	private Long total_account;
+	@Enumerated(EnumType.STRING)
+	private GroupRole groupRole;
 
-	@OneToMany(mappedBy = "asset")
-	List<Spending> spendings;
-
-	@OneToMany(mappedBy = "asset")
-	List<Income> incomes;
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

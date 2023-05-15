@@ -19,4 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByIncomeGroup(IncomeGroup incomeGroup);
 
     Member findByNickname(String rs);
+
+	List<Member> findByEmailLike(String email);
 }
