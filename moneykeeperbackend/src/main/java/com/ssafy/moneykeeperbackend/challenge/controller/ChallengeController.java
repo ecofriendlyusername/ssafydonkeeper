@@ -157,7 +157,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeListDto>> getChallengeInProgressList(@AuthenticationPrincipal CustomUserDetails member) {
 
 
-        //시작도 하고 종료 안한 챌린지 목록 조회
+        //시작 하고 종료 안한 챌린지 목록 조회
         List<ChallengeListDto> list = challengeService.getChallengeInProgressList(true, false, member.getMember());
 
         if (list.isEmpty()) {
@@ -211,8 +211,8 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeListDto>> getChallengeIsFinishedList(@AuthenticationPrincipal CustomUserDetails member) {
 
 
-        //시작도 하고 종료 안한 챌린지 목록 조회
-        List<ChallengeListDto> list = challengeService.getChallengeInProgressList(false, true, member.getMember());
+        //종료한 챌린지 목록 조회
+        List<ChallengeListDto> list = challengeService.getChallengeIsFinishedList(false, true, member.getMember());
 
         if (list.isEmpty()) {
             return ResponseEntity.ok().build(); // 빈 응답 반환

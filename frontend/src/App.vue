@@ -105,8 +105,8 @@
     <div @click="joinCancelChallenge">joinCancelChallenge</div> 
 
     
-    <!-- <br>
-    <div @click="getChallengeInProgressList">getChallengeInProgressList</div>  -->
+    <br>
+    <div @click="getChallengeInProgressList">getChallengeInProgressList</div> 
 
     
     <br>
@@ -115,6 +115,13 @@
     <br>
     <div @click="setChallengeTodaySuccess">setChallengeTodaySuccess</div> 
 
+    <br>
+    <div @click="getChallengeFinishedList">getChallengeFinishedList</div> 
+
+    <br>
+    <div @click="getChallengeFinishedDetail">getChallengeFinishedDetail</div> 
+
+    
     <!-- <br>
     <div @click="같음A">같음A</div> -->
 
@@ -155,8 +162,8 @@ export default {
         url: `http://localhost:8080/api/challenge`,
         data: {
           "name" : "하루에 천원쓰기 챌린지",
-          "startDate" : "2023-05-16",
-          "endDate" : "2023-05-25",
+          "startDate" : "2023-05-13",
+          "endDate" : "2023-05-14",
           "content" : "일주일간 하루에 천원만 사용하는 챌린지입니다.",
         }
       })
@@ -201,7 +208,7 @@ export default {
       //챌린지 참여 잘됨.
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/join/11`,
+        url: `http://localhost:8080/api/challenge/join/16`,
       })
         .then((res) => {
           console.log("joinChallenge")
@@ -215,7 +222,7 @@ export default {
       
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/challenge/cancel/11`,
+        url: `http://localhost:8080/api/challenge/cancel/7`,
       })
         .then((res) => {
           console.log("joinCancelChallenge")
@@ -242,7 +249,7 @@ export default {
       //챌린지 참여중인거 상세조회 날짜따라서 로그찍어줌
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/progress/12`,
+        url: `http://localhost:8080/api/challenge/progress/8`,
       })
         .then((res) => {
           console.log("getChallengeInProgressDetail")
@@ -256,7 +263,7 @@ export default {
       //오늘 성공 버튼
       axios({
         method: 'put',
-        url: `http://localhost:8080/api/challenge/progress/success/12`,
+        url: `http://localhost:8080/api/challenge/progress/success/8`,
       })
         .then((res) => {
           console.log("setChallengeTodaySuccess")
@@ -264,6 +271,33 @@ export default {
         })
 
     },
+
+    getChallengeFinishedList() {
+      //기간 끝난 챌린지 목록
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/finish`,
+      })
+        .then((res) => {
+          console.log("getChallengeFinishedList")
+          console.log(res.data)
+        })
+
+    },
+
+    getChallengeFinishedDetail() {
+      //기간 끝난 챌린지 목록
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/finish/19`,
+      })
+        .then((res) => {
+          console.log("getChallengeFinishedDetail")
+          console.log(res.data)
+        })
+
+    },
+
 
     updateIncomeClassification() {
       axios({

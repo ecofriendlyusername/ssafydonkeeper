@@ -27,4 +27,6 @@ public interface ChallengeService {
     void successChallenge(Member member, long id);
 
     ChallengeDetailResponseFinishedDto getChallengeFinsishedDetail(Member member, long id);
+
+    List<ChallengeListDto> getChallengeIsFinishedList(boolean inProgress, boolean isFinished, Member member);
 }
