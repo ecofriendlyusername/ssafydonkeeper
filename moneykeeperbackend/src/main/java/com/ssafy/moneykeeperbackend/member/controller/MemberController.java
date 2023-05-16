@@ -30,8 +30,9 @@ public class MemberController {
 	 * @author 정민지
 	 * */
 	@GetMapping("/search")
-	public ResponseEntity<?> getMembersByEmail(@RequestParam("email") String email) {
-		return new ResponseEntity<>(memberService.getMembersByEmail(email),
+	public ResponseEntity<?> getMembersByEmail(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestParam("email") String email) {
+		return new ResponseEntity<>(memberService.getMembersByEmail(member.getMember(), email),
 			HttpStatus.OK);
 	}
 }

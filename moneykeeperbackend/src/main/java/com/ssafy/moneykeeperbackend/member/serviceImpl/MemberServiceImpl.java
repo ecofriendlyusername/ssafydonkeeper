@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.moneykeeperbackend.member.dto.response.MemberResponse;
+import com.ssafy.moneykeeperbackend.member.entity.Member;
 import com.ssafy.moneykeeperbackend.member.repository.MemberRepository;
 import com.ssafy.moneykeeperbackend.member.service.MemberService;
 
@@ -20,9 +21,11 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public List<MemberResponse> getMembersByEmail(String email) {
+	public List<MemberResponse> getMembersByEmail(Member me, String email) {
 
-		return memberRepository.findByEmailLike(email + "%").stream().map(member -> MemberResponse.builder()
+		return memberRepository.findByEmailLikeAndIdNot(email + "%", me.getId())
+			.stream()
+			.map(member -> MemberResponse.builder()
 				.id(member.getId())
 				.nickname(member.getNickname())
 				.email(member.getEmail())

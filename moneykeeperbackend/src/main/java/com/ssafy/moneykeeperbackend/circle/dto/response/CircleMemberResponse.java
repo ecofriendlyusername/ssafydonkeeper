@@ -1,13 +1,11 @@
-package com.ssafy.moneykeeperbackend.group.dto.response;
-
-import com.ssafy.moneykeeperbackend.group.entity.GroupRole;
+package com.ssafy.moneykeeperbackend.circle.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-public class GroupMemberResponse {
+public class CircleMemberResponse {
 
 	private Long member_id;
 
@@ -15,7 +13,7 @@ public class GroupMemberResponse {
 
 	private String nickname;
 
-	private String groupRole;
+	private String circleRole;
 
 	private int thisMonthTotalAmount;
 

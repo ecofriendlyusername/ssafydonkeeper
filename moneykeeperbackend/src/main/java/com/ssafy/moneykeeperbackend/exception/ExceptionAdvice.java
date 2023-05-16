@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ssafy.moneykeeperbackend.exception.accountbook.AccountBookRuntimeException;
 import com.ssafy.moneykeeperbackend.exception.auth.AuthRuntimeException;
-import com.ssafy.moneykeeperbackend.exception.group.GroupRuntimeException;
+import com.ssafy.moneykeeperbackend.exception.circle.CircleRuntimeException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -41,11 +41,11 @@ public class ExceptionAdvice {
 			runError.getMessage()), runError.getErrorEnum().getHttpStatus());
 	}
 
-	@ExceptionHandler({GroupRuntimeException.class})
-	public ResponseEntity<ExceptionResponseEntity> groupExceptionHandler(
-		final GroupRuntimeException runError) {
+	@ExceptionHandler({CircleRuntimeException.class})
+	public ResponseEntity<ExceptionResponseEntity> circleExceptionHandler(
+		final CircleRuntimeException runError) {
 		Logger logger = LoggerFactory.getLogger(this.getClass());
-		logger.error("groupExceptionHandler: ", runError);
+		logger.error("circleExceptionHandler: ", runError);
 
 		return new ResponseEntity<>(new ExceptionResponseEntity(
 			runError.getErrorEnum().getHttpStatus().value(),

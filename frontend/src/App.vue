@@ -7,7 +7,7 @@
   </div>
     <div class="test" v-if="loginCheck">
 
-      
+<!--       
 
     <div @click="check">세션 체크</div>
 
@@ -99,7 +99,7 @@
     <div @click="getChallengeDetail">getChallengeDetail</div> 
 
     <br>
-    <div @click="joinChallenge">joinChallenge</div> 
+    <div @click="joinChallenge">joinChallenge</div>  -->
     <!-- <br>
     <div @click="같음A">같음A</div> -->
 <!-- 
