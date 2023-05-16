@@ -1,11 +1,12 @@
 <template>
+  {{ userData }}
   <headerComponent />
   <div class="test" v-if="!loginCheck">
     <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
   </div>
-    <div class="test" v-if="loginCheck">
+    <div class="test" v-if="!loginCheck">
 
       
 
@@ -135,6 +136,9 @@ export default {
   computed: {
     loginCheck() {
       return this.$store.state.loginCheck
+    },
+    userData() {
+      return this.$store.state.userData
     }
   },
 
