@@ -1,33 +1,55 @@
 <template>
   <div>
-    <h1>예산 설정 페이지</h1>
-
-    <div class="budget">
-      <label for="total_budget">전체 예산: </label><input type="number" name="total_budget" :value="total_budget" @change="logging_total()">
+    <h4 style="display:flex; margin-left: 15px;">한 달 예산</h4>
+    <div style="margin-top: -15px; font-weight: bold; font-size: 20px;">
+      <label for="total_budget" style="margin-left:-80px;">원</label>
+      <input type="number" name="total_budget" :value="total_budget" @change="logging_total()"
+      style="display:flex; margin-left: 15px; width: 30%; height: 22px; margin-top: -26px; border: 2px solid black; border-radius: 8px;">
     </div>
 
-    <div>
-      <h3>카테고리별 예산</h3>
-      <h3>
-        {{ total_budget - sum_budget }}원 남음
-      </h3>
+
+    <div style="display:flex; margin: 10px 0px; background-color: #F4F4F4; justify-content: space-between; padding: 5px 15px;">
+      <div style="font-weight:bold;">
+        남은 예산
+      </div>
+      <div style="color:gray;">
+        전체 {{ total_budget }}원 중 {{ total_budget - sum_budget }}원 남음
+      </div>
     </div>
 
-    <div v-for="(budget, idx) in budget_list" :key="idx">
+
+    <div v-if="!flag" @click="flag = true"
+    style="display:flex; justify-content:center; margin-left: 15px; background-color:#4D82E6; width:105px; padding: 5px 10px; color: white; font-weight: bold; border: none; border-radius: 10px; ">
+      세부예산 설정
+    </div>
+
+
+    <!-- <div v-if="!flag" @click="flag = true">세부예산 설정</div> -->
+    <div v-else @click="flag = false"
+    style="display:flex; justify-content:center; margin-left: 15px; background-color:#4D82E6; width:105px; padding: 5px 10px; color: white; font-weight: bold; border: none; border-radius: 10px; "
+    >설정 완료</div>
+
+    <div v-for="(budget, idx) in budget_list" :key="idx"
+    style="display:flex; margin:15px 15px;">
+    <div style="width:80px; display:flex; font-weight: bold;">
       <label :for="budget.name">{{ budget.name }}</label>
+    </div>
       <input type="number" :name="budget.name" :value="budget.amount" @change="logging(idx)">
-      <button @click="delList(budget.id)">X</button>
+      <button @click="delList(budget.id)" id="Xbtn">X</button>
     </div>
 
-    <div v-if="!flag" @click="flag = true">카테고리 열기</div>
-    <div v-else @click="flag = false">카테고리 닫기</div>
-    <div v-if="flag">
-      <p v-for="(classification, idx) in classifications" :key="idx" @click="addList(classification)" class="budget">
+    <br>
+    <div v-if="flag" style="margin-left:-45px">
+      <div v-for="(classification, idx) in classifications" :key="idx" @click="addList(classification)" class="budget">
         {{ classification.name }}
-      </p>
+      </div>
     </div>
 
-    <button v-on:click="checkData()">예산 저장하기</button>
+
+
+    <br><br><br>
+    <button v-on:click="checkData()"
+    style="margin-left: 15px; color:black; width:105px; padding: 10px 10px; font-weight: bold; border: none; border-radius: 10px;">예산 저장하기</button>
 
   </div>
 </template>
@@ -137,7 +159,21 @@ export default {
 
 <style>
 .budget {
-  /* font-size: 24px; */
-  padding: 4px;
+  display: inline-block;
+  margin:5px 10px;
+  border: 2px solid black;
+  padding: 5px;
+  width: 90px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+#Xbtn {
+  border: 1px solid black;
+  font-weight: bold;
+  background-color: white;
+  margin: 0px 10px;
+  border-radius: 5px;
 }
 </style>
