@@ -18,8 +18,8 @@
             </ul>
         </div>
 
-        <div v-if="existsCircleName">
-            <button @click="addGroup">그룹 생성</button>
+        <div >
+            <button @click="addGroup" :disabled="isGroupCreatable">그룹 생성</button>
         </div>
     </div>
   </template>
@@ -35,14 +35,20 @@
         emails : [],
         memberIds : [],
         existsCircleName : true,
+        isChecked : false,
       }
+    },
+    computed: {
+        isGroupCreatable() {
+            return this.groupName == '' || this.existsCircleName;
+        },
     },
     methods : {
         existsGroupName () {
             this.axios.get(process.env.VUE_APP_API_URL + `/circle/exists?name=` + this.groupName)
             .then((res) => {
                 console.log(res.data);
-                this.existsCircleName = !res.data;
+                this.existsCircleName = res.data;
             })
         },
         searchEmail () {
@@ -76,6 +82,10 @@
         email: debounce(function() {
             this.searchEmail();
         }, 500) // 500ms 동안 새로운 요청이 없으면 searchEmail 함수를 실행합니다.
+        ,
+        groupName () {
+            this.existsCircleName = true;
+        }
     },
     
   
