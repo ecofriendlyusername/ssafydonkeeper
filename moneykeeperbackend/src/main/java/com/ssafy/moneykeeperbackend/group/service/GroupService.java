@@ -18,4 +18,6 @@ public interface GroupService {
 	void deleteGroup(Long groupId, Member member);
 
 	List<IdNameDTO> getAllMembersGroup(Member member);
+
+	boolean existsGroupName(String name);
 }

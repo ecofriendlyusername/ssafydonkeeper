@@ -53,6 +53,17 @@ public class GroupController {
 	}
 
 	/*
+	 * 그룹명 중복 체크
+	 *
+	 * @date 2023.05.16
+	 * @author 정민지
+	 * */
+	@GetMapping("/exists")
+	public ResponseEntity<?> existsGroupName(@RequestParam String name) {
+		return new ResponseEntity<>(groupService.existsGroupName(name), HttpStatus.OK);
+	}
+
+	/*
 	 * 그룹 생성
 	 *
 	 * @date 2023.05.15
@@ -90,5 +101,7 @@ public class GroupController {
 		groupService.deleteGroup(groupId, member.getMember());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+
 
 }
