@@ -27,6 +27,8 @@ export default {
         .then((res) => {
             console.log(res.data)
             this.$store.dispatch('setLoginCheck', true)
+            this.$store.dispatch('setUserData', res.data)
+            
             this.$router.push('/book/calendar')
         })
         .catch(err => {
