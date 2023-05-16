@@ -2,25 +2,24 @@
   {{ userData }}
   <headerComponent />
   <div class="test" v-if="!loginCheck">
-    <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
+    <a
+      :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
   </div>
-    <div class="test" v-if="loginCheck">
-
-<!--
+  <div class="test" v-if="loginCheck">
 
     <div @click="check">세션 체크</div>
 
     <br>
     <div @click="incomeClassificationGet">incomeClassificationGet</div>
-    
+
     <br>
     <div @click="addIncomeclassification">addIncomeclassification</div>
 
     <br>
     <div @click="updateIncomeClassification">updateIncomeClassification</div>
-    
+
     <br>
     <div @click="deletIncomeClassification">deletIncomeClassification</div>
 
@@ -29,13 +28,13 @@
 
     <br>
     <div @click="SpendingClassificationGet">SpendingClassificationGet</div>
-    
+
     <br>
     <div @click="updateSpendingClassification">updateSpendingClassification</div>
-    
+
     <br>
     <div @click="deletSpendingClassification">deletSpendingClassification</div>
-    
+
     <br>
     <div @click="AssetGet">AssetGet</div>
     <br>
@@ -62,9 +61,9 @@
 
     <br>
     <div @click="get">get</div>
-    <br>  
+    <br>
     <div @click="monthget">monthget</div>
-    <br>  
+    <br>
     <div @click="detailget">detailget</div>
     <br>
     <div @click="amountget">amountget</div>
@@ -78,10 +77,10 @@
     <div @click="incomeadd">incomeadd</div>
     <br>
     <div @click="incomegetall">incomegetall</div>
-    
+
     <br>
     <div @click="incomemonthget">incomemonthget</div>
-    
+
     <br>
     <div @click="incomedetailget">incomedetailget</div>
     <br>
@@ -91,16 +90,16 @@
     <div @click="incomedelet">incomedelet</div>
 
     <br>
-    <div @click="postChallenge">postChallenge</div> 
+    <div @click="postChallenge">postChallenge</div>
 
     <br>
-    <div @click="getChallengeList">getChallengeList</div> 
-    
-    <br>
-    <div @click="getChallengeDetail">getChallengeDetail</div> 
+    <div @click="getChallengeList">getChallengeList</div>
 
     <br>
-    <div @click="joinChallenge">joinChallenge</div> 
+    <div @click="getChallengeDetail">getChallengeDetail</div>
+
+    <br>
+    <div @click="joinChallenge">joinChallenge</div>
 
     <br>
     <div @click="joinCancelChallenge">joinCancelChallenge</div>
@@ -126,12 +125,13 @@
     <br>
     <div @click="getChallengeFinishedDetail">getChallengeFinishedDetail</div>
 
-    
-    <br>
-    <div @click="같음A">같음A</div> -->
 
-    </div>
-  
+    <!-- <br>
+<div @click="같음A">같음A</div> -->
+
+  </div>
+
+
   <router-view />
   <footerComponent />
 </template>
@@ -169,17 +169,17 @@ export default {
         method: 'post',
         url: `http://localhost:8080/api/challenge`,
         data: {
-          "name" : "하루에 천원쓰기 챌린지",
-          "startDate" : "2023-05-10",
-          "endDate" : "2023-05-17",
-          "content" : "일주일간 하루에 천원만 사용하는 챌린지입니다.",
+          "name": "하루에 천원쓰기 챌린지",
+          "startDate": "2023-05-13",
+          "endDate": "2023-05-14",
+          "content": "일주일간 하루에 천원만 사용하는 챌린지입니다.",
         }
       })
         .then((res) => {
           console.log("postChallenge")
           console.log(res.data)
         })
-      
+
 
     },
 
@@ -193,14 +193,14 @@ export default {
           console.log("getChallengeList")
           console.log(res.data)
         })
-      
+
 
     },
 
     getChallengeDetail() {
-            //챌린지 시작전 챌린지 디테일
-            //참여여부 true false로 줘가지고 그거로 참여버튼 활성화 비활성화 하면 됨.
-            //이거는 안될수도 있음 무시하고 하셈 아까는 됨.
+      //챌린지 시작전 챌린지 디테일
+      //참여여부 true false로 줘가지고 그거로 참여버튼 활성화 비활성화 하면 됨.
+      //이거는 안될수도 있음 무시하고 하셈 아까는 됨.
       axios({
         method: 'get',
         url: `http://localhost:8080/api/challenge/3`,
@@ -211,7 +211,7 @@ export default {
         })
 
     },
-    
+
     joinChallenge() {
       //챌린지 참여 잘됨.
       axios({
@@ -227,7 +227,7 @@ export default {
 
     joinCancelChallenge() {
       //챌린지 취소
-      
+
       axios({
         method: 'delete',
         url: `http://localhost:8080/api/challenge/cancel/7`,
@@ -239,19 +239,72 @@ export default {
 
     },
 
-    
-    // getChallengeInProgressList() {
-    //   //챌린지 참여
-    //   axios({
-    //     method: 'get',
-    //     url: `http://localhost:8080/api/challenge/progress`,
-    //   })
-    //     .then((res) => {
-    //       console.log("getChallengeInProgressList")
-    //       console.log(res.data)
-    //     })
 
-    // },
+    getChallengeInProgressList() {
+      //챌린지 참여한거중에 진행중인거 리스트
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/progress`,
+      })
+        .then((res) => {
+          console.log("getChallengeInProgressList")
+          console.log(res.data)
+        })
+
+    },
+
+    getChallengeInProgressDetail() {
+      //챌린지 참여중인거 상세조회 날짜따라서 로그찍어줌
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/progress/8`,
+      })
+        .then((res) => {
+          console.log("getChallengeInProgressDetail")
+          console.log(res.data)
+        })
+
+    },
+
+
+    setChallengeTodaySuccess() {
+      //오늘 성공 버튼
+      axios({
+        method: 'put',
+        url: `http://localhost:8080/api/challenge/progress/success/8`,
+      })
+        .then((res) => {
+          console.log("setChallengeTodaySuccess")
+          console.log(res.data)
+        })
+
+    },
+
+    getChallengeFinishedList() {
+      //기간 끝난 챌린지 목록
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/finish`,
+      })
+        .then((res) => {
+          console.log("getChallengeFinishedList")
+          console.log(res.data)
+        })
+
+    },
+
+    getChallengeFinishedDetail() {
+      //기간 끝난 챌린지 목록
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/finish/19`,
+      })
+        .then((res) => {
+          console.log("getChallengeFinishedDetail")
+          console.log(res.data)
+        })
+
+    },
 
 
     updateIncomeClassification() {
@@ -259,14 +312,14 @@ export default {
         method: 'patch',
         url: `http://localhost:8080/api/account-book/incomeclassification/66`,
         data: {
-          "name" : "엄마",
+          "name": "엄마",
         }
       })
         .then((res) => {
           console.log("updateIncomeClassification")
           console.log(res.data)
         })
-      
+
 
     },
     deletIncomeClassification() {
@@ -285,41 +338,41 @@ export default {
         method: 'post',
         url: `http://localhost:8080/api/account-book/incomeclassification`,
         data: {
-          "name" : "엄마 용돈",
+          "name": "엄마 용돈",
         }
       })
         .then((res) => {
           console.log("addIncomeclassification")
           console.log(res.data)
         })
-      
+
     },
     SpendingClassificationGet() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spendingclassification`,
-        
+
       })
         .then((res) => {
           console.log("spendingclassification")
           console.log(res.data)
         })
-      
+
     },
     SpendingClassificationadd() {
       axios({
         method: 'post',
         url: `http://localhost:8080/api/account-book/spendingclassification`,
         data: {
-          "majorSpendingClassificationId" : 0,
-          "name" : "승현이랑 외식"
+          "majorSpendingClassificationId": 0,
+          "name": "승현이랑 외식"
         }
       })
         .then((res) => {
           console.log("spendingclassification")
           console.log(res.data)
         })
-      
+
     },
     deletSpendingClassification() {
       axios({
@@ -337,15 +390,15 @@ export default {
         method: 'patch',
         url: `http://localhost:8080/api/account-book/spendingclassification/65`,
         data: {
-          "majorSpendingClassificationId" : 0,
-          "name" : "승현쓰"
+          "majorSpendingClassificationId": 0,
+          "name": "승현쓰"
         }
       })
         .then((res) => {
           console.log("updateSpendingClassification")
           console.log(res.data)
         })
-      
+
     },
 
 
@@ -353,13 +406,13 @@ export default {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/incomeclassification`,
-        
+
       })
         .then((res) => {
           console.log("incomeClassificationGet")
           console.log(res.data)
         })
-      
+
     },
 
 
@@ -367,27 +420,27 @@ export default {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/asset`,
-        
+
       })
         .then((res) => {
           console.log("AssetGet")
           console.log(res.data)
         })
-      
+
     },
     updateasset() {
       axios({
         method: 'patch',
         url: `http://localhost:8080/api/account-book/asset/67`,
         data: {
-          "name" : "엄마",
+          "name": "엄마",
         }
       })
         .then((res) => {
           console.log("updateasset")
           console.log(res.data)
         })
-      
+
 
     },
     deletassest() {
@@ -406,14 +459,14 @@ export default {
         method: 'post',
         url: `http://localhost:8080/api/account-book/asset`,
         data: {
-          "name" : "엄마 용돈",
+          "name": "엄마 용돈",
         }
       })
         .then((res) => {
           console.log("addassest")
           console.log(res.data)
         })
-      
+
     },
 
     allBudget() {
@@ -430,21 +483,21 @@ export default {
       axios({
         method: 'patch',
         url: `http://localhost:8080/api/account-book/budget`,
-        data:{
-            "year": 2023,
-            "month": 5,
-            "total_amount": 1000000,
-            "datas": [
-              {
-                "classificationId": 1, 
-                "amount": 2, 
-              },
-              {
-                "classificationId": 2,
-                "amount": 4,
-              },
-            ] 
-          }
+        data: {
+          "year": 2023,
+          "month": 5,
+          "total_amount": 1000000,
+          "datas": [
+            {
+              "classificationId": 1,
+              "amount": 2,
+            },
+            {
+              "classificationId": 2,
+              "amount": 4,
+            },
+          ]
+        }
       })
         .then((res) => {
           console.log("budgetpatch")
@@ -468,20 +521,20 @@ export default {
         method: 'get',
         url: `http://localhost:8080/api/account-book/total/amount/2023/5`
       })
-      .then((res) => {
-        console.log("get")
-        console.log(res.data)
-      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
     getDateTotalAmmount() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/total/amount/2023/5/4`
       })
-      .then((res) => {
-        console.log("get")
-        console.log(res.data)
-      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
 
     logout() {
@@ -492,20 +545,20 @@ export default {
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending?page=0&size=10`
       })
-      .then((res) => {
-        console.log("get")
-        console.log(res.data)
-      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
     add() {
       axios({
         method: 'post',
         url: `http://localhost:8080/api/account-book/spending`,
         data: {
-          "assetId" : 50,
-          "spendingClassificationId" : 32,
-          "date" : "2023-05-04",
-          "amount" : 50000,
+          "assetId": 50,
+          "spendingClassificationId": 32,
+          "date": "2023-05-04",
+          "amount": 50000,
           "detail": "엽닭",
           "memo": "승현이랑"
         },
@@ -530,20 +583,20 @@ export default {
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending/2023/5?page=0&size=10`
       })
-      .then((res) => {
-        console.log("get")
-        console.log(res.data)
-      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
     detailget() {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/account-book/spending/47`
       })
-      .then((res) => {
-        console.log("get")
-        console.log(res.data)
-      })
+        .then((res) => {
+          console.log("get")
+          console.log(res.data)
+        })
     },
     amountget() {
       axios({
@@ -560,15 +613,15 @@ export default {
         method: 'patch',
         url: `http://localhost:8080/api/account-book/spending/47`,
         data: {
-          "assetId" : 20,
-          "spendingClassificationId" : 2,
-          "date" : "2023-05-04",
-          "amount" : 54000, 
+          "assetId": 20,
+          "spendingClassificationId": 2,
+          "date": "2023-05-04",
+          "amount": 54000,
           "detail": "엽닭",
           "memo": "민지랑승현이랑"
         },
       })
-      .then((res) => {
+        .then((res) => {
           console.log("patch")
           console.log(res.data)
         })
@@ -588,10 +641,10 @@ export default {
         method: 'post',
         url: `http://localhost:8080/api/account-book/income`,
         data: {
-          "assetId" : 21,
-          "incomeClassificationId" : 24,
-          "date" : "2023-05-04",
-          "amount" : 50000, 
+          "assetId": 21,
+          "incomeClassificationId": 24,
+          "date": "2023-05-04",
+          "amount": 50000,
           "detail": "용돈",
           "memo": "승현이가 줌"
         },
@@ -636,15 +689,15 @@ export default {
         method: 'patch',
         url: `http://localhost:8080/api/account-book/income/59`,
         data: {
-          "assetId" : 21,
-          "incomeClassificationId" : 24,
-          "date" : "2023-05-09",
-          "amount" : 5050,
+          "assetId": 21,
+          "incomeClassificationId": 24,
+          "date": "2023-05-09",
+          "amount": 5050,
           "detail": "용돈",
           "memo": "승현이가 줬당"
         },
       })
-      .then((res) => {
+        .then((res) => {
           console.log("patch")
           console.log(res.data)
         })
@@ -661,11 +714,13 @@ export default {
     },
 
   },
-  mounted () {
+  mounted() {
     console.log(process.env.VUE_APP_URL);
   }
 
-  
+
+
+
 }
 </script>
 <style>
