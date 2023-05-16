@@ -118,7 +118,7 @@
     <br>
     <div @click="getChallengeFinishedList">getChallengeFinishedList</div>
 
-    <div @click="joinChallenge">joinChallenge</div>  -->
+    <div @click="joinChallenge">joinChallenge</div> 
     <!-- <br>
     <div @click="같음A">같음A</div> -->
 <!--
