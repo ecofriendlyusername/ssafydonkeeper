@@ -1,4 +1,4 @@
-package com.ssafy.moneykeeperbackend.group.dto.request;
+package com.ssafy.moneykeeperbackend.circle.dto.request;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class GroupRequest {
+public class CircleRequest {
 
 	private String name;
 

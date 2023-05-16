@@ -1,4 +1,4 @@
-package com.ssafy.moneykeeperbackend.group.entity;
+package com.ssafy.moneykeeperbackend.circle.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
 import com.ssafy.moneykeeperbackend.member.entity.Member;
-import com.ssafy.moneykeeperbackend.member.entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,11 +24,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberGroup extends BaseEntity {
+public class MemberCircle extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_group_id")
+	@Column(name = "member_circle_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -37,10 +36,10 @@ public class MemberGroup extends BaseEntity {
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "group_id")
-	private Group group;
+	@JoinColumn(name = "circle_id")
+	private Circle circle;
 
 	@Enumerated(EnumType.STRING)
-	private GroupRole groupRole;
+	private CircleRole circleRole;
 
 }
