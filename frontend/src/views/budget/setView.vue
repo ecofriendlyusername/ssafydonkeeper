@@ -3,7 +3,14 @@
     <h1>예산 설정 페이지</h1>
 
     <div class="budget">
-      <label for="total_budget">전체 예산: </label><input type="number" name="total_budget" :value="total_budget">
+      <label for="total_budget">전체 예산: </label><input type="number" name="total_budget" :value="total_budget" @change="logging_total()">
+    </div>
+
+    <div>
+      <h3>카테고리별 예산</h3>
+      <h3>
+        {{ total_budget - sum_budget }}원 남음
+      </h3>
     </div>
 
     <div v-for="(budget, idx) in budget_list" :key="idx">
@@ -20,7 +27,7 @@
       </p>
     </div>
 
-    <button v-on:click="postData()">예산 저장하기</button>
+    <button v-on:click="checkData()">예산 저장하기</button>
 
   </div>
 </template>
@@ -33,12 +40,17 @@ export default {
       classifications: [],
       budget_list: [],
       total_budget: 0,
+      sum_budget: 0,
       today: new Date()
     }
   },
   methods: {
     logging(index) {
       this.budget_list[index].amount = event.target.value;
+      this.sum_budget = this.budget_list.reduce((o, t) => o + parseInt(t.amount), 0)
+    },
+    logging_total() {
+      this.total_budget = event.target.value;
     },
     addList(data) {
       let flag = true;
@@ -68,21 +80,35 @@ export default {
     getData() {
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spendingclassification`)
         .then(res => {
+          console.log(res.data);
           this.classifications = res.data.map(el => {
             return { "id": el.id, "name": el.name, "amount": 0 }
           })
         })
     },
-
+    checkData() {
+      let flag = false
+      this.budget_list.forEach((el) => {
+        console.log(el);
+        if (el.amount <= 0) {
+          flag = true
+        } 
+      })
+      console.log(flag);
+      if (flag) {
+        this.postData()      
+      } else {
+        alert("예산을 입력해주세요.")
+      }
+    },
     postData() {
-      console.log(this.budget_list)
       this.axios({
         method: 'patch',
-        url: process.env.VUE_APP_API_URL + `/account-book/spendingclassification`,
+        url: process.env.VUE_APP_API_URL + `/account-book/budget`,
         data: {
           "year": this.today.getFullYear(),
-          "month": this.today.getMonth(),
-          "total_amount": 5000000 ,
+          "month": this.today.getMonth()+1,
+          "total_amount": this.total_budget,
           "datas": this.budget_list.map(el => {
             return {
               "classificationId": el.id, 
@@ -90,6 +116,13 @@ export default {
             }
           })
         }
+      })
+      .then(res => {
+        console.log(res.data);
+        this.budget_list = []
+      })
+      .then(()=>{
+        this.$router.push('/budget')
       })
       .catch((err) => {
         console.log(err);
