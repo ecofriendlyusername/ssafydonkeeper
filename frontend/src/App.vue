@@ -1,4 +1,5 @@
 <template>
+  {{ userData }}
   <headerComponent />
   <div class="test" v-if="!loginCheck">
     <a :href="`https://kauth.kakao.com/oauth/authorize?client_id=f1433e701d3db7dd3776547238c0abac&redirect_uri=${kakaoUrl}/kakaoCallback&response_type=code`">
@@ -7,7 +8,7 @@
   </div>
     <div class="test" v-if="loginCheck">
 
-<!--       
+<!--
 
     <div @click="check">세션 체크</div>
 
@@ -99,16 +100,35 @@
     <div @click="getChallengeDetail">getChallengeDetail</div> 
 
     <br>
+    <div @click="joinChallenge">joinChallenge</div> 
+
+    <br>
+    <div @click="joinCancelChallenge">joinCancelChallenge</div>
+
+
+    <br>
+    <div @click="getChallengeInProgressList">getChallengeInProgressList</div>
+
+
+    <br>
+    <div @click="getChallengeInProgressDetail">getChallengeInProgressDetail</div>
+
+    <br>
+    <div @click="setChallengeTodaySuccess">setChallengeTodaySuccess</div>
+
+    <br>
+    <div @click="getChallengeFinishedList">getChallengeFinishedList</div>
+
     <div @click="joinChallenge">joinChallenge</div>  -->
     <!-- <br>
     <div @click="같음A">같음A</div> -->
-<!-- 
+<!--
     <br>
-    <div @click="joinCancleChallenge">joinCancleChallenge</div> 
- -->
+    <div @click="getChallengeFinishedDetail">getChallengeFinishedDetail</div>
+
     
-    <!-- <br>
-    <div @click="getChallengeInProgressList">getChallengeInProgressList</div>  -->
+    <br>
+    <div @click="같음A">같음A</div> -->
 
     </div>
   
@@ -135,6 +155,9 @@ export default {
   computed: {
     loginCheck() {
       return this.$store.state.loginCheck
+    },
+    userData() {
+      return this.$store.state.userData
     }
   },
 
@@ -175,11 +198,12 @@ export default {
     },
 
     getChallengeDetail() {
-            //시작전 챌린지 디테일
+            //챌린지 시작전 챌린지 디테일
+            //참여여부 true false로 줘가지고 그거로 참여버튼 활성화 비활성화 하면 됨.
             //이거는 안될수도 있음 무시하고 하셈 아까는 됨.
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/1194`,
+        url: `http://localhost:8080/api/challenge/3`,
       })
         .then((res) => {
           console.log("getChallengeDetail")
@@ -192,7 +216,7 @@ export default {
       //챌린지 참여 잘됨.
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/join/1193`,
+        url: `http://localhost:8080/api/challenge/join/16`,
       })
         .then((res) => {
           console.log("joinChallenge")
@@ -201,19 +225,19 @@ export default {
 
     },
 
-    // joinCancleChallenge() {
-    //   //챌린지 취소
+    joinCancelChallenge() {
+      //챌린지 취소
       
-    //   axios({
-    //     method: 'delete',
-    //     url: `http://localhost:8080/api/challenge/cancel/1194`,
-    //   })
-    //     .then((res) => {
-    //       console.log("joinCancleChallenge")
-    //       console.log(res.data)
-    //     })
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/challenge/cancel/7`,
+      })
+        .then((res) => {
+          console.log("joinCancelChallenge")
+          console.log(res.data)
+        })
 
-    // },
+    },
 
     
     // getChallengeInProgressList() {

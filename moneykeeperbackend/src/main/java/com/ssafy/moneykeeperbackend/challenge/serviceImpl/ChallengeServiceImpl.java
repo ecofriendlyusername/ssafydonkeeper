@@ -49,11 +49,20 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<Challenge> challenges = challengeRepository.findAllByInProgressAndIsFinished(inProgress, isFinished);
         List<ChallengeListDto> challengeListDtos = new ArrayList<>();
 
+        LocalDate today = LocalDate.now();
+
         for (Challenge challenge : challenges) {
-            ChallengeListDto challengeListDto = new ChallengeListDto();
-            challengeListDto.setId(challenge.getId());
-            challengeListDto.setName(challenge.getName());
-            challengeListDtos.add(challengeListDto);
+            if(challenge.getStartDate().isEqual(today) || challenge.getStartDate().isBefore(today)){
+                challenge.setInProgress(true);
+                challengeRepository.save(challenge);
+            }
+            else{
+                ChallengeListDto challengeListDto = new ChallengeListDto();
+                challengeListDto.setId(challenge.getId());
+                challengeListDto.setName(challenge.getName());
+                challengeListDtos.add(challengeListDto);
+            }
+
         }
 
         return challengeListDtos;
@@ -66,24 +75,28 @@ public class ChallengeServiceImpl implements ChallengeService {
             return null; // 해당 챌린지가 존재하지 않을 경우 null 반환
         }
 
-        int participant = challengeMemberRepository.countByMemberAndId(member, id);
-        boolean participantValue = participant == 1; // 참여 여부 판단
+        int participant = challengeMemberRepository.countByMemberIdAndChallengeId(member.getId(), id);
+        boolean participantValue = false;
 
+        if(participant >0){
+            participantValue = true;
+        }
         ChallengeDetailResponseDto challengeDetailDto = new ChallengeDetailResponseDto();
         challengeDetailDto.setName(challenge.getName());
         challengeDetailDto.setContent(challenge.getContent());
         challengeDetailDto.setStartDate(challenge.getStartDate());
         challengeDetailDto.setEndDate(challenge.getEndDate());
         challengeDetailDto.setParticipant(participantValue);
-        challengeDetailDto.setParticipantCount(challengeRepository.countById(id));
+        challengeDetailDto.setParticipantCount(challengeMemberRepository.countByChallengeId(id));
         return challengeDetailDto;
     }
 
     @Override
     public boolean joinChallenge(Member member, long id) {
         Challenge challenge = challengeRepository.findById(id);
+        ChallengeMember challengeMember = challengeMemberRepository.findByChallengeIdAndMemberId(id,member.getId());
         boolean result;
-        if (challenge == null) {
+        if (challenge == null || challengeMember!=null) {
             result = false;
         } else {
             ChallengeMember join = new ChallengeMember();
@@ -108,12 +121,39 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<ChallengeListDto> getChallengeInProgressList(boolean inProgress, boolean isFinished, Member member) {
+
         LocalDate today = LocalDate.now();
 
-        List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndMemberIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
+        List<ChallengeListDto> list = new ArrayList<>();
+
+        List<Challenge> challengeList = challengeRepository.findAllByInProgressAndIsFinished(inProgress,isFinished);
 
 
-        return challengeList;
+        for (Challenge challenge : challengeList) {
+            // 챌린지 멤버 아이디와 챌린지 이름을 가져올 쿼리를 실행하여 결과를 얻는다.
+            LocalDate endDate = challenge.getEndDate();
+
+            if (endDate.isBefore(today)) {
+             challenge.setInProgress(false);
+             challenge.setFinished(true);
+             challengeRepository.save(challenge);
+            }
+            else {
+                ChallengeMember challengeMember = challengeMemberRepository.findByChallengeIdAndMemberId(challenge.getId(), member.getId());
+
+                if (challengeMember != null) {
+                    String challengeName = challengeMember.getChallenge().getName();
+                    long challengeMemberId = challengeMember.getId();
+                    ChallengeListDto dto = new ChallengeListDto();
+                    dto.setId(challengeMemberId);
+                    dto.setName(challengeName);
+                    list.add(dto);
+                }
+            }
+        }
+
+      return list;
+
     }
 
     @Override
@@ -131,7 +171,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         String logs = challengeMember.getLogs();
         if (logs.length() < daysPassed - 2) {
             int zerosToAdd = daysPassed - 2 - logs.length();
-            for (int i = 0; i < zerosToAdd; i++) {
+            for (int i = 0; i <= zerosToAdd; i++) {
                 logs = logs + "0";
             }
         }
@@ -151,6 +191,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         challengeMemberRepository.save(challengeMember);
 
+        result.setId(challengeMember.getId());
         result.setName(challenge.getName());
         result.setContent(challenge.getContent());
         result.setStartDate(challenge.getStartDate());
@@ -169,13 +210,23 @@ public class ChallengeServiceImpl implements ChallengeService {
         ChallengeMember challengeMember = challengeMemberRepository.findById(id);
         Challenge challenge = challengeRepository.findById(challengeMember.getChallenge().getId());
 
-        int duration = (int) ChronoUnit.DAYS.between(today, challenge.getEndDate()); // 남은 날짜
+//        int duration = (int) ChronoUnit.DAYS.between(today, challenge.getEndDate()); // 남은 날짜
         int daysPassed = (int) (ChronoUnit.DAYS.between(challenge.getStartDate(), today) + 1); // 얼마나 지났는가
         int totalDate = (int) (ChronoUnit.DAYS.between(challenge.getStartDate(), challenge.getEndDate()) + 1); // 전체 날짜
 
         String logs = challengeMember.getLogs();
 
-        logs = logs + "1"; // 로그에 1 추가
+        if (logs.length() < daysPassed - 2) {
+            int zerosToAdd = daysPassed - 2 - logs.length();
+            for (int i = 0; i <= zerosToAdd; i++) {
+                logs = logs + "0";
+            }
+        }
+
+        if(logs.length()<daysPassed) {
+            logs = logs + "1"; // 로그에 1 추가
+        }
+
 
         long oneCount = logs.chars().filter(ch -> ch == '1').count(); // 1의 개수 세기
 
@@ -190,9 +241,25 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public ChallengeDetailResponseFinishedDto getChallengeFinsishedDetail(Member member, long id) {
 
-        ChallengeDetailResponseFinishedDto result = new ChallengeDetailResponseFinishedDto();
+
         ChallengeMember challengeMember = challengeMemberRepository.findById(id);
-        Challenge challenge = challengeMember.getChallenge();
+        Challenge challenge = challengeRepository.findById(challengeMember.getChallenge().getId());
+
+        int daysPassed = (int) (ChronoUnit.DAYS.between(challenge.getStartDate(), challenge.getEndDate()) + 1); // 얼마나 지났는가
+
+        String logs = challengeMember.getLogs();
+
+        if (logs.length() < daysPassed - 1) {
+            int zerosToAdd = daysPassed - 1 - logs.length();
+            for (int i = 0; i <= zerosToAdd; i++) {
+                logs = logs + "0";
+            }
+        }
+
+        challengeMember.setLogs(logs);
+        challengeMemberRepository.save(challengeMember);
+        ChallengeDetailResponseFinishedDto result = new ChallengeDetailResponseFinishedDto();
+
         result.setName(challenge.getName());
         result.setSuccess(challengeMember.isSuccess());
         result.setLogs(challengeMember.getLogs());
@@ -201,5 +268,36 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 
         return result;
+    }
+
+    @Override
+    public List<ChallengeListDto> getChallengeIsFinishedList(boolean inProgress, boolean isFinished, Member member) {
+
+
+
+        List<ChallengeListDto> list = new ArrayList<>();
+
+        List<Challenge> challengeList = challengeRepository.findAllByInProgressAndIsFinished(inProgress,isFinished);
+
+
+        for (Challenge challenge : challengeList) {
+            // 챌린지 멤버 아이디와 챌린지 이름을 가져올 쿼리를 실행하여 결과를 얻는다.
+            LocalDate endDate = challenge.getEndDate();
+
+
+            ChallengeMember challengeMember = challengeMemberRepository.findByChallengeIdAndMemberId(challenge.getId(), member.getId());
+
+                if (challengeMember != null) {
+                    String challengeName = challengeMember.getChallenge().getName();
+                    long challengeMemberId = challengeMember.getId();
+                    ChallengeListDto dto = new ChallengeListDto();
+                    dto.setId(challengeMemberId);
+                    dto.setName(challengeName);
+                    list.add(dto);
+
+            }
+        }
+
+        return list;
     }
 }

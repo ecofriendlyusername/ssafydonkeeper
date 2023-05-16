@@ -22,6 +22,11 @@ public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember
 
     ChallengeMember findByChallengeIdAndMemberId(long id, Long id1);
 
-    @Query("SELECT c.name, cm.id FROM ChallengeMember cm JOIN cm.challenge c WHERE cm.member.id = :memberId AND c.inProgress = :inProgress AND c.isFinished = :isFinished")
-    List<ChallengeListDto> findChallengeNameAndMemberIdByMemberIdAndInProgressAndIsFinished(@Param("memberId") long memberId, @Param("inProgress") boolean inProgress, @Param("isFinished") boolean isFinished);
+    @Query("SELECT c.name, c.id FROM ChallengeMember cm JOIN cm.challenge c WHERE cm.member.id = :memberId AND c.inProgress = :inProgress AND c.isFinished = :isFinished")
+    List<ChallengeListDto> findChallengeNameAndIdByMemberIdAndInProgressAndIsFinished(@Param("memberId") long memberId, @Param("inProgress") boolean inProgress, @Param("isFinished") boolean isFinished);
+
+    int countByMemberIdAndChallengeId(Long memberId, Long challengeId);
+
+
+
 }
