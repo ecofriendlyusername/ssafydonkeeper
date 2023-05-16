@@ -126,7 +126,7 @@
     <div @click="getChallengeFinishedDetail">getChallengeFinishedDetail</div>
 
 
-    <!-- <br>
+    <br>
 <div @click="같음A">같음A</div> -->
 
   </div>
