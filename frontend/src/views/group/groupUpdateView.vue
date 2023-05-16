@@ -8,7 +8,7 @@
         </div>
 
         <div >
-            <button @click="addGroup" :disabled="isGroupCreatable">이름 변경</button>
+            <button @click="updateGroupName" :disabled="isGroupCreatable">이름 변경</button>
         </div>
 
         <div style="">
@@ -68,8 +68,29 @@
                 this.memberIds.push(id);
             }
         },
+        updateGroupName(){
+            this.axios({
+                method: 'patch',
+                url: process.env.VUE_APP_API_URL + `/circle?circleId=${this.$route.params.id}&name=${this.groupName}`,
+            })
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch(err => { console.log(err) })
+        },
         inviteMember () {
-
+            this.axios({
+                method: 'patch',
+                url: process.env.VUE_APP_API_URL + `/circle/invite?circleId=${this.$route.params.id}`,
+                data: {
+                    "name" : this.groupName,
+                    "member_ids" : this.memberIds
+                },
+            })
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch(err => { console.log(err) })
         }
     },
     watch: {
