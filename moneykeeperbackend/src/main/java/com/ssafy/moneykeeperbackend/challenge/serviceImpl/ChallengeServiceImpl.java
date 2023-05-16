@@ -66,16 +66,20 @@ public class ChallengeServiceImpl implements ChallengeService {
             return null; // 해당 챌린지가 존재하지 않을 경우 null 반환
         }
 
-        int participant = challengeMemberRepository.countByMemberAndId(member, id);
-        boolean participantValue = participant == 1; // 참여 여부 판단
+        int participant = challengeMemberRepository.countByMemberIdAndChallengeId(member.getId(), id);
+        System.out.println("참여중인가?ㅇㅇ "+participant);
+        boolean participantValue = false;
 
+        if(participant >0){
+            participantValue = true;
+        }
         ChallengeDetailResponseDto challengeDetailDto = new ChallengeDetailResponseDto();
         challengeDetailDto.setName(challenge.getName());
         challengeDetailDto.setContent(challenge.getContent());
         challengeDetailDto.setStartDate(challenge.getStartDate());
         challengeDetailDto.setEndDate(challenge.getEndDate());
         challengeDetailDto.setParticipant(participantValue);
-        challengeDetailDto.setParticipantCount(challengeRepository.countById(id));
+        challengeDetailDto.setParticipantCount(challengeMemberRepository.countByChallengeId(id));
         return challengeDetailDto;
     }
 
@@ -110,7 +114,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public List<ChallengeListDto> getChallengeInProgressList(boolean inProgress, boolean isFinished, Member member) {
         LocalDate today = LocalDate.now();
 
-        List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndMemberIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
+        List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
 
 
         return challengeList;
