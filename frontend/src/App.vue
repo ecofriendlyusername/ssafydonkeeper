@@ -108,6 +108,12 @@
     <!-- <br>
     <div @click="getChallengeInProgressList">getChallengeInProgressList</div>  -->
 
+    
+    <br>
+    <div @click="getChallengeInProgressDetail">getChallengeInProgressDetail</div> 
+
+    <br>
+    <div @click="setChallengeTodaySuccess">setChallengeTodaySuccess</div> 
 
     <!-- <br>
     <div @click="같음A">같음A</div> -->
@@ -149,8 +155,8 @@ export default {
         url: `http://localhost:8080/api/challenge`,
         data: {
           "name" : "하루에 천원쓰기 챌린지",
-          "startDate" : "2023-05-10",
-          "endDate" : "2023-05-17",
+          "startDate" : "2023-05-16",
+          "endDate" : "2023-05-25",
           "content" : "일주일간 하루에 천원만 사용하는 챌린지입니다.",
         }
       })
@@ -195,7 +201,7 @@ export default {
       //챌린지 참여 잘됨.
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/join/3`,
+        url: `http://localhost:8080/api/challenge/join/11`,
       })
         .then((res) => {
           console.log("joinChallenge")
@@ -209,7 +215,7 @@ export default {
       
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/challenge/cancel/3`,
+        url: `http://localhost:8080/api/challenge/cancel/11`,
       })
         .then((res) => {
           console.log("joinCancelChallenge")
@@ -232,6 +238,32 @@ export default {
 
     },
 
+    getChallengeInProgressDetail() {
+      //챌린지 참여중인거 상세조회 날짜따라서 로그찍어줌
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/challenge/progress/12`,
+      })
+        .then((res) => {
+          console.log("getChallengeInProgressDetail")
+          console.log(res.data)
+        })
+
+    },
+
+
+    setChallengeTodaySuccess() {
+      //오늘 성공 버튼
+      axios({
+        method: 'put',
+        url: `http://localhost:8080/api/challenge/progress/success/12`,
+      })
+        .then((res) => {
+          console.log("setChallengeTodaySuccess")
+          console.log(res.data)
+        })
+
+    },
 
     updateIncomeClassification() {
       axios({
