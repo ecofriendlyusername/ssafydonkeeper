@@ -9,7 +9,7 @@ import com.ssafy.moneykeeperbackend.accountbook.entity.IncomeClassification;
 import com.ssafy.moneykeeperbackend.accountbook.entity.Spending;
 import com.ssafy.moneykeeperbackend.accountbook.entity.SpendingClassification;
 import com.ssafy.moneykeeperbackend.common.BaseEntity;
-import com.ssafy.moneykeeperbackend.group.entity.MemberGroup;
+import com.ssafy.moneykeeperbackend.circle.entity.MemberCircle;
 import com.ssafy.moneykeeperbackend.statistics.entity.*;
 import com.sun.istack.NotNull;
 
@@ -69,7 +69,7 @@ public class Member extends BaseEntity {
 	List<Budget> budgets;
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-	List<MemberGroup> memberGroups;
+	List<MemberCircle> memberCircles;
 
 	@ManyToOne
 	private IncomeGroup incomeGroup;

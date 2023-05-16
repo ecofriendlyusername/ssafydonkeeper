@@ -3,6 +3,21 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/group',
+    name: 'group',
+    component: () => import('../views/group/groupView.vue'),
+  },
+  {
+    path: '/group/add',
+    name: 'groupadd',
+    component: () => import('../views/group/groupAddView.vue')
+  },
+  {
+    path: '/group/detail/:id',
+    name: 'groupDetail',
+    component: () => import('../views/group/groupDetail.vue')
+  },
+  {
     path: '/book',
     children: [
       {
@@ -75,11 +90,7 @@ const routes = [
         name: 'comparison',
         component: () => import('../views/comparison/comparisonView.vue')
       },
-      {
-        path: 'group',
-        name: 'group',
-        component: () => import('../views/comparison/groupView.vue')
-      },
+      
       {
         path: 'challenge',
         name: 'challenge',
