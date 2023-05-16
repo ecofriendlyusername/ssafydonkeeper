@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,8 @@ public class CircleController {
 	 * @author 정민지
 	 * */
 	@GetMapping("/{circleId}/{year}/{month}")
-	public ResponseEntity<?> getCircleInfo(@PathVariable Long circleId, @PathVariable int year, @PathVariable int month) {
+	public ResponseEntity<?> getCircleInfo(@PathVariable Long circleId, @PathVariable int year,
+		@PathVariable int month) {
 		return new ResponseEntity<>(circleService.getCircleInfo(circleId, year, month),
 			HttpStatus.OK);
 	}
@@ -101,16 +103,30 @@ public class CircleController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// /*
-	//  * 그룹 리더인지 확인
-	//  *
-	//  * @date 2023.05.15
-	//  * @author 정민지
-	//  * */
-	// @GetMapping("/{circleId}")
-	// public ResponseEntity<?> isLoginMemberisLeader(@AuthenticationPrincipal CustomUserDetails member, @PathVariable Long circleId) {
-	// 	return new ResponseEntity<>(circleService.isLoginMemberisLeader(circleId, member.getMember()),
-	// 		HttpStatus.OK);
-	// }
+	/*
+	 * 그룹 멤버 초대
+	 *
+	 * @date 2023.05.16
+	 * @author 정민지
+	 * */
+	@PatchMapping("/invite")
+	public ResponseEntity<?> addMember(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestParam Long circleId, @RequestBody CircleRequest circleRequest) {
+		return new ResponseEntity<>(circleService.addMember(circleId, circleRequest, member.getMember()),
+			HttpStatus.OK);
+	}
+
+	/*
+	 * 그룹 이름 수정
+	 *
+	 * @date 2023.05.16
+	 * @author 정민지
+	 * */
+	@PatchMapping()
+	public ResponseEntity<?> updateName(@AuthenticationPrincipal CustomUserDetails member,
+		@RequestParam Long circleId, @RequestParam String name) {
+		return new ResponseEntity<>(circleService.updateName(circleId, name, member.getMember()),
+			HttpStatus.OK);
+	}
 
 }
