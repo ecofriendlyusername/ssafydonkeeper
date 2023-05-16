@@ -7,7 +7,7 @@
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
   </div>
-  <div class="test" v-if="loginCheck">
+  <div class="test" v-if="!loginCheck">
 
     <div @click="check">세션 체크</div>
 
