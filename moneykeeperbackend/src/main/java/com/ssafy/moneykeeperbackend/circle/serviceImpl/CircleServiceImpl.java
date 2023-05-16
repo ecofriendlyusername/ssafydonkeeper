@@ -1,5 +1,6 @@
 package com.ssafy.moneykeeperbackend.circle.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -211,6 +212,65 @@ public class CircleServiceImpl implements CircleService {
 				.name(memberCircle.getCircle().getName())
 				.build())
 			.collect(Collectors.toList());
+	}
+
+	/*
+	 * 그룹 멤버 초대
+	 *
+	 * @date 2023.05.16
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public CircleResponse addMember(Long circleId, CircleRequest circleRequest, Member member) {
+		List<Long> memberIds = circleRequest.getMember_ids();
+
+		Circle circle = circleRepository.findById(circleId)
+			.orElseThrow(() -> new CircleRuntimeException(CircleExxceptionEnum.CIRCLE_ID_NULL));
+
+		List<MemberCircle> alreadyInvitedMembers = memberCircleRepository.findByCircle(circle);
+
+		List<Member> membersToInvite = memberIds.stream()
+			.filter(memberId -> !alreadyInvitedMembers.stream()
+				.map(MemberCircle::getMember)
+				.anyMatch(mem -> mem.getId().equals(memberId)))
+			.map(memberId -> memberRepository.findById(memberId)
+				.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.MEMBER_ID_NULL)))
+			.collect(Collectors.toList());
+
+		for (Member inviteMem : membersToInvite) {
+			memberCircleRepository.saveAndFlush(MemberCircle.builder()
+				.member(inviteMem)
+				.circle(circle)
+				.circleRole(CircleRole.CIRCLE_MEMBER)
+				.build());
+		}
+
+		LocalDate currentDate = LocalDate.now();
+		return getCircleInfo(circleId, currentDate.getYear(), currentDate.getMonthValue());
+	}
+
+	/*
+	 * 그룹 이름 수정
+	 *
+	 * @date 2023.05.16
+	 * @author 정민지
+	 * */
+	@Transactional
+	@Override
+	public CircleResponse updateName(Long circleId, String name, Member member) {
+		Circle circle = circleRepository.findById(circleId)
+			.orElseThrow(() -> new CircleRuntimeException(CircleExxceptionEnum.CIRCLE_ID_NULL));
+
+		if (existsCircleName(name)) {
+			throw new CircleRuntimeException(CircleExxceptionEnum.EXISTS_CIRCLE_NAME);
+		}
+
+		circle.setName(name);
+		circleRepository.save(circle);
+
+		LocalDate currentDate = LocalDate.now();
+		return getCircleInfo(circleId, currentDate.getYear(), currentDate.getMonthValue());
 	}
 
 }

@@ -13,7 +13,7 @@ const routes = [
     component: () => import('../views/group/groupAddView.vue')
   },
   {
-    path: '/group/update',
+    path: '/group/update/:id',
     name: 'groupupdate',
     component: () => import('../views/group/groupUpdateView.vue')
   },

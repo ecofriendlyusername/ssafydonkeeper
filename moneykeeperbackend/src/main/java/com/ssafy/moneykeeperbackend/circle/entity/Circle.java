@@ -35,4 +35,7 @@ public class Circle extends BaseEntity {
 	@OneToMany(mappedBy = "circle", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<MemberCircle> memberCircles;
 
+	public void setName(String name) {
+		this.name = name;
+	}
 }

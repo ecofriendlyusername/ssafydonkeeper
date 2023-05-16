@@ -21,5 +21,8 @@ public interface CircleService {
 
 	boolean existsCircleName(String name);
 
-	// boolean isLoginMemberisLeader(Long circleId, Member member);
+	CircleResponse addMember(Long circleId, CircleRequest circleRequest, Member member);
+
+	CircleResponse updateName(Long circleId, String name, Member member);
+
 }
