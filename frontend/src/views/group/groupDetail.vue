@@ -1,6 +1,10 @@
 <template>
     <div>
         <h1>{{ groupName }}</h1>
+        
+        <button v-if="isLeader" @click="deletGroup(this.groupId)"> 그룹 삭제 </button>
+        <button v-if="!isLeader" @click="secession(this.groupId)"> 그룹 탈퇴 </button>
+
         <ol>
             <li v-for="top in top3" :key="top.id">
                 {{ top.email }}
@@ -24,6 +28,7 @@ export default {
     data() {
         return {
             groupName : '',
+            groupId : -1,
             top3 : [],
             allMembers : [],
             isLeader : false,
@@ -58,10 +63,11 @@ export default {
             this.groupName = res.data.name;
             this.top3 = res.data.top3Members;
             this.allMembers = res.data.allMembers;
+            this.groupId = res.data.circle_id;
 
-            // if (res.data.leader_id == ) {
-
-            // }
+            if (res.data.leader_id == this.$store.state.userData.id) {
+                this.isLeader = true;
+            }
         })
     }
 

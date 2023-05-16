@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>그룹 생성</h1>
         <div style="">
             <div id=""><label for="groupName">그룹 이름</label></div>
             <input type="text" id="groupName" v-model="groupName" style="border-radius:5px; width: 165px;">
