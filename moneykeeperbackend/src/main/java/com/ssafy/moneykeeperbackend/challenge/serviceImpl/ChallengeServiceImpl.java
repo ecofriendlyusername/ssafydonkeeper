@@ -86,8 +86,9 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public boolean joinChallenge(Member member, long id) {
         Challenge challenge = challengeRepository.findById(id);
+        ChallengeMember challengeMember = challengeMemberRepository.findByChallengeIdAndMemberId(id,member.getId());
         boolean result;
-        if (challenge == null) {
+        if (challenge == null || challengeMember!=null) {
             result = false;
         } else {
             ChallengeMember join = new ChallengeMember();
@@ -114,10 +115,11 @@ public class ChallengeServiceImpl implements ChallengeService {
     public List<ChallengeListDto> getChallengeInProgressList(boolean inProgress, boolean isFinished, Member member) {
         LocalDate today = LocalDate.now();
 
-        List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
+        //List<ChallengeListDto> challengeList = challengeMemberRepository.findChallengeNameAndIdByMemberIdAndInProgressAndIsFinished(member.getId(), inProgress, isFinished);
 
 
-        return challengeList;
+    //        return challengeList;
+    return null;
     }
 
     @Override
@@ -135,7 +137,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         String logs = challengeMember.getLogs();
         if (logs.length() < daysPassed - 2) {
             int zerosToAdd = daysPassed - 2 - logs.length();
-            for (int i = 0; i < zerosToAdd; i++) {
+            for (int i = 0; i <= zerosToAdd; i++) {
                 logs = logs + "0";
             }
         }
@@ -173,13 +175,23 @@ public class ChallengeServiceImpl implements ChallengeService {
         ChallengeMember challengeMember = challengeMemberRepository.findById(id);
         Challenge challenge = challengeRepository.findById(challengeMember.getChallenge().getId());
 
-        int duration = (int) ChronoUnit.DAYS.between(today, challenge.getEndDate()); // 남은 날짜
+//        int duration = (int) ChronoUnit.DAYS.between(today, challenge.getEndDate()); // 남은 날짜
         int daysPassed = (int) (ChronoUnit.DAYS.between(challenge.getStartDate(), today) + 1); // 얼마나 지났는가
         int totalDate = (int) (ChronoUnit.DAYS.between(challenge.getStartDate(), challenge.getEndDate()) + 1); // 전체 날짜
 
         String logs = challengeMember.getLogs();
 
-        logs = logs + "1"; // 로그에 1 추가
+        if (logs.length() < daysPassed - 2) {
+            int zerosToAdd = daysPassed - 2 - logs.length();
+            for (int i = 0; i <= zerosToAdd; i++) {
+                logs = logs + "0";
+            }
+        }
+
+        if(logs.length()<daysPassed) {
+            logs = logs + "1"; // 로그에 1 추가
+        }
+
 
         long oneCount = logs.chars().filter(ch -> ch == '1').count(); // 1의 개수 세기
 

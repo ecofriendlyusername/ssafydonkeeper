@@ -228,7 +228,7 @@ public class ChallengeController {
      * @date 2023.05.12
      * @author 양윤정
      * */
-    @PutMapping("/finish/{id}")
+    @PutMapping("/progress/success/{id}")
     public ResponseEntity<String> setChallengeSuccess(@AuthenticationPrincipal CustomUserDetails member, @PathVariable long id) {
         challengeService.successChallenge(member.getMember(), id);
         return ResponseEntity.ok("챌린지 성공적 처리");
