@@ -12,7 +12,7 @@
       <div style="font-size:17px;">
         <h3>가장 많이 사용한 곳</h3>
         <p v-for="(data, idx) in spend_data.filter((_, idx) => idx < key)" :key="idx">
-          ㆍ{{ data.category }} {{ data.amount }} 원 </p>
+          ㆍ{{ data.category }} {{ data.amount.toLocaleString() }} 원 </p>
       </div>
     </div>
 
@@ -27,7 +27,7 @@
             {{ data.category }}
           </div>
           <div style="font-size:20px; margin-right:30px;">
-            {{ data.amount }}원
+            {{ data.amount.toLocaleString() }}원
           </div>
         </div>
       </div>

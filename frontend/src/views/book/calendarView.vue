@@ -92,8 +92,8 @@ export default {
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/total/amount/${this.year}/${this.month + 1}`)
       .then(res=>{
         console.log(res.data)
-        this.incom = res.data.total.totalIncomeAmount
-        this.spend = res.data.total.totalSpendingAmount
+        this.incom = res.data.total.totalIncomeAmount.toLocaleString();
+        this.spend = res.data.total.totalSpendingAmount.toLocaleString();
         this.datas = res.data.details
       })
       .then(() => {
@@ -108,13 +108,13 @@ export default {
       dayday.forEach((day, idx) => {
         let p1 = document.createElement("p");
         p1.setAttribute('class', 'incom')
-        p1.innerText = this.datas[idx].incomeAmount
+        p1.innerText = this.datas[idx].incomeAmount.toLocaleString();
         if(this.datas[idx].incomeAmount != 0) {          
           day.appendChild(p1);
         }
         let p2 = document.createElement("p");
         p2.setAttribute('class', 'spend')
-        p2.innerText = this.datas[idx].spendingAmount
+        p2.innerText = this.datas[idx].spendingAmount.toLocaleString();
         if(this.datas[idx].spendingAmount != 0) {
           day.appendChild(p2);
         }

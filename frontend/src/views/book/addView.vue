@@ -149,6 +149,7 @@ export default {
         .then((res) => {
           console.log("add")
           console.log(res.data)
+          this.$router.push('/book/calendar')
         })
         .catch(err => { console.log(err) })
     },
@@ -169,6 +170,7 @@ export default {
         .then((res) => {
           console.log("add")
           console.log(res.data)
+          this.$router.push('/book/calendar')
         })
         .catch(err => { console.log(err) })
     },
