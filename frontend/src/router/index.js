@@ -25,6 +25,11 @@ const routes = [
 
   },
   {
+    path: '/ocr',
+    name: 'ocr',
+    component: () => import('../views/ocrView.vue'),
+  },
+  {
     path: '/group',
     name: 'group',
     component: () => import('../views/group/groupView.vue'),
@@ -92,15 +97,25 @@ const routes = [
   {
     path: '/budget',
     children: [
+      // {
+      //   path: 'test',
+      //   name: 'budget2',
+      //   component: () => import('../views/budget/budgetView.vue')
+      // },
       {
         path: '',
         name: 'budget',
-        component: () => import('../views/budget/budgetView.vue')
+        component: () => import('../views/budget/budgetView2.vue')
       },
+      // {
+      //   path: 'settest',
+      //   name: 'set2',
+      //   component: () => import('../views/budget/setView2.vue')
+      // },
       {
         path: 'set',
         name: 'set',
-        component: () => import('../views/budget/setView.vue')
+        component: () => import('../views/budget/setView2.vue')
       },
       {
         path: 'update',
