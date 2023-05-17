@@ -36,13 +36,24 @@
                 </router-link>
             </div>
 
-            <div>
+            <div style="margin-top:-3px;">
                 <router-link to="/comparison" class="router">
                     <div>
                         <img src="@/assets/자산비교.png" style="width:34px; margin-top: 5px; margin-bottom: 5px;">
                     </div>
                     <div>
                         자산비교
+                    </div>
+                </router-link>
+            </div>
+
+            <div style="margin-top:-3px;">
+                <router-link to="/group" class="router">
+                    <div>
+                        <img src="@/assets/그룹.png" style="width:34px; margin-top: 5px; margin-bottom: 5px;">
+                    </div>
+                    <div>
+                        그룹
                     </div>
                 </router-link>
             </div>
