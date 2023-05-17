@@ -29,15 +29,17 @@
     style="display:flex; justify-content:center; margin-left: 15px; background-color:#4D82E6; width:105px; padding: 5px 10px; color: white; font-weight: bold; border: none; border-radius: 10px; "
     >설정 완료</div>
 
-    <div v-for="(budget, idx) in budget_list" :key="idx"
-    style="display:flex; margin:15px 15px;">
-    <div style="width:80px; display:flex; font-weight: bold;">
-      <label :for="budget.name">{{ budget.name }}</label>
+    <div v-if="flag" >
+      <div v-for="(budget, idx) in budget_list" :key="idx"
+      style="display:flex; margin:15px 15px;">
+      <div style="width:80px; display:flex; font-weight: bold;">
+        <label :for="budget.name">{{ budget.name }}</label>
+      </div>
+        <input type="number" :name="budget.name" :value="budget.amount" @change="logging(idx)">
+        <button @click="delList(budget.id)" id="Xbtn">X</button>
+      </div>
     </div>
-      <input type="number" :name="budget.name" :value="budget.amount" @change="logging(idx)">
-      <button @click="delList(budget.id)" id="Xbtn">X</button>
-    </div>
-
+    
     <br>
     <div v-if="flag" style="margin-left:-45px">
       <div v-for="(classification, idx) in classifications" :key="idx" @click="addList(classification)" class="budget">
@@ -63,7 +65,10 @@ export default {
       budget_list: [],
       total_budget: 0,
       sum_budget: 0,
-      today: new Date()
+      today: new Date(),
+      data: [],
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
     }
   },
   methods: {
@@ -100,12 +105,39 @@ export default {
     },
 
     getData() {
+      
+
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spendingclassification`)
         .then(res => {
           console.log(res.data);
           this.classifications = res.data.map(el => {
             return { "id": el.id, "name": el.name, "amount": 0 }
           })
+        })
+
+        this.axios.get(process.env.VUE_APP_API_URL + `/account-book/budget/all/${this.year}/${this.month}`)
+        .then(res => {
+          this.data = res.data;
+          this.total_budget = res.data.total_amount != -1 ? res.data.total_amount : 0;
+
+          // if (res.data.datas.length > 0) {
+          //   this.flag = true
+          // }
+          
+          let f = true;
+          for (var i = 0; i < res.data.datas.length; i++) {
+            var da = res.data.datas[i];
+            this.budget_list.filter(el => {
+              if (el.id == da.id) {
+                f = false;
+              }
+            });
+            if (f) {
+              // da.amount = 0;
+              this.budget_list.push(da);
+            }
+          }
+          console.log(res.data);
         })
     },
     checkData() {
@@ -118,9 +150,9 @@ export default {
       })
       console.log(flag);
       if (flag) {
-        this.postData()      
-      } else {
         alert("예산을 입력해주세요.")
+      } else {
+        this.postData()
       }
     },
     postData() {
