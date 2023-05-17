@@ -118,9 +118,10 @@ export default {
       })
       console.log(flag);
       if (flag) {
-        this.postData()      
-      } else {
+          
         alert("예산을 입력해주세요.")
+      } else {
+        this.postData()   
       }
     },
     postData() {

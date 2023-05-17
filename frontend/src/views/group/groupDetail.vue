@@ -1,18 +1,38 @@
 <template>
     <div>
-        <h1>{{ groupName }}</h1>
-        
-        <button v-if="isLeader" @click="this.$router.push(`/group/update/${this.$route.params.id}`)">그룹 수정</button>
-        <button v-if="isLeader" @click="deletGroup(this.$route.params.id)"> 그룹 삭제 </button>
-        <button v-if="!isLeader" @click="secession(this.$route.params.id)"> 그룹 탈퇴 </button>
 
-        <ol>
-            <li v-for="top in top3" :key="top.id">
-                {{ top.email }}
-                {{ top.nickname }}
-                {{ top.thisMonthTotalAmount }}원
-            </li>
+        <div style="display:flex; justify-content: space-between; padding: 0px 50px;">
+            <div>
+                <h1>{{ groupName }}</h1>
+            </div>
+            
+            <div style="margin-top:20px;">
+                <button id="GBtn" v-if="isLeader" @click="this.$router.push(`/group/update/${this.$route.params.id}`)">그룹 수정</button>
+                <button id="GBtn" v-if="isLeader" @click="deletGroup(this.$route.params.id)"> 그룹 삭제 </button>
+                <button id="GBtn" v-if="!isLeader" @click="secession(this.$route.params.id)"> 그룹 탈퇴 </button>
+            </div>
+        </div>
+        
+
+        <ol style="margin-top:-10px;">
+            <div v-for="top in top3" :key="top.id">
+                <div class="groupName" style="justify-content:space-between">
+                    <div>
+                        <span>
+                            {{ top.nickname }}
+                        </span>
+                        <span style="margin-left:5px; color:gray; font-weight: 100; font-size:14px;">
+                            {{ top.email }}
+                        </span>
+                    </div>
+                    <div>
+                        {{ top.thisMonthTotalAmount }}원
+                    </div>
+                </div>
+            </div>
         </ol>
+
+
 
         <ul>
             <li v-for="member in allMembers" :key="member.id">
@@ -73,4 +93,12 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+#GBtn {
+    border: 1px solid black;
+    padding:4px 5px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+</style>
