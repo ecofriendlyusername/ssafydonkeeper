@@ -262,8 +262,10 @@ public class StatService {
 
         for (MajorSpendingClassification msc : mscList) {
             MonthSpendingRecordByClass cur = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member, curMonth, msc);
-
-
+            if (cur == null) {
+                buildMonthSpendingRecordByClassesForAUser(member,curMonth);
+                cur = monthSpendingRecordByClassRepository.findByMemberAndYmonthAndMajorSpendingClass(member, curMonth, msc);
+            }
             MSRCDto msrcDto = MSRCDto.builder()
                     .amount(cur.getAmount())
                     .categoryId(msc.getId())
