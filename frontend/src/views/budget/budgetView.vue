@@ -62,6 +62,10 @@ export default {
           this.data = res.data;
           console.log(res.data);
         }).then(() => {
+          const gauge = document.querySelector(".gaugeBar");
+          let tmp = 100 - (this.data?.total_budget - this.spend_data?.spend_budget) / this.data?.total_budget * 100
+          gauge.style.width = `${tmp}%`;
+
           if (this.data.amount == 1) {
             // this.axios.get(process.env.VUE_APP_API_URL + `/`)
             this.$router.push('/budget/set')
@@ -82,9 +86,7 @@ export default {
   },
   mounted() {
     this.getData()
-    const gauge = document.querySelector(".gaugeBar");
-    let tmp = 100 - (this.data?.total_budget - this.spend_data?.spend_budget) / this.data?.total_budget * 100
-    gauge.style.width = `${tmp}%`;
+    
   }
 
 }
