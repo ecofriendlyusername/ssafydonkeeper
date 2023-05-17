@@ -76,6 +76,7 @@ public class TestService { //
         "교육/학습","자녀/육아","반려동물","경조/선물"};
 
         for (String s : major) {
+            if (majorSpendingClassificationRepository.existsByName(s)) return;
             MajorSpendingClassification msc =
                     MajorSpendingClassification.builder()
                             .name(s)

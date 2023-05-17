@@ -14,4 +14,6 @@ public interface MajorSpendingClassificationRepository extends JpaRepository<Maj
 	List<MajorSpendingClassification> findAll();
 
 	Optional<MajorSpendingClassification> findById(Long id);
+
+    boolean existsByName(String s);
 }

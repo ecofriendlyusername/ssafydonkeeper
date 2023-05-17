@@ -10,6 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"below"})
+})
 public class SpendingGroup {
     @Id
     @GeneratedValue
