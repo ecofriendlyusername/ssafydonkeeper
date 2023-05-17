@@ -214,6 +214,8 @@ public class SpendingServiceImpl implements SpendingService {
 
 		Spending resultSpending = spendingRepository.save(spending);
 
+		processRecordService.processUpdatedSpending(spending, resultSpending);
+
 		return SpendingResponse.builder()
 			.spendingId(resultSpending.getId())
 			.amount(resultSpending.getAmount())
@@ -234,6 +236,7 @@ public class SpendingServiceImpl implements SpendingService {
 	@Transactional
 	@Override
 	public void deleteSpending(Long spendingId) {
+		processRecordService.processDeletedSpending(spendingId);
 		spendingRepository.deleteById(spendingId);
 	}
 }
