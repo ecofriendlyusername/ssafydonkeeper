@@ -32,7 +32,7 @@
 
             <br><br>
         <div>
-            <button @click="addGroup" :disabled="isGroupCreatable"
+            <button @click="addGroup"
             style="border:none; background-color:#5987DF; color:white; padding:10px 15px; font-size:15px; font-weight:bold; border-radius:8px;">그룹 생성</button>
         </div>
     </div>
@@ -78,6 +78,11 @@
             }
         },
         addGroup () {
+            if (this.isGroupCreatable) {
+                alert("그룹 이름 중복 체크를 진행해주세요.");
+                return;
+            }
+
             this.axios({
                 method: 'post',
                 url: process.env.VUE_APP_API_URL + `/circle`,

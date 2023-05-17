@@ -40,7 +40,18 @@ public class BudgetServiceImpl implements BudgetService {
 	@Transactional
 	@Override
 	public BudgetDTO upsertMonthBudget(BudgetDTO budgetDTO, Member member) {
-		List<SpendingClassificationAmountDTO> spendingClassificationAmountDTOS = budgetDTO.getDatas();
+		System.out.println();
+		System.out.println(budgetDTO.getYear());
+		System.out.println(budgetDTO.getMonth());
+		System.out.println(budgetDTO.getTotal_amount());
+		System.out.println("--------------------");
+		for (SpendingClassificationAmountDTO a: budgetDTO.getDatas()
+			 ) {
+			System.out.println(a.getClassificationId());
+			System.out.println(a.getAmount());
+		}
+		System.out.println("--------------------");
+		System.out.println();
 
 		// 전체 예산이 있으면 수정, 없으면 등록
 		Budget budget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(member,
@@ -59,7 +70,7 @@ public class BudgetServiceImpl implements BudgetService {
 		}
 
 		// 소비 분류 별 예산이 있으면 수정, 없으면 등록
-		for (SpendingClassificationAmountDTO spendingClassificationAmountDTO : spendingClassificationAmountDTOS) {
+		for (SpendingClassificationAmountDTO spendingClassificationAmountDTO : budgetDTO.getDatas()) {
 			Budget classificationBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationId(
 				member, budgetDTO.getYear(), budgetDTO.getMonth(),
 				spendingClassificationAmountDTO.getClassificationId()).orElse(null);
@@ -82,8 +93,7 @@ public class BudgetServiceImpl implements BudgetService {
 		}
 
 		Budget resultTotalBudget = budgetRepository.findByMemberAndYearAndMonthAndSpendingClassificationIsNull(
-			member,
-			budgetDTO.getYear(), budgetDTO.getMonth()).orElse(null);
+			member, budgetDTO.getYear(), budgetDTO.getMonth()).orElse(null);
 
 		BudgetDTO resultBudgetDTO = BudgetDTO.builder()
 			.year(budgetDTO.getYear())
