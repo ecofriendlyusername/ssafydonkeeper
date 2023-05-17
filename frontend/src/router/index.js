@@ -3,6 +3,28 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/challange',
+    children: [
+      {
+        path: '',
+        name: 'challangeList',
+        component: () => import('../views/challange/challangeListView.vue')
+      },
+      {
+        path: 'add',
+        name: 'challangeAdd',
+        component: () => import('../views/challange/challangeAddView.vue')
+      },
+      {
+        path: ':id',
+        name: 'challangeDetail',
+        component: () => import('../views/challange/challangeDetailView.vue')
+      },
+
+    ]
+
+  },
+  {
     path: '/ocr',
     name: 'ocr',
     component: () => import('../views/ocrView.vue'),

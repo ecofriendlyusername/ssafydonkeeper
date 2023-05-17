@@ -25,8 +25,8 @@
 
     <div class="modal" v-show="aModalFlag">
       <div>
-        <div v-for="el in AC_data" :key="el.id" v-on:click="AC = el" id="selecadd" style="display:inline-block">
-            <div>{{ el.name }}</div>
+        <div v-for="el in AC_data" :key="el.id" v-on:click="AC = el" class="selecadd" style="display:inline-block">
+            <div @click="clickBtn">{{ el.name }}</div>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
 
     <div class="modal" v-show="cModalFlag && !flag">
       <div>
-        <li v-for="el in SC_data" :key="el.id" v-on:click="SC = el" id="selecadd" style="display:inline-block">
+        <li v-for="el in SC_data" :key="el.id" v-on:click="SC = el" class="selecadd" style="display:inline-block">
           {{ el.name }}
         </li>
       </div>
@@ -187,13 +187,17 @@ export default {
   min-height: 530px;
 }
 
-#selecadd {
+.selecadd {
   width: 100px;
   background-color:#f7f7f7;
   padding:5px;
   margin: 5px;
   border-radius: 5px;
 }
+.selecadd:hover {
+  font-weight: bold;
+}
+
 
 #assetId {
   display: inline-block;

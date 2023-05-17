@@ -1,8 +1,9 @@
 <template>
   <div class="header">
+    <div v-on:click="this.$router.go(-1)"
+    style="font-weight:bold; width:150px; display:flex;">◀</div>
     돈키퍼
     <!-- 현재 페이지 {{ title }} -->
-    <button v-on:click="this.$router.go(-1)">back</button>
   </div>
 </template>
 
@@ -21,7 +22,7 @@ export default {
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   height: 40px;
   padding: 5px 30px;
   background-color: #4D82E6;
