@@ -17,28 +17,28 @@
         </div>
 
         <div id="budgetTitle" style="font-size: 17px;">
-            <div> <span style="font-weight:bold;">남은 예산:</span> {{ formatAmount(this.budgetResponse.total_amount - this.total_spend_amount) }} ₩</div>
+            <div> <span style="font-weight:bold;">남은 예산:</span> {{ formatAmount(this.budgetResponse.total_amount - this.total_spend_amount > 0 ? this.budgetResponse.total_amount - this.total_spend_amount : 0) }} ₩</div>
         </div>
 
         <div id="budgetTitle" style="font-size: 17px;">
-            <div> <span style="font-weight:bold;">하루 권장 지출액:</span> {{ }} ₩</div>
+            <div> <span style="font-weight:bold;">하루 권장 지출액:</span> {{ this.suggestedDaySpending }} ₩</div>
         </div>
 
-        <div style="margin-top:45px;">
-        <h3 id="budgetTitle">카테고리별 예산</h3>
-        <div v-for="(item, idx) in spendingClassificationBudget" :key="idx" class="cell">
-            <div>
-                <div id="budgetTitle" style="display:flex; align-items:center; justify-content: space-between;">
-                    <div style="display:flex; align-items:center;">
-                        <div id="budgetImg"></div>
-                        <div style="font-weight: bold; margin-left: 10px; font-size: 16px;">{{ item.name }}</div>
+        <div v-if="this.hasClassificationBudget" style="margin-top:45px;">
+            <h3 id="budgetTitle">카테고리별 예산</h3>
+            <div v-for="(item, idx) in spendingClassificationBudget" :key="idx" class="cell">
+                <div>
+                    <div id="budgetTitle" style="display:flex; align-items:center; justify-content: space-between;">
+                        <div style="display:flex; align-items:center;">
+                            <div id="budgetImg"></div>
+                            <div style="font-weight: bold; margin-left: 10px; font-size: 16px;">{{ item.name }}</div>
+                        </div>
+                        <div> {{ formatAmount(getClassificationSpend(item.classificationId)) }}원 사용 </div>
+                        <div style="color:#808080;">{{ formatAmount(getSpendingPercent(item.classificationId, item.amount)) }}%</div>
+                        <div style="font-weight: bold;">{{ formatAmount(getRemainingAmount(item.classificationId, item.amount)) }}원 남음 </div>
                     </div>
-                    <div> {{ formatAmount(getClassificationSpend(item.classificationId)) }}원 사용 </div>
-                    <div style="color:#808080;">{{ formatAmount(getSpendingPercent(item.classificationId, item.amount)) }}%</div>
-                    <div style="font-weight: bold;">{{ formatAmount(getRemainingAmount(item.classificationId, item.amount)) }}원 남음 </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </template>
@@ -54,6 +54,8 @@ export default {
             spendingClassificationBudget : [],
             total_spend_amount: 0,
             total_spend_percent : 0,
+            suggestedDaySpending : 0,
+            hasClassificationBudget : false,
         }
     },
     methods : {
@@ -82,8 +84,25 @@ export default {
             if (amount) {
                 return amount.toLocaleString();
             }
-            return '';
+            return 0;
         }   
+
+    },
+    watch: {
+        total_spend_amount () {
+            if (this.budgetResponse.total_amount - this.total_spend_amount > 0) {
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth();
+                const currentYear = currentDate.getFullYear();
+                const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                const remainingDays = lastDayOfMonth - currentDate.getDate() + 1;
+
+                this.suggestedDaySpending = this.formatAmount(Math.floor(this.budgetResponse.total_amount / remainingDays));
+            } else {
+                this.suggestedDaySpending = 0;
+            }
+            
+        },
 
     },
     mounted() {
@@ -91,6 +110,10 @@ export default {
         .then(res => {
             this.budgetResponse = res.data;
             this.spendingClassificationBudget = res.data.datas;
+
+            if (res.data.datas.length > 0) {
+                this.hasClassificationBudget = true;
+            }
             console.log(res.data);
         })
 

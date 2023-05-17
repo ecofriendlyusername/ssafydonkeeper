@@ -26,7 +26,7 @@
                         </span>
                     </div>
                     <div>
-                        {{ top.thisMonthTotalAmount }}원
+                        {{ top.thisMonthTotalAmount.toLocaleString() }}원
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <li v-for="member in allMembers" :key="member.id">
                 {{ member.email }}
                 {{ member.nickname }}
-                {{ member.thisMonthTotalAmount }}원
+                {{ member.thisMonthTotalAmount.toLocaleString() }}원
             </li>
         </ul>
     </div>

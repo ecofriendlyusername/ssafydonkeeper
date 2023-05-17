@@ -69,19 +69,14 @@ export default {
           console.log("확인");
           console.log(this.data.amount);
 
-          // if (this.data.amount != null && this.data.amount == 1) {
-          //   // this.axios.get(process.env.VUE_APP_API_URL + `/`)
-          //   this.$router.push('/budget/set')
-          // }
-          const gauge = document.querySelector(".gaugeBar");
-          let tmp = 100 - (this.data?.total_budget - this.spend_data?.spend_budget) / this.data?.total_budget * 100
-          gauge.style.width = `${tmp}%`;
-
-          if (this.data.amount == 1) {
+          if (this.data.amount != null && this.data.amount == 1) {
             // this.axios.get(process.env.VUE_APP_API_URL + `/`)
             this.$router.push('/budget/set')
           }
         })
+
+        console.log("sss");
+
       this.axios.get(process.env.VUE_APP_API_URL + `/statistics/monthlyspendingbycat/${this.year}/${this.month}`)
         .then(res => {
           // console.log(`/statistics/monthlyspendingbycat/${this.year}/${this.month}`);
@@ -90,6 +85,8 @@ export default {
           this.total_spend = res.data.reduce((o, t) => o + t.amount, 0)
         })
 
+      console.log("ddd");
+
     },
     priceToString(price) {
       return Math.round(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -97,7 +94,7 @@ export default {
   },
   mounted() {
     this.getData()
-
+    
   }
 
 }
