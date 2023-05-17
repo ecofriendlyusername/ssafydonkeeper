@@ -39,7 +39,7 @@
         <button @click="delList(budget.id)" id="Xbtn">X</button>
       </div>
     </div>
-    
+
     <br>
     <div v-if="flag" style="margin-left:-45px">
       <div v-for="(classification, idx) in classifications" :key="idx" @click="addList(classification)" class="budget">
@@ -105,7 +105,7 @@ export default {
     },
 
     getData() {
-      
+
 
       this.axios.get(process.env.VUE_APP_API_URL + `/account-book/spendingclassification`)
         .then(res => {
@@ -123,7 +123,7 @@ export default {
           // if (res.data.datas.length > 0) {
           //   this.flag = true
           // }
-          
+
           let f = true;
           for (var i = 0; i < res.data.datas.length; i++) {
             var da = res.data.datas[i];
