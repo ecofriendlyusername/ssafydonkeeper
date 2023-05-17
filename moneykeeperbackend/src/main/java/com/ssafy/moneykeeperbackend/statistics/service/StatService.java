@@ -109,7 +109,9 @@ public class StatService {
             GroupSpending gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
 
             if (gs == null) {
-                throw new NoSuchElementException();
+                List<IncomeGroup> igList = incomeGroupRepository.findAll();
+                updateDataService.generateGroupSpending(ymonth,mscList,igList);
+                gs = groupSpendingRepository.findByIncomeGroupAndMajorSpendingClassAndYmonth(incomeGroup,msc,ymonth);
             }
             SpendingDataDto sddGroup = SpendingDataDto.builder()
                     .amount( (int) ((double)gs.getTotal()/(double)gs.getMonths())  )
