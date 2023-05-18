@@ -146,6 +146,7 @@ export default {
   color: white;
   text-align: right;
   padding: 5px;
+  width: 70%
 }
 
 .yourBar {
@@ -154,5 +155,6 @@ export default {
   color: white;
   text-align: right;
   padding: 5px;
+  width: 70%
 }
 </style>
