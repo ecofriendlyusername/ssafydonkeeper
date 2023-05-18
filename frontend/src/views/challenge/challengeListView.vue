@@ -5,7 +5,7 @@
                 내가 참여중인 챌린지
             </div>
         </div>
-        <div v-for="(data, idx) in playing" :key="idx" @click="this.$router.push(`/challange/playing/${data.id}`)"
+        <div v-for="(data, idx) in playing" :key="idx" @click="this.$router.push(`/challenge/playing/${data.id}`)"
             style="display:flex; justify-content:center;">
             <div class="challangeName">
                 <div>
@@ -24,7 +24,7 @@
         </div>
 
 
-        <div v-for="(data, idx) in beforeStart" :key="idx" @click="this.$router.push(`/challange/before/${data.id}`)"
+        <div v-for="(data, idx) in beforeStart" :key="idx" @click="this.$router.push(`/challenge/before/${data.id}`)"
             style="display:flex; justify-content:center;">
             <div class="challangeName">
                 <div>
@@ -43,7 +43,7 @@
         </div>
 
 
-        <div v-for="(data, idx) in finish" :key="idx" @click="this.$router.push(`/challange/finish/${data.id}`)"
+        <div v-for="(data, idx) in finish" :key="idx" @click="this.$router.push(`/challenge/finish/${data.id}`)"
             style="display:flex; justify-content:center;">
             <div class="challangeName">
                 <div>

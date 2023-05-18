@@ -3,32 +3,32 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/challange',
+    path: '/challenge',
     children: [
       {
         path: '',
         name: 'challangeList',
-        component: () => import('../views/challange/challangeListView.vue')
+        component: () => import('../views/challenge/challengeListView.vue')
       },
       {
         path: 'add',
         name: 'challangeAdd',
-        component: () => import('../views/challange/challangeAddView.vue')
+        component: () => import('../views/challenge/challengeAddView.vue')
       },
       {
         path: 'before/:id',
         name: 'beforeDetail',
-        component: () => import('../views/challange/challangeBeforeStartDetailView.vue')
+        component: () => import('../views/challenge/challengeBeforeStartDetailView.vue')
       },
       {
         path: 'playing/:id',
         name: 'playingDetail',
-        component: () => import('../views/challange/challangePlayingDetailView.vue')
+        component: () => import('../views/challenge/challengePlayingDetailView.vue')
       },
       {
         path: 'finish/:id',
         name: 'finishDetail',
-        component: () => import('../views/challange/challangeFinishDetailView.vue')
+        component: () => import('../views/challenge/challengeFinishDetailView.vue')
       },
 
     ]

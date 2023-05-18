@@ -60,7 +60,7 @@
           <img src="@/assets/copy.png" id="calBtn">
         </p> -->
 
-        <div v-on:click="this.$router.push('/challange')"
+        <div v-on:click="this.$router.push('/challenge')"
         style="display: flex; margin-top: 16px; font-weight: bold; justify-content: center; color: white; font-size: 13px; padding: 3px;  align-items: center; background-color:#34A853; width: 40px; height: 40px; border-radius: 25px;">
           챌린지
         </div>
