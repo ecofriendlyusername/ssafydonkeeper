@@ -1,7 +1,9 @@
 <template>
     <div>
         <h1>{{ this.year }}년 {{ this.month }}월 나의 예산</h1>
-        <button @click="this.$router.push('/budget/set')">예산 설정하기</button> 
+        <!-- <div style="display:flex; justify-content:end; margin-right:10px; margin-top:-14px;"> -->
+            <button @click="this.$router.push('/budget/set')" id="budgetBtn">예산 설정하기</button> 
+        <!-- </div> -->
         
         <br> 
         <br>
@@ -34,7 +36,7 @@
                             <div style="font-weight: bold; margin-left: 10px; font-size: 16px;">{{ item.name }}</div>
                         </div>
                         <div> {{ formatAmount(getClassificationSpend(item.classificationId)) }}원 사용 </div>
-                        <div style="color:#808080;">{{ formatAmount(getSpendingPercent(item.classificationId, item.amount)) }}%</div>
+                        <div style="color:#808080;">{{ Math.floor(formatAmount(getSpendingPercent(item.classificationId, item.amount))) }}%</div>
                         <div style="font-weight: bold;">{{ formatAmount(getRemainingAmount(item.classificationId, item.amount)) }}원 남음 </div>
                     </div>
                 </div>
@@ -69,7 +71,11 @@ export default {
         getRemainingAmount(id, amount) {
             const spendData = this.spend_data.find(item => item.categoryId === id);
             if (spendData) {
-                return amount - spendData.amount;
+                if (amount - spendData.amount > 0) {
+                    return amount - spendData.amount;
+                } else {
+                    return 0;
+                }
             }
             return amount;
         },
@@ -188,5 +194,17 @@ export default {
   width: 35px;
   height: 35px;
   border-radius: 20px;
+}
+
+#budgetBtn {
+    border: 2px solid #4D82E6;
+    display:flex;
+    background-color: #4D82E6;
+    color:white;
+    padding: 6px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-left: 15px;
+    margin-bottom: -15px;
 }
 </style>
