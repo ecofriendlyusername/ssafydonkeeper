@@ -1,5 +1,5 @@
 <template>
-  {{ userData }}
+  <!-- {{ userData }} -->
   <headerComponent />
   <div class="test" v-if="!loginCheck">
     <a
@@ -7,7 +7,7 @@
       <img src="./assets/kakao_login_medium_narrow.png" alt="">
     </a>
   </div>
-  <div class="test" v-if="!loginCheck">
+  <!-- <div class="test" v-if="!loginCheck">
 
     <div @click="check">세션 체크</div>
 
@@ -119,17 +119,8 @@
     <div @click="getChallengeFinishedList">getChallengeFinishedList</div>
 
     <div @click="joinChallenge">joinChallenge</div> 
-    <!-- <br>
-    <div @click="같음A">같음A</div> -->
-<!--
-    <br>
-    <div @click="getChallengeFinishedDetail">getChallengeFinishedDetail</div>
 
-
-    <br>
-<div @click="같음A">같음A</div> -->
-
-  </div>
+  </div> -->
 
 
   <router-view />
