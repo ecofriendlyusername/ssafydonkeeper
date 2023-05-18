@@ -260,6 +260,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeMemberRepository.save(challengeMember);
         ChallengeDetailResponseFinishedDto result = new ChallengeDetailResponseFinishedDto();
 
+        result.setContent(challenge.getContent());
         result.setName(challenge.getName());
         result.setSuccess(challengeMember.isSuccess());
         result.setLogs(challengeMember.getLogs());
