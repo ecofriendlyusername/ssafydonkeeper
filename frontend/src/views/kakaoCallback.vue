@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{ $route.query.code }}
+        <!-- {{ $route.query.code }} -->
     </div>
 </template>
 
