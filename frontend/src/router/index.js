@@ -16,9 +16,19 @@ const routes = [
         component: () => import('../views/challange/challangeAddView.vue')
       },
       {
-        path: ':id',
-        name: 'challangeDetail',
-        component: () => import('../views/challange/challangeDetailView.vue')
+        path: 'before/:id',
+        name: 'beforeDetail',
+        component: () => import('../views/challange/challangeBeforeStartDetailView.vue')
+      },
+      {
+        path: 'playing/:id',
+        name: 'playingDetail',
+        component: () => import('../views/challange/challangePlayingDetailView.vue')
+      },
+      {
+        path: 'finish/:id',
+        name: 'finishDetail',
+        component: () => import('../views/challange/challangeFinishDetailView.vue')
       },
 
     ]

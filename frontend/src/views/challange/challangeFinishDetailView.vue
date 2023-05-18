@@ -10,8 +10,10 @@
       <div class="dot_line"></div>
     </div>
 
-    <p v-if="data.isSuccess">성공</p>
+    <p v-if="data.success">성공</p>
     <p v-else>실패</p>
+
+    <headComponent />
 
     <div>챌린지 기록</div>
     <div v-for="(check, idx) in checkList.filter((el, idx) => idx < showing)" :key="idx">
@@ -22,17 +24,14 @@
 </template>
 
 <script>
+import headComponent from "@/components/calendar/bodyComponent.vue";
 export default {
+  components:{
+    headComponent
+  },
   data() {
     return {
-      data: {
-        "name": "챌린지이름임",
-        "startDate": "2023-07-01",//String임
-        "endDate": "2023-08-16",//지난 날짜
-        "logs": "1111111111111111111111111111111111111111111111111100000000000000000000",
-        "content": 111,
-        "isSuccess": false,//성공여부
-      },
+      data: {},
       checkList: [],
       percent: 0,
       showing: 10,
@@ -41,21 +40,7 @@ export default {
   methods: {
     getChallengeDetail() {
       // 위치이동 필수
-      let idx = 0
-      this.check = [];
-      let currentDate = new Date(this.data.startDate.split('-'));
-      while (currentDate <= new Date(this.data.endDate.split('-'))) {
-        let tmp = new Date(currentDate)
-        this.checkList.push({
-          "year": tmp.getFullYear(),
-          "month": tmp.getMonth() + 1,
-          "day": tmp.getDate(),
-          "log": this.data.logs[idx]
-        });
-        idx += 1
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      this.barChart()
+      
       // @@@@@@@@@@@@@@
 
       this.axios({
@@ -69,6 +54,21 @@ export default {
         })
         .then(() => {
           // 여기로 와야 함
+          let idx = 0
+          this.check = [];
+          let currentDate = new Date(this.data.startDate.split('-'));
+          while (currentDate <= new Date(this.data.endDate.split('-'))) {
+            let tmp = new Date(currentDate)
+            this.checkList.push({
+              "year": tmp.getFullYear(),
+              "month": tmp.getMonth() + 1,
+              "day": tmp.getDate(),
+              "log": this.data.logs[idx]
+            });
+            idx += 1
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+          this.barChart()
           // @@@@@@@@@@@@@@
         })
     },
@@ -77,8 +77,10 @@ export default {
       let tmp = (this.data.logs.match(/1/g) || []).length / this.data.logs.length * 100
       console.log(tmp);
       let limit = tmp < 100 ? tmp : 100;
-      if (limit == 100) {
+      if (limit <= 60) {
         gauge.style.backgroundColor = "red";
+      } else {
+        gauge.style.backgroundColor = "blue";
       }
 
       for (let i = 0; i < limit; i++) {
@@ -116,7 +118,7 @@ export default {
   height: 28px;
   border-right: 4px dotted black;
   z-index: 99;
-  width: 60%;
+  width: 80%;
   position: absolute;
 }
 </style>
