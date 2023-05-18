@@ -15,6 +15,8 @@ public class ChallengeDetailResponseFinishedDto {
     private LocalDate endDate;
     private String logs;
     private boolean isSuccess;
+    private String content;
+
 
 
 }
