@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <div id="challangeTitle">
@@ -6,9 +5,7 @@
                 내가 참여중인 챌린지
             </div>
         </div>
-
-
-        <div v-for="(data, idx) in dataList2" :key="idx" @click="this.$router.push(`/challange/${data.id}`)"
+        <div v-for="(data, idx) in playing" :key="idx" @click="this.$router.push(`/challange/playing/${data.id}`)"
             style="display:flex; justify-content:center;">
             <div class="challangeName">
                 <div>
@@ -30,7 +27,26 @@
         </div>
 
 
-        <div v-for="(data, idx) in dataList" :key="idx" @click="this.$router.push(`/challange/${data.id}`)"
+        <div v-for="(data, idx) in beforeStart" :key="idx" @click="this.$router.push(`/challange/before/${data.id}`)"
+            style="display:flex; justify-content:center;">
+            <div class="challangeName">
+                <div>
+                    {{ data.name }}
+                </div>
+                <div>
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div id="challangeTitle">
+            <div>
+                내가 완료한 챌린지
+            </div>
+        </div>
+
+
+        <div v-for="(data, idx) in finish" :key="idx" @click="this.$router.push(`/challange/finish/${data.id}`)"
             style="display:flex; justify-content:center;">
             <div class="challangeName">
                 <div>
@@ -48,39 +64,49 @@
 export default {
     data() {
         return {
-            dataList: [],
-            dataList2:[]
+            beforeStart: [],
+            playing: [],
+            finish: [],
         }
     },
     methods: {
-        getChallengeList() {
+        getBeforeStart() {
             //시작전 챌린지 리스트 잘됨.
             this.axios({
                 method: 'get',
-                url: `http://localhost:8080/api/challenge/list`,
+                url: process.env.VUE_APP_API_URL + `/challenge/list`,
             })
                 .then((res) => {
-                    console.log("getChallengeList")
                     console.log(res.data)
-                    this.dataList = res.data
+                    this.beforeStart = res.data
                 })
         },
-        getChallengeList2() {
+        getPlaying() {
             //시작전 챌린지 리스트 잘됨.
             this.axios({
                 method: 'get',
-                url: `http://localhost:8080/api/challenge/progress`,
+                url: process.env.VUE_APP_API_URL + `/challenge/progress`,
             })
                 .then((res) => {
-                    console.log("getChallengeList")
                     console.log(res.data)
-                    this.dataList2 = res.data
+                    this.playing = res.data
                 })
         },
+        getFinish() {
+            this.axios({
+                method: 'get',
+                url: process.env.VUE_APP_API_URL + `/challenge/finish`,
+            })
+                .then((res) => {
+                    console.log(res.data)
+                    this.finish = res.data
+                })
+        }
     },
     mounted() {
-        this.getChallengeList()
-        this.getChallengeList2()
+        this.getBeforeStart()
+        this.getPlaying()
+        this.getFinish()
     }
 
 }

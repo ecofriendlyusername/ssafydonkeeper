@@ -30,6 +30,7 @@ export default {
         })
     },
     joinChallenge() {
+      console.log(this.data.participant);
       this.axios({
         method: 'get',
         url: process.env.VUE_APP_API_URL + `/challenge/join/${this.$route.params.id}`,
@@ -37,6 +38,7 @@ export default {
         .then((res) => {
           console.log("joinChallenge")
           console.log(res.data)
+          this.data.participant = true
         })
     },
     joinCancelChallenge() {
@@ -47,6 +49,7 @@ export default {
         .then((res) => {
           console.log("joinCancelChallenge")
           console.log(res.data)
+          this.data.participant = false
         })
     },
   },
