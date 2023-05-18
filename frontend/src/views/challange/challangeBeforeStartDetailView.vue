@@ -1,12 +1,26 @@
 <template>
   <div>
-    <h3>{{ data.name }}</h3>
-    <p>시작일: {{ data.startDate }}</p>
-    <p>마감일: {{ data.endDate }}</p>
-    <p>콘텐츠 내용: {{ data.content }}</p>
-    <p>참여자 수: {{ data.participantCount }}</p>
-    <p v-if="data.participant" v-on:click="joinCancelChallenge()">참여취소하기</p>
-    <p v-else v-on:click="joinChallenge()">참여하기</p>
+    <h3># {{ data.name }}</h3>
+    <p style="margin-top:-15px; margin-bottom: 20px; color:#4D82E6; font-weight: bold;">참여자 수: {{ data.participantCount }}</p>
+
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">기간</p>
+      <div style="margin-top:-20px;">
+        <p>시작일: {{ data.startDate }}</p>
+        <p style="margin-top:-10px;">마감일: {{ data.endDate }}</p>
+      </div>
+    </div>
+
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block; margin-top:20px;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">내용</p>
+      <div style="margin-top:-20px; padding: 5px;">
+        <p>{{ data.content }}</p>
+      </div>
+    </div>
+
+
+    <p v-if="data.participant" v-on:click="joinCancelChallenge()" id="exitBtn">참여 취소하기</p>
+    <p v-else v-on:click="joinChallenge()" id="joinBtn">참여하기</p>
   </div>
 </template>
 
@@ -60,5 +74,24 @@ export default {
 </script>
 
 <style>
+#joinBtn {
+  display: inline-block;
+  width: 32%;
+  border-radius: 8px;
+  background-color: #4D82E6;
+  padding:5px;
+  color:white;
+  font-weight: bold;
+}
+
+#exitBtn {
+  display: inline-block;
+  width: 32%;
+  border-radius: 8px;
+  background-color: rgb(102, 102, 102);
+  padding:5px;
+  color:white;
+  font-weight: bold;
+}
 
 </style>
