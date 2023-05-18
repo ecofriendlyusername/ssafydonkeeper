@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <div v-on:click="this.$router.go(-1)"
-    style="font-weight:bold; width:150px; display:flex;">◀</div>
+    <div v-on:click="this.$router.go(-1)" style="font-weight:bold; width:150px; display:flex;">◀</div>
     돈키퍼
     <!-- 현재 페이지 {{ title }} -->
+    <!-- <div :click="logout()">logout</div> -->
   </div>
 </template>
 
@@ -14,6 +14,19 @@ export default {
     title() {
       return this.$store.state.title
     }
+  },
+  methods: {
+    // logout() {
+    //   window.Kakao.Auth.logout()
+    //     .then((res) => {
+    //       console.log(res.data);
+    //       console.log(Kakao.Auth.getAccessToken()); // null
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       console.log('Not logged in.');
+    //     });
+    // }
   }
 }
 </script>

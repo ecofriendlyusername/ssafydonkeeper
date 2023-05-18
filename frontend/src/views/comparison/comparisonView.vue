@@ -62,18 +62,18 @@ export default {
       if (this.data.total > this.data.groupAvg) {
         const your = document.querySelector('.yourBar');
         if (this.data.total > this.data.groupAvg / 2) {
-          your.style.width = '50%';
+          your.style.width = '40%';
         } else {
-          your.style.width = '80%';
+          your.style.width = '70%';
         }
-      } else {
+      } else if (this.data.total < this.data.groupAvg){
         const my = document.querySelector('.myBar');
         if (this.data.groupAvg > this.data.total / 2) {
-          my.style.width = '50%';
+          my.style.width = '40%';
         } else {
-          my.style.width = '80%';
+          my.style.width = '70%';
         }
-      }
+      } 
     },
     pieChartAdd() {
       new Chart(
@@ -146,6 +146,7 @@ export default {
   color: white;
   text-align: right;
   padding: 5px;
+  width: 70%
 }
 
 .yourBar {
@@ -154,5 +155,6 @@ export default {
   color: white;
   text-align: right;
   padding: 5px;
+  width: 70%
 }
 </style>
