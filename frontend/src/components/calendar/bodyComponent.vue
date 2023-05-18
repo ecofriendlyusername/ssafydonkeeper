@@ -25,8 +25,6 @@ export default {
         return {
             today: new Date(),
             days: [],
-            incom: 0,
-            spend: 0,
             datas: [],
         };
     },
@@ -38,48 +36,71 @@ export default {
         month: {
             type: Number,
             required: true
-        }
+        },
+        checkList: {
+            type: Object,
+            required: true
+        },
     },
     watch: {
-        month: {
+        checkList: {
             immediate: true,
             handler() {
-                this.getData()
+                new Promise((resolve, reject) => {
+                    try {
+                        this.renderCalendar();
+                        resolve();
+                    } catch (error) {
+                        reject("Error in getData: " + error);
+                    }
+                })
+                    .then(() => {
+                        try {
+                            this.addData();
+                        } catch (error) {
+                            console.error("Error in renderCalendar: " + error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        },
+        month: {
+            handler() {
+                new Promise((resolve, reject) => {
+                    try {
+                        this.renderCalendar();
+                        resolve();
+                    } catch (error) {
+                        reject("Error in getData: " + error);
+                    }
+                })
+                    .then(() => {
+                        try {
+                            this.addData();
+                        } catch (error) {
+                            console.error("Error in renderCalendar: " + error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
             }
         }
     },
     methods: {
-        getData() {
-            this.axios.get(process.env.VUE_APP_API_URL + `/account-book/total/amount/${this.year}/${this.month + 1}`)
-                .then(res => {
-                    console.log(res.data)
-                    this.incom = res.data.total.totalIncomeAmount
-                    this.spend = res.data.total.totalSpendingAmount
-                    this.datas = res.data.details
-                }).then(() => {
-                    this.$emit('totals', { "incom": this.incom, "spend": this.spend });
-                    this.renderCalendar()
-                })
-                .then(() => {
-                    this.addData()
-                })
-        },
         addData() {
             const dayday = document.querySelectorAll('.current');
-            dayday.forEach((day, idx) => {
-                let p1 = document.createElement("p");
-                p1.setAttribute('class', 'incom')
-                p1.innerText = this.datas[idx].incomeAmount
-                if (this.datas[idx].incomeAmount != 0) {
-                    day.appendChild(p1);
-                }
-                let p2 = document.createElement("p");
-                p2.setAttribute('class', 'spend')
-                p2.innerText = this.datas[idx].spendingAmount
-                if (this.datas[idx].spendingAmount != 0) {
-                    day.appendChild(p2);
-                }
-            })
+            this.checkList.filter(el => el.month == this.month + 1)
+                .forEach(el => {
+                    if (el.log == 1) {
+                        let TG = document.createElement("p");
+                        TG.innerText = '성공!'
+                        dayday[el.day - 1].appendChild(TG);
+                    }
+                })
+
         },
         renderCalendar() {
             let startDay = new Date(this.year, this.month, 0);
@@ -102,10 +123,10 @@ export default {
                 days.push({ date: i, class: "day next disable" });
             }
 
-            if (this.today.getMonth() === this.month && this.today.getFullYear() === this.year) {
-                let todayDate = this.today.getDate();
-                days[prevDay + todayDate - 1].class += " today";
-            }
+            // if (this.today.getMonth() === this.month && this.today.getFullYear() === this.year) {
+            //     let todayDate = this.today.getDate();
+            //     days[prevDay + todayDate - 1].class += " today";
+            // }
 
             this.days = days;
         },

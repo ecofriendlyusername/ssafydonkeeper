@@ -13,18 +13,13 @@
     <p v-if="data.success">성공</p>
     <p v-else>실패</p>
 
-    <headComponent />
+    <headComponent :checkList="checkList"/>
 
-    <div>챌린지 기록</div>
-    <div v-for="(check, idx) in checkList.filter((el, idx) => idx < showing)" :key="idx">
-      <p>{{ check.year + '-' + check.month + '-' + check.day }} {{ check.log == 0 ? "실패" : "성공" }}</p>
-    </div>
-    <button v-if="checkList.length > showing" @click="showing += 10">더보기</button>
   </div>
 </template>
 
 <script>
-import headComponent from "@/components/calendar/bodyComponent.vue";
+import headComponent from "@/components/calendar/headComponent.vue";
 export default {
   components:{
     headComponent
@@ -34,23 +29,16 @@ export default {
       data: {},
       checkList: [],
       percent: 0,
-      showing: 10,
     }
   },
   methods: {
     getChallengeDetail() {
-      // 위치이동 필수
-      
-      // @@@@@@@@@@@@@@
-
       this.axios({
         method: 'get',
-        url: `http://localhost:8080/api/challenge/finish/${this.$route.params.id}`,
+        url: process.env.VUE_APP_API_URL + `/challenge/finish/${this.$route.params.id}`,
       })
         .then((res) => {
           this.data = res.data
-          console.log("getChallengeDetail")
-          console.log(res.data)
         })
         .then(() => {
           // 여기로 와야 함

@@ -8,29 +8,7 @@
             <a href="javascript:;" class="nav-btn go-next" @click="goNext">next</a>
         </div>
 
-        <div style="display:flex; justify-content:center;">
-            <div style="display:flex; justify-content:space-between; width: 70%;">
-                <div>
-                    <div id="subTitle">
-                        수입
-                    </div>
-                    <div style="color:#4285F4;">
-                        {{ incom }}
-                    </div>
-                </div>
-
-                <div>
-                    <div id="subTitle">
-                        지출
-                    </div>
-                    <div style="color:#EA4335">
-                        {{ spend }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <BodyComponent :year="year" :month="month" @totals="emitsData" />
+        <BodyComponent :year="year" :month="month" :checkList="checkList" @totals="emitsData" />
 
         <div style="display:flex; justify-content: end; margin-top: 38px;">
             <p v-on:click="this.$router.push('/book/list')">
@@ -51,14 +29,17 @@
 <script>
 import BodyComponent from '@/components/calendar/bodyComponent.vue';
 export default {
-    emits: ['totals'],
     data() {
         return {
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-            incom: 0,
-            spend: 0,
         };
+    },
+    props: {
+        checkList: {
+            type: Object,
+            required: true
+        },
     },
     computed: {
         yearMonth() {
