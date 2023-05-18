@@ -30,6 +30,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	implementation 'org.springframework.session:spring-session-core:2.5.3'
 	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'net.sourceforge.tess4j:tess4j:4.5.4'
+//	implementation 'org.bytedeco:tesseract:4.0.0-1.5.6'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -49,3 +51,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+

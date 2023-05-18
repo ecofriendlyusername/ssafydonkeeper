@@ -95,15 +95,15 @@ export default {
         this.incom = res.data.total.totalIncomeAmount.toLocaleString();
         this.spend = res.data.total.totalSpendingAmount.toLocaleString();
         this.datas = res.data.details
-      })
-      .then(() => {
-        this.renderCalendar()
+
+        return this.renderCalendar();
       })
       .then(()=>{
         this.addData()
       })
     },
     addData() {
+      // const testdayday = this.$refs.incomRefs;
       const dayday = document.querySelectorAll('.current');
       dayday.forEach((day, idx) => {
         let p1 = document.createElement("p");
