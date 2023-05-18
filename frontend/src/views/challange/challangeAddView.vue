@@ -26,7 +26,7 @@ export default {
         postChallenge() {
             this.axios({
                 method: 'post',
-                url: `http://localhost:8080/api/challenge`,
+                url: process.env.VUE_APP_API_URL + `/challenge`,
                 data: {
                     "name": this.name,
                     "startDate": this.startDate,
