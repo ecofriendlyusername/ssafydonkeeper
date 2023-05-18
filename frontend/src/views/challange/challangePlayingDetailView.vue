@@ -1,25 +1,34 @@
 <template>
   <div>
     <h3>{{ data.name }} D-{{ data.remainingDuration }}</h3>
-    <p>시작일: {{ data.startDate }}</p>
-    <p>마감일: {{ data.endDate }}</p>
-    <p>콘텐츠 내용: {{ data.content }}</p>
-
-    <div>챌린지 기록</div>
-    <div v-for="(check, idx) in checkList.filter((el, idx) => idx < showing)" :key="idx">
-      <p>{{ check.year + '-' + check.month + '-' + check.day }} {{ check.log == 0 ? "실패" : "성공" }}</p>
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">기간</p>
+      <div style="margin-top:-20px;">
+        <p>시작일: {{ data.startDate }}</p>
+        <p style="margin-top:-10px;">마감일: {{ data.endDate }}</p>
+      </div>
     </div>
-    <button v-if="checkList.length > showing" @click="showing += 10">더보기</button>
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block; margin-top:20px;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">내용</p>
+      <div style="margin-top:-20px; padding: 5px;">
+        <p>{{ data.content }}</p>
+      </div>
+    </div>
+
+    <headComponent :checkList="checkList"/>
 
   </div>
 </template>
 
 <script>
+import headComponent from "@/components/calendar/headComponent.vue";
 export default {
+  components:{
+    headComponent
+  },
   data() {
     return {
       data: [],
-      showing: 10,
       checkList: []
     }
   },
@@ -50,18 +59,6 @@ export default {
             currentDate.setDate(currentDate.getDate() + 1);
           }
         })
-    },
-    joinChallenge() {
-      //챌린지 참여 잘됨.
-      this.axios({
-        method: 'get',
-        url: process.env.VUE_APP_API_URL + `/challenge/join/${this.$route.params.id}`,
-      })
-        .then((res) => {
-          console.log("joinChallenge")
-          console.log(res.data)
-        })
-
     },
   },
   mounted() {

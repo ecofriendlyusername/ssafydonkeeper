@@ -21,9 +21,6 @@
             <div>
                 참여 가능한 챌린지
             </div>
-            <div style="color:#5987DF" @click="this.$router.push('/challange/add')">
-                + 추가
-            </div>
         </div>
 
 

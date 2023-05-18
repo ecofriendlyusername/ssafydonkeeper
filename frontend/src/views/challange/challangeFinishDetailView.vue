@@ -1,10 +1,20 @@
 <template>
   <div>
     <h3>{{ data.name }}</h3>
-    <p>시작일: {{ data.startDate }}</p>
-    <p>마감일: {{ data.endDate }}</p>
-    <p>콘텐츠 내용: {{ data.content }}</p>
-
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">기간</p>
+      <div style="margin-top:-20px;">
+        <p>시작일: {{ data.startDate }}</p>
+        <p style="margin-top:-10px;">마감일: {{ data.endDate }}</p>
+      </div>
+    </div>
+    <div style="border:2px solid black; border-radius: 8px; width: 80%; display: inline-block; margin-top:20px;">
+      <p style="font-weight:bold; border:2px solid black; background-color:white; width: 20%; display: inline-block; margin-top: -60px;">내용</p>
+      <div style="margin-top:-20px; padding: 5px;">
+        <p>{{ data.content }}</p>
+      </div>
+    </div>
+    <br><br>
     <div class="baseBar">
       <div class="gaugeBar"></div>
       <div class="dot_line"></div>

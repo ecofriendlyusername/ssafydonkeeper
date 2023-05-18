@@ -28,7 +28,7 @@
 export default {
   data(){
     return {
-      data: []
+      data: [],
     }
   },
   methods:{
@@ -53,6 +53,7 @@ export default {
           console.log("joinChallenge")
           console.log(res.data)
           this.data.participant = true
+          this.data.participantCount += 1
         })
     },
     joinCancelChallenge() {
@@ -64,6 +65,7 @@ export default {
           console.log("joinCancelChallenge")
           console.log(res.data)
           this.data.participant = false
+          this.data.participantCount -= 1
         })
     },
   },

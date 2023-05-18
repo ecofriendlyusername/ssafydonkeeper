@@ -10,19 +10,6 @@
 
         <BodyComponent :year="year" :month="month" :checkList="checkList" @totals="emitsData" />
 
-        <div style="display:flex; justify-content: end; margin-top: 38px;">
-            <p v-on:click="this.$router.push('/book/list')">
-                <img src="@/assets/list.png" id="calBtn">
-            </p>
-
-            <p v-on:click="null">
-                <img src="@/assets/copy.png" id="calBtn">
-            </p>
-
-            <p v-on:click="this.$router.push('/book/add')">
-                <img src="@/assets/add.png" id="addBtn">
-            </p>
-        </div>
     </div>
 </template>
 

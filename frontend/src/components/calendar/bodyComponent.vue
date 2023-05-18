@@ -92,12 +92,29 @@ export default {
     methods: {
         addData() {
             const dayday = document.querySelectorAll('.current');
+            console.log(this.checkList.filter(el => el.month == this.month + 1));
             this.checkList.filter(el => el.month == this.month + 1)
                 .forEach(el => {
                     if (el.log == 1) {
                         let TG = document.createElement("p");
                         TG.innerText = '성공!'
                         dayday[el.day - 1].appendChild(TG);
+                    } else if (el.log == 0) {
+                        let TG = document.createElement("p");
+                        TG.innerText = '실패!'
+                        dayday[el.day - 1].appendChild(TG);
+                    } else {
+                        let TG = document.createElement("button");
+                        TG.innerText = '완료'
+                        TG.addEventListener('click', () => {
+                            this.setChallengeTodaySuccess()
+                            event.target.setAttribute('disabled', true)
+                            let TG = document.createElement("p");
+                            TG.innerText = '성공!'
+                            event.target.parentNode.appendChild(TG);
+                        })
+                        dayday[el.day - 1].appendChild(TG);
+
                     }
                 })
 
@@ -123,13 +140,25 @@ export default {
                 days.push({ date: i, class: "day next disable" });
             }
 
-            // if (this.today.getMonth() === this.month && this.today.getFullYear() === this.year) {
-            //     let todayDate = this.today.getDate();
-            //     days[prevDay + todayDate - 1].class += " today";
-            // }
+            if (this.today.getMonth() === this.month + 1 && this.today.getFullYear() === this.year) {
+                let todayDate = this.today.getDate();
+                days[prevDay + todayDate - 1].class += "today";
+            }
 
             this.days = days;
         },
+        setChallengeTodaySuccess() {
+      //오늘 성공 버튼
+      this.axios({
+        method: 'put',
+        url: `http://localhost:8080/api/challenge/progress/success/${this.$route.params.id}`,
+      })
+        .then((res) => {
+          console.log("setChallengeTodaySuccess")
+          console.log(res.data)
+        })
+
+    },
     },
 }
 </script>
