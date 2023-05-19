@@ -76,6 +76,11 @@
             .then((res) => {
                 console.log(res.data);
                 this.existsCircleName = res.data;
+                if (res.data) {
+                    alert("이미 사용 중인 그룹 이름입니다. 다시 체크해주세요.");
+                }else {
+                    alert("사용 가능합니다.");
+                }
             })
         },
         searchEmail () {
@@ -138,6 +143,12 @@
             this.existsCircleName = true;
         }
     },
+    mounted () {
+        this.axios.get(process.env.VUE_APP_API_URL + `/circle/${this.$route.params.id}/${new Date().getFullYear()}/${new Date().getMonth()+1}`)
+        .then((res) => {
+            this.groupName = res.data.name;
+        })
+    }
     
   
   }
