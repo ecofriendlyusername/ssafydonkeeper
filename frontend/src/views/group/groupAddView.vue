@@ -24,7 +24,7 @@
             </div>
         </div>
         <ul>
-                <li v-for="email in emails" :key="email.id" @click="addMemberId(email.id)">
+                <li v-for="email in emails" :key="email.id" @click="addMemberId(email)" :style="{ color: email.isClicked ? 'blue' : 'black' }">
                     {{ email.email }}
                     {{ email.nickname }}
                 </li>
@@ -74,13 +74,25 @@
         searchEmail () {
             this.axios.get(process.env.VUE_APP_API_URL + `/member/search?email=` + this.email)
             .then((res) => {
-                this.emails = res.data;
+                // this.emails = res.data;
+                this.emails = res.data.map(email => {
+                    return {
+                    id: email.id,
+                    email: email.email,
+                    nickname: email.nickname,
+                    isClicked: false
+                    };
+                });
                 console.log(res.data);
             })
         },
-        addMemberId(id) {
-            if (!this.memberIds.includes(id)) {
-                this.memberIds.push(id);
+        addMemberId(email) {
+            if (this.memberIds.includes(email.id)) {
+                this.memberIds = this.memberIds.filter(id => id !== email.id);
+                return email.isClicked = false;
+            } else {
+                this.memberIds.push(email.id);
+                return email.isClicked = true;
             }
         },
         addGroup () {
