@@ -63,6 +63,12 @@
             .then((res) => {
                 console.log(res.data);
                 this.existsCircleName = res.data;
+                if (res.data) {
+                    alert("이미 사용 중인 그룹 이름입니다. 다시 체크해주세요.");
+                }else {
+                    alert("사용 가능합니다.");
+                }
+
             })
         },
         searchEmail () {
